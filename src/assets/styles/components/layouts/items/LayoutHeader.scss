@@ -1,0 +1,19 @@
+// LayoutHeader.scss
+
+@charset "UTF-8";
+
+.app_header {
+    position: fixed;
+    z-index: 500;
+    width: 100%;
+    height: 4.8rem;
+    background-color: rgba(255, 255, 255, .6);
+    margin-bottom: constant(safe-area-inset-bottom);
+    margin-bottom: env(safe-area-inset-bottom);
+    overflow: hidden;  // 초기에 숨겨진 상태를 나타내기 위해 추가
+    transition: height .3s;  // height에 대한 transition 설정
+}
+
+.app_header.visible {
+    height: 4.8rem;  // 보이는 상태일 때의 height
+}

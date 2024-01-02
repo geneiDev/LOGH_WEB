@@ -1,28 +1,59 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js Apps"/>
+    <layout-header></layout-header>
+    <div id="app_body">
+      {{ globals.bodyName }}
+      <component :is="bodyNameComponent"></component>
+    </div>
+    <layout-footer :globals="globals"></layout-footer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
+import LayoutFooter from './components/layouts/items/LayoutFooter.vue'
+import LayerTitle from './components/layouts/mains/LayerTitle.vue'
+import LayerLogin from './components/layouts/users/LayerLogin.vue'
+import { mapGetters } from 'vuex';
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    LayoutHeader,
+    LayoutFooter,
+    LayerTitle,
+    LayerLogin
+  },
+  data() {
+    return {
+      globals : {
+        bodyName: 'LayerTitle',
+      },
+    };
+  },
+  computed: {
+    ...mapGetters(['']),
+    bodyNameComponent() {
+      return ''//this.getBodyName === 'LayerTitle' ? LayerTitle : LayerLogin;
+    },
+  },
+  mounted() {
+    this.fnChangeMainLayer('Title');
+  },
+  watch: {
+    // bodyName(to, from) {
+    //   console.info(to, from);
+    //   this.fnChangeMainLayer(to);
+    // }
+  },
+  methods: {
+    fnChangeMainLayer(id) {
+      this.globals.bodyName = 'Layer' + id;
+    },
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style lang="scss">
+    @import "@/assets/styles/App.scss";
+  </style>
