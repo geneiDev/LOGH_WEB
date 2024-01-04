@@ -5,8 +5,8 @@
   <div class="app_header">
       <img class="profile_img" src="@/assets/images/person/etc/user/silhouette-male-person.png" alt="">
       <ul>
-        <!-- <li class="profile_data">ID<h3>{{ userData.name }}</h3></li>
-        <li class="profile_data">PONITS<h3>{{ userData.points }}</h3></li> -->
+        <li class="profile_data"><h3>{{ userData.name }}</h3></li>
+        <li class="profile_data"><h3>{{ userData.points }}</h3></li>
       </ul>
       <div class="btn_menu">
         <input class="menu-check" type="checkbox" id="menu-check" />
