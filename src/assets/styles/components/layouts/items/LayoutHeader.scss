@@ -2,22 +2,6 @@
 
 @charset "UTF-8";
 .app_header {
-    .profile_img {
-        height:4.0rem;
-        border: 2px solid black;
-        margin: 0.4rem;
-    }
-    .profile_data {
-        height: 4.0rem;
-        border: 2px solid black;
-        padding: 0.3em;
-        box-sizing: border-box; // 박스 모델을 변경
-        overflow: hidden;
-        h3 {
-          text-align: center;
-        }
-    }
-    text-align: left;
     position: fixed;
     z-index: 500;
     width: 100%;
@@ -27,21 +11,104 @@
     margin-bottom: env(safe-area-inset-bottom);
     overflow: hidden;
     display: flex;
-    ul{
-        position: relative;
-        display: flex;
-        height: 4.8rem;
-        align-items: center;
-        list-style-type: none;
-        flex: 1;
-        li {
-            position: relative;
-            flex: 1;
-            flex-direction: column;
-            align-items: center;
-            span {
-                margin-bottom: 0.3em;  // 각 span 요소 사이의 간격 조절
-            }
+
+    .profile_img {
+        height: 4.0rem;
+        border: 2px solid black;
+        margin: 0.4rem;
+    }
+
+    .profile_data {
+        border: 2px solid black;
+        overflow: hidden;
+        h3 {
+          text-align: center;
         }
+    }
+    
+    .btn_menu {
+        display: flex;
+        height: 4.0rem;
+        width: 4.0rem;
+        align-items: center;
+        justify-content: center;
+        background-color: blue;
+        .menu-icon {
+            align-items: center;
+            cursor: pointer;
+            display: inline-block;
+            position: absolute;
+            z-index: 2;
+            user-select: none;
+            width: 2.0rem; // 변경된 부분
+            height: 2.0rem; // 변경된 부분
+            margin: 0;
+          }
+          
+        .menu-icon .menu-sticks {
+            background: rgb(255, 255, 255);
+            display: block;
+            height: 2px;
+            position: relative;
+            transition: background .2s ease-out;
+            width: 2rem;
+        }
+        .menu-icon .menu-sticks:before,
+        .menu-icon .menu-sticks:after {
+            background: rgb(255, 255, 255);
+            content: '';
+            display: block;
+            height: 100%;
+            position: absolute;
+            transition: all .2s ease-out;
+            width: 100%;
+        }
+        .menu-icon .menu-sticks:before {
+            top: 5px;
+        }
+        .menu-icon .menu-sticks:after {
+            top: -5px;
+        }
+        .menu-check {
+            display: none;
+        }
+        .menu-check:checked~.menu {
+            max-width: 200px;
+        }
+        .menu-check:checked~.menu-icon .menu-sticks {
+            background: transparent;
+        }
+        
+        .menu-check:checked~.menu-icon .menu-sticks:before {
+            transform: rotate(-45deg);
+        }
+        
+        .menu-check:checked~.menu-icon .menu-sticks:after {
+            transform: rotate(45deg);
+        }
+        
+        .menu-check:checked~.menu-icon:not(.steps) .menu-sticks:before,
+        .menu-check:checked~.menu-icon:not(.steps) .menu-sticks:after {
+            top: 0;
+        }
+  
+    }
+
+    ul{
+        flex: 1;
+        // position: relative;
+        // display: flex;
+        // height: 4.8rem;
+        // align-items: center;
+        list-style-type: none;
+        // li {
+            // position: relative;
+            // flex: 1;
+            // flex-direction: row;
+            // align-items: center;
+            // span {
+                // margin-bottom: 0.3em;  // 각 span 요소 사이의 간격 조절
+            // }
+        // }
     }
 }

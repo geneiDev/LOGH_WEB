@@ -2,7 +2,12 @@
   <div class="app_bottom_navi">
     <div class="navigation">
       <ul>
-        <li class="side"><a id="Title">타이틀</a></li>
+        <li class="side"><a>사용자</a></li>
+        <li class="side"><a id="Main" @click="fnPopBottomNavi()">메인</a></li>
+        <li class="side"><a>옵션</a></li>
+        <li class="side"><a>정보</a></li>
+      </ul>
+      <ul>
         <li class="side"><a>사용자</a></li>
         <li class="side"><a id="Main" @click="fnPopBottomNavi()">메인</a></li>
         <li class="side"><a>옵션</a></li>
