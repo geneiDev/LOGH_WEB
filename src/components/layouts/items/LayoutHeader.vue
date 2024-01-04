@@ -14,7 +14,9 @@
           <span class="menu-sticks"></span>
         </label>
         <div class="menu">
-          <div style="width: 200px;"></div>
+          <div>
+            
+          </div>
         </div>
       </div>
   </div>

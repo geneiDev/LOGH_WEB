@@ -9,7 +9,6 @@
     background-color: rgba(255, 255, 255, 0.2);
     margin-bottom: constant(safe-area-inset-bottom);
     margin-bottom: env(safe-area-inset-bottom);
-    overflow: hidden;
     display: flex;
     align-items: center;
     
@@ -25,7 +24,7 @@
         flex-direction: row;
         width:100%;
         h3 {
-          text-align: center;
+            text-align: center;
         }
     }
     .profile_data + .profile_data {
@@ -34,13 +33,14 @@
 
     .menu {
         position: absolute;
-        top: 0;
+        top: 4.8rem;
         right: 0;
-        height: 100%;
-        max-width: 0;
+        height: 35rem;
+        max-width: 0px;
         transition: 0.5s ease;
         z-index: 1;
         background-color: #eee;
+        overflow:hidden;
     }
 
     .btn_menu {
@@ -50,7 +50,6 @@
         width: 3.0rem;
         align-items: center;
         justify-content: center;
-        // background-color: blue;
         .menu-icon {
             align-items: center;
             cursor: pointer;
@@ -59,7 +58,7 @@
             z-index: 2;
             user-select: none;
         }
-          
+        
         .menu-icon .menu-sticks {
             background: rgb(255, 255, 255);
             display: block;
@@ -88,7 +87,8 @@
             display: none;
         }
         .menu-check:checked~.menu {
-            max-width: 200px;
+            max-width: 100%;
+            width:100%;
         }
         .menu-check:checked~.menu-icon .menu-sticks {
             background: transparent;
