@@ -1,65 +1,60 @@
 <!-- LayoutHeader.vue 
-    @DESC : 사용자의 정보와 가장 최근 소켓 통신의 글을 3줄까지 출력한다.
+    @DESC : 사용자의 정보를 출력한다.
 -->
 <template>
-  <div v-resize="handleResize" class="app_header">
-    <div :class="{ 'app_header': true, 'visible': isHeaderVisible }">
-      <span>{{ userData.currentUser.id }}</span>
-      <span>{{ userData.currentUser.name }}</span>
-      <span>ccc</span>
-      <!-- 추가 필요한 사용자 정보 표시 -->
-    </div>
+  <div class="app_header">
+      <img class="profile_img" src="@/assets/images/person/etc/user/silhouette-male-person.png" alt="">
+      <ul>
+        <li class="profile_data">ID<h3>{{ userData.name }}</h3></li>
+        <li class="profile_data">PONITS<h3>{{ userData.points }}</h3></li>
+      </ul>
   </div>
 </template>
   
-  <script>
-  import { mapState } from 'vuex';
-  
+<script>
   export default {
     data() {
-    return {
-      isHeaderVisible: false,
-      userData : {
-        currentUser : {
-          id  : '10',
-          name : 'aa',
-          pic : '',
-          points : 0,
-        },
-        currentPerson : {
-
-        },
-      }
-    };
-  },
+      return {
+        isLogin : false,
+        isHeaderVisible: false,
+        userData : {}
+      };
+    },
     computed: {
-        ...mapState('user', ['currentUser']),
+      
     },
     created() {
-      this.isHeaderVisible = true;
-      setTimeout(() => {
-        this.isHeaderVisible = false;
-      }, 5000); // 5초 후에 숨김
+      this.fnInitUserData()
     },
     mounted() {
-        // 스토어 상태가 변경될 때마다 호출되는 콜백 등록
-        this.$store.subscribe((mutation, state) => {
-        // mutation 타입이 'user/setCurrentUser'일 때만 로그 출력
-          if (mutation.type === 'user/setCurrentUser') {
-            console.log('currentUser가 변경되었습니다.', state.user.currentUser);
-          }
-        });
-
+      this.fnGetUserData()
     },
     methods : {
-      handleResize(rect) {
-        // rect에는 변경된 크기와 위치 정보가 포함됩니다.
-        console.log(rect.width, rect.height, rect.top, rect.left);
+      fnInitUserData() {
+        console.info(this.$store)
+        const user = {
+          isLogin : false,
+          id  : '',
+          name : 'GUEST',
+          pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
+          points : 0,
+        }
+        this.$store.commit('setCurrentUser', user);
+      },
+      fnGetUserData() {
+        console.info(this.$store.state.user);
+        this.userData = this.$store.getters.getCurrentUser;
+        console.info('userData:', this.userData);
+      },
+      fnIsLogin() {
+        if(!this.userData.isLogin) {
+          console.info('goto login')
+        }
       }
     }
   };
-  </script>
+</script>
   
-  <style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/styles/components/layouts/items/LayoutHeader.scss";
 </style>

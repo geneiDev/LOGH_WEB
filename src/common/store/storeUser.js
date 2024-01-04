@@ -21,6 +21,6 @@ export default {
     },
   },
   getters: {
-    getCurrentUser: (state) => (state.currentUser ? state.currentUser : { username: '', email: '' }),
+    getCurrentUser: (state) => (state.currentUser ? state.currentUser : { username: 'GUEST', email: '' }),
   },
 };

@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -12,8 +11,17 @@
     height: 100vh;
     width: 100vw;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  #app_header {
+    flex:1;
+  }
+  #app_body {
+    flex: 8;
+    overflow-y: auto;
+  }
+  #app_footer {
+    flex:1;
   }
   
-  #app_body {
-    margin-top: 12vh;
-  }

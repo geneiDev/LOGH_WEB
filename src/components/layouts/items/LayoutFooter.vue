@@ -2,11 +2,11 @@
   <div class="app_bottom_navi">
     <div class="navigation">
       <ul>
-        <li class="side"><a id="Title">{{globals}}</a></li>
-        <li class="side"><a>33767543</a></li>
-        <li class="side"><a>33767544</a></li>
-        <li class="side"><a>33767545</a></li>
-        <li class="side"><a>33767546</a></li>
+        <li class="side"><a id="Title">타이틀</a></li>
+        <li class="side"><a>사용자</a></li>
+        <li class="side"><a id="Main" @click="fnPopBottomNavi()">메인</a></li>
+        <li class="side"><a>옵션</a></li>
+        <li class="side"><a>정보</a></li>
       </ul>
     </div>
   </div>
@@ -28,6 +28,10 @@ export default {
     }
   },
   methods: {
+    fnPopBottomNavi () {
+      
+
+    }
   }
 }
 </script>

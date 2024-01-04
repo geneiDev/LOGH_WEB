@@ -1,21 +1,23 @@
 <template>
   <div id="app">
-    <layout-header></layout-header>
-    <div id="app_body">
-      {{ globals.bodyName }}
-      <component :is="bodyNameComponent"></component>
+    <div id="app_header">
+      <layout-header></layout-header>
     </div>
-    <layout-footer :globals="globals"></layout-footer>
+    <div id="app_body">
+      <component :is=" LayerComponent"></component>
+    </div>
+    <div id="app_footer">
+      <layout-footer :globals="globals"></layout-footer>
+    </div>
   </div>
 </template>
 
 <script>
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
 import LayoutFooter from './components/layouts/items/LayoutFooter.vue'
+//Body
 import LayerTitle from './components/layouts/mains/LayerTitle.vue'
 import LayerLogin from './components/layouts/users/LayerLogin.vue'
-import { mapGetters } from 'vuex';
-
 
 export default {
   name: 'App',
@@ -28,28 +30,27 @@ export default {
   data() {
     return {
       globals : {
-        bodyName: 'LayerTitle',
+         Layer: '',
       },
     };
   },
   computed: {
-    ...mapGetters(['']),
-    bodyNameComponent() {
-      return ''//this.getBodyName === 'LayerTitle' ? LayerTitle : LayerLogin;
+     LayerComponent() {
+      return this.globals.Layer;
     },
   },
   mounted() {
-    this.fnChangeMainLayer('Title');
+    this.fnChangeMainLayer();
   },
   watch: {
-    // bodyName(to, from) {
-    //   console.info(to, from);
-    //   this.fnChangeMainLayer(to);
-    // }
   },
   methods: {
     fnChangeMainLayer(id) {
-      this.globals.bodyName = 'Layer' + id;
+      if(!id || id === '')  {
+        id = 'Title'
+      }
+      // console.info('fnChangeMainLayer:', id)
+      this.globals. Layer = 'Layer' + id;
     },
   }
 }

@@ -26,7 +26,7 @@
         left: 0;
         z-index: 270;
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.2);
         border-radius: 1rem 1rem 0 0;
         box-shadow: 0 -.5rem .5rem -.5rem rgba(0, 0, 0, .3);
         transition: all .3s;
@@ -41,7 +41,16 @@
             li {
                 position: relative;
                 flex: 1;
+                border: 0.2em solid gray;
+                
+            }
+            li + li {
+                margin-left: 0.3em;  // Adjust the margin between li elements
             }
         }
+        ul + ul {
+            margin-top: 0.3em;
+        }
+
     }
 }
