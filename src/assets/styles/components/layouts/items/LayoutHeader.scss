@@ -11,7 +11,8 @@
     margin-bottom: env(safe-area-inset-bottom);
     overflow: hidden;
     display: flex;
-
+    align-items: center;
+    
     .profile_img {
         height: 4.0rem;
         border: 2px solid black;
@@ -28,11 +29,11 @@
     
     .btn_menu {
         display: flex;
-        height: 4.0rem;
-        width: 4.0rem;
+        height: 3.0rem;
+        width: 3.0rem;
         align-items: center;
         justify-content: center;
-        background-color: blue;
+        // background-color: blue;
         .menu-icon {
             align-items: center;
             cursor: pointer;
@@ -40,10 +41,7 @@
             position: absolute;
             z-index: 2;
             user-select: none;
-            width: 2.0rem; // 변경된 부분
-            height: 2.0rem; // 변경된 부분
-            margin: 0;
-          }
+        }
           
         .menu-icon .menu-sticks {
             background: rgb(255, 255, 255);
@@ -64,10 +62,10 @@
             width: 100%;
         }
         .menu-icon .menu-sticks:before {
-            top: 5px;
+            top: 10px;
         }
         .menu-icon .menu-sticks:after {
-            top: -5px;
+            top: -10px;
         }
         .menu-check {
             display: none;
