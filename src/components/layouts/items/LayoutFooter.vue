@@ -1,20 +1,34 @@
 <template>
-  <div class="app_bottom_navi">
-    <div class="navigation">
-      <div class="navi_pop">
-        
+  <div class="navigation">
+    <div class="dimmed"></div>
+    <ul>
+      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(1)" id="1">1</a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(2)" id="2">2</a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(3)" id="3">3</a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(4)" id="4">4</a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(5)" id="5">5</a></li>
+    </ul>
+    <div class="bottomNaviBox" v-if="naviPopIdx">
+      <div class="navi_sub_box" v-if="naviPopIdx === 1">
+        <button class="btn_navi_sub">1-1</button>
+        <button class="btn_navi_sub">1-2</button>
+        <button class="btn_navi_sub">1-3</button>
+        <button class="btn_navi_sub">1-4</button>
+        <button class="btn_navi_sub">1-5</button>
       </div>
-      <div  v-if="naviPopIdx != 0">
-        <button class="pop_hide">▼</button>
+      <div v-if="naviPopIdx === 2">
+        2
       </div>
-      
-      <ul>
-        <li class="side"><a @click="fnPopBottomNavi" id="1">1</a></li>
-        <li class="side"><a @click="fnPopBottomNavi" id="2">2</a></li>
-        <li class="side"><a @click="fnPopBottomNavi" id="3">3</a></li>
-        <li class="side"><a @click="fnPopBottomNavi" id="4">4</a></li>
-        <li class="side"><a @click="fnPopBottomNavi" id="5">5</a></li>
-      </ul>
+      <div v-if="naviPopIdx === 3">
+        3
+      </div>
+      <div v-if="naviPopIdx === 4">
+        4
+      </div>
+      <div v-if="naviPopIdx === 5">
+        5
+      </div>
+      <button class="btn_navi_close" @click="fnPopBottomNavi(0)"></button>
     </div>
   </div>
 </template>
@@ -36,8 +50,8 @@ export default {
     }
   },
   methods: {
-    fnPopBottomNavi (ev) {
-      console.info(ev);
+    fnPopBottomNavi (idx) {
+      this.naviPopIdx = idx;
     }
   }
 }

@@ -10,13 +10,13 @@
 	margin-bottom: env(safe-area-inset-bottom);
 	display: flex;
 	align-items: center;
-
+  
 	.profile_img {
 		height: 4.0rem;
 		border: 2px solid black;
 		margin: 0.4rem;
 	}
-
+  
 	.profile_data {
 		overflow: hidden;
 		display: flex;
@@ -29,18 +29,7 @@
 	.profile_data + .profile_data {
 		margin-top: 0.4rem;
 	}
-
-	.menu {
-		position: absolute;
-		top: 4.8rem;
-		right: 0;
-		max-height: 100vh;
-		transition: max-height 0.5s ease;
-		z-index: 1;
-		background-color: #eee;
-		overflow: hidden;
-	}
-
+  
 	.btn_menu {
 		margin:0.4rem;
 		display: flex;
@@ -56,16 +45,16 @@
 			z-index: 2;
 			user-select: none;
 		}
-        
+  
 		.menu-icon .menu-sticks {
 			background: rgb(255, 255, 255);
 			display: block;
 			height: 2px;
 			position: relative;
-			transition: background .2s ease-out;
+			transition: all .2s ease-out;
 			width: 2rem;
 		}
-
+  
 		.menu-icon .menu-sticks:before,
 		.menu-icon .menu-sticks:after {
 			background: rgb(255, 255, 255);
@@ -76,7 +65,19 @@
 			transition: all .2s ease-out;
 			width: 100%;
 		}
-        
+  
+		.menu {
+			position: absolute;
+			top: 4.8rem;
+			right: 0;
+			max-height: 100vh;
+			transition: max-height 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+			z-index: 1;
+			background-color: #eee;
+			overflow: hidden;
+			opacity: 0;
+		}
+		
 		.menu-icon .menu-sticks:before {
 			top: 10px;
 		}
@@ -89,14 +90,14 @@
         .menu-check:checked~.menu {
             max-height: 100vh;
             height: calc(100vh - 4.8rem);
-            width:100vw;
-						transition: max-height 0.5s ease;
+            // width:100vw;
+						opacity: 1;
         }
         .menu-check:not(:checked)~.menu {
           max-height: 0;
           height: 0;
           border: none;
-          transition: max-height 0.5s ease;
+					opacity: 0;
         }
 
         .menu-check:checked~.menu-icon .menu-sticks {
