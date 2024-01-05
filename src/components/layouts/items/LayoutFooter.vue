@@ -1,17 +1,19 @@
 <template>
   <div class="app_bottom_navi">
     <div class="navigation">
+      <div class="navi_pop">
+        
+      </div>
+      <div  v-if="naviPopIdx != 0">
+        <button class="pop_hide">▼</button>
+      </div>
+      
       <ul>
-        <li class="side"><a>사용자</a></li>
-        <li class="side"><a id="Main" @click="fnPopBottomNavi()">메인</a></li>
-        <li class="side"><a>옵션</a></li>
-        <li class="side"><a>정보</a></li>
-      </ul>
-      <ul>
-        <li class="side"><a>사용자</a></li>
-        <li class="side"><a id="Main" @click="fnPopBottomNavi()">메인</a></li>
-        <li class="side"><a>옵션</a></li>
-        <li class="side"><a>정보</a></li>
+        <li class="side"><a @click="fnPopBottomNavi" id="1">1</a></li>
+        <li class="side"><a @click="fnPopBottomNavi" id="2">2</a></li>
+        <li class="side"><a @click="fnPopBottomNavi" id="3">3</a></li>
+        <li class="side"><a @click="fnPopBottomNavi" id="4">4</a></li>
+        <li class="side"><a @click="fnPopBottomNavi" id="5">5</a></li>
       </ul>
     </div>
   </div>
@@ -30,12 +32,12 @@ export default {
   },
   data () {
     return {
+      naviPopIdx : 0
     }
   },
   methods: {
-    fnPopBottomNavi () {
-      
-
+    fnPopBottomNavi (ev) {
+      console.info(ev);
     }
   }
 }

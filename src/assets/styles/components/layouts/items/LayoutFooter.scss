@@ -1,56 +1,54 @@
 @charset "UTF-8";
-*{
-    padding: 0;
-    margin: 0;
-}
-.app_bottom_navi {
-    z-index: 300;
-    position: fixed;
-    &.active {
-        &>.dimmed_all {
-            visibility: visible;
-            opacity: .6;
-            transition: opacity .4s ease-in;
-        }
-    }
+.navigation {
+  z-index: 300;
+  background-color: rgba(255, 255, 255, 0.2);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-radius: 1rem 1rem 0 0;
+  padding-top: 15px;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  min-height: 4.8rem;
 
-    .dimmed_all {
-        visibility: hidden;
-        background-color: rgb(0, 0, 0);
-        opacity: 0;
-        transition: visibility .4s, opacity .4s ease-out;
-    }
-    .navigation {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        z-index: 270;
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.2);
-        border-radius: 1rem 1rem 0 0;
-        box-shadow: 0 -.5rem .5rem -.5rem rgba(0, 0, 0, .3);
-        transition: all .3s;
-        padding-bottom: constant(safe-area-inset-bottom);
-        padding-bottom: env(safe-area-inset-bottom);
-        ul {
-            display: flex;
-            height: 4.8rem;
-            align-items: center;
-            padding-top: .8rem;
-            list-style-type: none;
-            li {
-                position: relative;
-                flex: 1;
-                border: 0.2em solid gray;
-                
-            }
-            li + li {
-                margin-left: 0.3em;  // Adjust the margin between li elements
-            }
-        }
-        ul + ul {
-            margin-top: 0.3em;
-        }
+  .navi_pop {
+    align-items: center;
+    justify-content: center;
+  }
+  .navi_pop.on {
+    align-items: center;
+    justify-content: center;
+    border: 0.1em solid gray;
+    min-height: 2.5rem;
+  }
 
+  .pop_hide {
+    height:2rem;
+    width: 100%;
+    background-color: black;
+    color: white;
+  }
+
+  ul {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    li {
+      position: relative;
+      flex: 1;
+      border: 0.1em solid gray;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    li + li {
+      margin-left: 0.3em;  // Adjust the margin between li elements
+    }
+  }
+
+  ul + ul {
+    margin-top: 0.3em;
+  }
 }

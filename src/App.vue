@@ -8,11 +8,13 @@
     </div>
     <div id="app_footer">
       <layout-footer :globals="globals"></layout-footer>
-    </div>
+  </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+//common
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
 import LayoutFooter from './components/layouts/items/LayoutFooter.vue'
 //Body
@@ -35,7 +37,8 @@ export default {
     };
   },
   computed: {
-     LayerComponent() {
+    ...mapGetters('user', ['getCurrentUser']),
+    LayerComponent() {
       return this.globals.Layer;
     },
   },
@@ -43,18 +46,23 @@ export default {
     this.fnChangeMainLayer();
   },
   watch: {
+    currentUser(newCurrentUser) {
+      console.info('userInfo Chagened:', newCurrentUser);
+      // 'currentUser'가 변경될 때 수행할 동작을 여기에 추가
+      // 예: this.fnChangeMainLayer(newCurrentUser.someProperty);
+    },
+
   },
   methods: {
     fnChangeMainLayer(id) {
       if(!id || id === '')  {
         id = 'Title'
       }
-      // console.info('fnChangeMainLayer:', id)
       this.globals. Layer = 'Layer' + id;
     },
   }
 }
 </script>
 <style lang="scss">
-    @import "@/assets/styles/App.scss";
-  </style>
+  @import "@/assets/styles/App.scss";
+</style>

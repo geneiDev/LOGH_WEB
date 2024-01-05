@@ -1,13 +1,19 @@
 // storeUser.js
 export default {
+  namespaced: true,
   state: {
     currentUser: {
-      username: '',
+      isLogin: false,
+      id: '',
+      name: 'GUEST',
+      pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
+      points: 0,
     },
   },
   mutations: {
     setCurrentUser(state, user) {
-      state.currentUser = user;
+      // 객체의 각 속성을 복사
+      Object.assign(state.currentUser, user);
     },
   },
   actions: {
@@ -17,10 +23,16 @@ export default {
     },
     // 로그아웃 액션
     logout({ commit }) {
-      commit('setCurrentUser', null);
+      commit('setCurrentUser', {
+        isLogin: false,
+        id: '',
+        name: 'GUEST',
+        pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
+        points: 0,
+      });
     },
   },
   getters: {
-    getCurrentUser: (state) => (state.currentUser ? state.currentUser : { username: 'GUEST', email: '' }),
+    getCurrentUser: (state) => state.currentUser,
   },
 };
