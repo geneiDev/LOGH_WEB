@@ -1,0 +1,63 @@
+@charset "UTF-8";
+.body_layer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+
+  .login_bot {
+    margin: auto;
+  }
+  
+  .login_btn_group {
+    width:90vw;
+    li + li {
+      margin-top: 1rem;
+    }
+  }
+  
+  .btn_base {
+    background-size: contain;
+    width: 65px;
+    height: 65px;
+    background: url("~@/assets/images/common/icon/icoLoginBtn.png") no-repeat ;
+    border-radius: 25%;
+    background-size: 35px;
+    // display: flex;
+    // flex-direction: column;
+
+    span {
+      display: none;
+    }
+
+    &.kakao {
+      background-position: 14px -58px;
+      background-color: #ffe53d;
+    }
+    &.naver {
+      background-position: 14px -128px;
+      background-color: #00dc44;
+    }
+    &.facebook {
+      background-position: 14px -204px;
+      background-color: #315aa0;
+    }
+    &.email {
+      background-position: 14px -275px;
+      background-color: #6bb2ff;
+    }
+    &.phone {
+      background-position: 14px 14px;
+      background-color: #4385f0;
+    }
+    &.apple {
+      background-position: 14px -350px;
+      background-color: #ffffff;
+    }
+  }
+  
+  .btn_base + .btn_base {
+    margin-left: 5vw;
+  }
+}

@@ -3,7 +3,7 @@
 -->
 <template>
   <div class="app_header">
-    <img class="profile_img" src="@/assets/images/person/etc/user/silhouette-male-person.png" alt="">
+    <img class="profile_img" src="@/assets/images/person/etc/user/silhouette-male-person.png" alt="" @click="fnGetUserData">
     <ul>
       <li class="profile_data"><h3>{{ userData.name }}</h3></li>
       <li class="profile_data" v-if="userData.isLogin"><h3>{{ userData.points }}</h3></li>
@@ -40,25 +40,22 @@
       
     },
     created() {
-      
-    },
-    mounted() {
       this.fnGetUserData()
     },
+    mounted() {
+      
+    },
     methods : {
-      // fnInitUserData() {
-        // console.info(this.$store)
-        // const user = {
-        //   isLogin : false,
-        //   id  : '',
-        //   name : 'GUEST',
-        //   pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
-        //   points : 5,
-        // }
-        // this.$store.commit('user/setCurrentUser', user);
-      // },
       fnGetUserData() {
-        this.userData = this.$store.getters['user/getCurrentUser'];
+        this.userData = this.$store.getters['storeUser/getCurrentUser'];
+        
+        if(this.userData.isLogin) {
+          console.info('fnGetUserData', this.userData)
+        } else {
+          //로그인 세션 이동
+          console.info('fnGetUserData', this.userData)
+        }
+
       },
     }
   };

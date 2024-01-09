@@ -1,45 +1,40 @@
 <template>
   <div class="navigation">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
     <div class="dimmed"></div>
-    <ul>
+    <ul :class="naviPopIdx ? 'on' : ''">
+      
       <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(1)" id="1">1</a></li>
       <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(2)" id="2">2</a></li>
-      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(3)" id="3">3</a></li>
-      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(4)" id="4">4</a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('Title')"><span class="material-symbols-outlined">home</span></a></li>
+      
+      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(4)" id="4"><span class="material-symbols-outlined on">home</span></a></li>
       <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(5)" id="5">5</a></li>
     </ul>
     <div class="bottomNaviBox" v-if="naviPopIdx">
-      <div class="navi_sub_box" v-if="naviPopIdx === 1">
-        <button class="btn_navi_sub">1-1</button>
-        <button class="btn_navi_sub">1-2</button>
-        <button class="btn_navi_sub">1-3</button>
-        <button class="btn_navi_sub">1-4</button>
-        <button class="btn_navi_sub">1-5</button>
+      <div class="footerContainer">
+        <layer-footer-menu :naviPopIdx="naviPopIdx"></layer-footer-menu>
       </div>
-      <div v-if="naviPopIdx === 2">
-        2
+      <div class="footerContainer">
+        <button class="btn_navi_close" @click="fnPopBottomNavi(0)"></button>
       </div>
-      <div v-if="naviPopIdx === 3">
-        3
-      </div>
-      <div v-if="naviPopIdx === 4">
-        4
-      </div>
-      <div v-if="naviPopIdx === 5">
-        5
-      </div>
-      <button class="btn_navi_close" @click="fnPopBottomNavi(0)"></button>
     </div>
   </div>
 </template>
 
 <script>
+import LayerFooterMenu from '@/components/layer/commons/LayerFooterMenu.vue'
+
 export default {
   props: {
     globals: {
       type: Object,
       required: true
     }
+  },
+  components: {
+    LayerFooterMenu,
   },
   watch: {
     
@@ -51,8 +46,15 @@ export default {
   },
   methods: {
     fnPopBottomNavi (idx) {
+      if(this.naviPopIdx === idx) {
+        return this.naviPopIdx = 0;
+      }
       this.naviPopIdx = idx;
+    },
+    fnChangeMainLayer (id) {
+      this.$store.commit('storeMain/setLayer', id);
     }
+    
   }
 }
 </script>

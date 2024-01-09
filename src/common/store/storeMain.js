@@ -1,14 +1,22 @@
 export default {
+  namespaced: true,
   state: {
-    // state for layer module
+    layer : ''
   },
   mutations: {
-    // mutations for layer module
+    setLayer(state, layerId) {
+      if (!layerId || layerId === '') {
+        layerId = 'Title';
+      }
+      state.layer = layerId;
+    },
   },
   actions: {
-    // actions for layer module
+    gotoLayer({ commit }, layerId) {
+      commit('setLayer', layerId);
+    },
   },
   getters: {
-    // getters for layer module
+    getLayer: (state) => state.layer,
   },
 };

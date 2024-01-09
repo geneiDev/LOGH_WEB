@@ -4,6 +4,7 @@ export default {
   state: {
     currentUser: {
       isLogin: false,
+      lastLogin: 'K',
       id: '',
       name: 'GUEST',
       pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
@@ -12,7 +13,6 @@ export default {
   },
   mutations: {
     setCurrentUser(state, user) {
-      // 객체의 각 속성을 복사
       Object.assign(state.currentUser, user);
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="sky">
     <div id="app_header">
       <layout-header></layout-header>
     </div>
@@ -39,27 +39,25 @@ export default {
   computed: {
     ...mapGetters('user', ['getCurrentUser']),
     LayerComponent() {
-      return this.globals.Layer;
+      return 'Layer' + this.globals.Layer;
     },
   },
   mounted() {
-    this.fnChangeMainLayer();
+    this.$store.commit('storeMain/setLayer', '');
   },
   watch: {
+    async '$store.state.storeMain.layer'(newLayer, oldLayer) {
+      console.info('MOVE TO :', oldLayer, ' > ', newLayer);
+      return this.globals.Layer = newLayer.trim();
+    },
     currentUser(newCurrentUser) {
       console.info('userInfo Chagened:', newCurrentUser);
       // 'currentUser'가 변경될 때 수행할 동작을 여기에 추가
       // 예: this.fnChangeMainLayer(newCurrentUser.someProperty);
     },
-
   },
   methods: {
-    fnChangeMainLayer(id) {
-      if(!id || id === '')  {
-        id = 'Title'
-      }
-      this.globals. Layer = 'Layer' + id;
-    },
+    
   }
 }
 </script>
