@@ -2,7 +2,8 @@
     @DESC : 사용자의 정보를 출력한다.
 -->
 <template>
-  <div class="app_header">
+<div class="layout_header">
+  <div class="profile_container">
     <img class="profile_img" src="@/assets/images/person/etc/user/silhouette-male-person.png" alt="" @click="fnGetUserData">
     <ul>
       <li class="profile_data"><h3>{{ userData.name }}</h3></li>
@@ -20,6 +21,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -33,7 +35,7 @@
       return {
         isLogin : false,
         isHeaderVisible: false,
-        userData : {}
+        userData : {},
       };
     },
     computed: {
@@ -43,19 +45,17 @@
       this.fnGetUserData()
     },
     mounted() {
-      
+
     },
     methods : {
       fnGetUserData() {
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
-        
         if(this.userData.isLogin) {
           console.info('fnGetUserData', this.userData)
         } else {
           //로그인 세션 이동
           console.info('fnGetUserData', this.userData)
         }
-
       },
     }
   };

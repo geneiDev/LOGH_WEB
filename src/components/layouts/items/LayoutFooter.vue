@@ -27,12 +27,6 @@
 import LayerFooterMenu from '@/components/layer/commons/LayerFooterMenu.vue'
 
 export default {
-  props: {
-    globals: {
-      type: Object,
-      required: true
-    }
-  },
   components: {
     LayerFooterMenu,
   },

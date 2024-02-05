@@ -16,8 +16,8 @@
       </ul>
     </div>
 		<div class="login_bot">
-      <button type="button" class="btn_base kakao1" value="R"><span>회원가입하기</span></button>
-			<p class="notice">혹시, 계정을 잊어버리셨나요?<a href="LO-02-03-1.html" class="link" id="AccSearch">계정찾기</a></p>
+			<p class="notice"><a href="" class="link" id="AccSearch">혹시, 계정이 없으신가요? 회원가입</a></p>
+			<p class="notice"><a href="" class="link" id="AccSearch">혹시, 계정을 잊어버리셨나요? 계정찾기</a></p>
 		</div>
 	</div>
 </template>

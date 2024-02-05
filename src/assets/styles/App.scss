@@ -1,49 +1,64 @@
-//src\assets\styles\App.scss
 @charset "UTF-8";
-*{
+* {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
-#app {
+
+body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  user-select: none;
+  flex: 1;
+  height: 100vh;
 }
+
+#app {
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  user-select: none;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 #app.sky {
   background-image: url("@/assets/images/common/backgroundSky.jpg");
   color: #c2daf7;
 }
+
 #app.univ {
   background-image: url("@/assets/images/common/background.jpg");
   color: #c2daf7;
 }
 
-  #app_header {
-    flex:1;
-  }
-  #app_body {
-    flex: 6;
-  }
-  #app_footer {
-    flex:1;
-  }
-  
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-  
-  .blinking {
-    animation: blink 2s infinite;
-  }
+#app_header {
+  height: 12vh;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  z-index: 200;
+}
+
+#app_body {
+  margin-top: 12vh;
+  margin-bottom: 12vh;
+  overflow: auto;
+  flex: 1;
+  z-index: 100;
+}
+
+#app_footer {
+  height: 12vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 200;
+}

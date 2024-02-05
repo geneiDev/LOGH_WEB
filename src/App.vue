@@ -1,14 +1,15 @@
 <template>
-  <div id="app" class="sky">
+<div id="app" class="sky">
     <div id="app_header">
       <layout-header></layout-header>
     </div>
     <div id="app_body">
-      <component :is=" LayerComponent"></component>
+      <component :is="LayerComponent"></component>
     </div>
-    <div id="app_footer">
-      <layout-footer :globals="globals"></layout-footer>
-  </div>
+    <div id="app_footer"> 
+      <!-- v-if="fnGetFooterType()" -->
+      <layout-footer></layout-footer>
+    </div>
   </div>
 </template>
 
@@ -57,7 +58,19 @@ export default {
     },
   },
   methods: {
-    
+    fnGetFooterType () {
+      if(!this.globals.Layer) return;
+
+      //
+      const exceptlayerList = ['Title'];
+      
+      if(exceptlayerList.includes(this.globals.Layer)) {
+        return false;
+      } else {
+        return true;
+      }
+
+    }
   }
 }
 </script>

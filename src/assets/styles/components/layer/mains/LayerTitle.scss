@@ -5,7 +5,97 @@
   justify-content: center;
   flex-direction: column;
   height: 100%;
+  position: relative;
   div {
     margin: auto;
+    flex:1;
+  }
+  
+  .blinking {
+    animation: blink 5s infinite;
+  }
+  .subPop_container {
+    position: absolute;
+    right: 0;
+    width: 0;
+    height: 100%;
+    transition: all 0.5s ease;
+    z-index: 500;
+    background-image: url("@/assets/images/common/background.jpg");
+    background-size: cover;
+    background-position: center;  
+    background-color: rgba(0, 0, 0, 1);
+    overflow: hidden;
+    &.on {
+      transform: translateX(0);
+      width: 100vw;
+    }
+    &.off {
+      transform: translateX(100%);
+      width: 0vw;
+    }
+    .btn_back {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      color: #c2daf7;
+      width: 80vw;
+      background-color: rgba(255, 255, 255, 0);
+    }
+  }
+
+  .tip_container {
+    min-height: 3rem;
+    max-height: 3rem;
+    width: 99%;
+    display: flex;
+    border: 1px solid blue;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .title_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .btn_title {
+      color: #c2daf7;
+      width: 100vw;
+      flex: 1;
+      border: none;
+      background-color: rgba(255, 255, 255, 0);
+    }
+    .btn_scene {
+      border: 1px solid;
+      padding: 1rem;
+      color: #c2daf7;
+      width: 80vw;
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0);
+    }
+  }
+
+  .title_footer {
+    margin-top: 4rem;
+    max-height: 4rem;
+    .btn_back {
+      margin-top: auto;
+      width: 12rem;
+      flex: 1;
+      border: 1px solid white;
+      border-color: white;
+      background-color: rgba(255, 255, 255, 0);
+      color: #c2daf7;
+      font-size: 2rem;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
   }
 }
