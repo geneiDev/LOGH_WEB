@@ -1,3 +1,4 @@
+//App.vue
 <template>
 <div id="app" class="sky">
     <div id="app_header">
@@ -44,7 +45,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('storeMain/setLayer', '');
+    this.$store.commit('storeMain/setLayer', 'Title');
   },
   watch: {
     async '$store.state.storeMain.layer'(newLayer, oldLayer) {
@@ -60,10 +61,7 @@ export default {
   methods: {
     fnGetFooterType () {
       if(!this.globals.Layer) return;
-
-      //
       const exceptlayerList = ['Title'];
-      
       if(exceptlayerList.includes(this.globals.Layer)) {
         return false;
       } else {
