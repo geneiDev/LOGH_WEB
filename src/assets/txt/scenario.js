@@ -1,11 +1,11 @@
-// scenarioMeta.js
+// scenario.js
 export const scenarioMeta = [
   {
     flag : 'T',
     idx : 0,
     date : '640. 07. 14',
-    title: '튜토리얼-1',
-    subtitle: '다곤 성역 회전',
+    title: '다곤 성역 회전',
+    subtitle: '튜토리얼 - 정치',
     desc : '우주력 640년, 제국력 331년. 2월\n'
           +'은하제국군은 변경지역을 순찰하던 도중 새로운 세력과 조우하게 된다.\n'
           +'순찰 함대는 크게 당황하여 제대로 된 대응도 못한 채 전멸하게 되었다는 교신만 남긴 채 사라지고 만다.\n'

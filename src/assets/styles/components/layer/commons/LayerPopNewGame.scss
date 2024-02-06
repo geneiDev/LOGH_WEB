@@ -50,8 +50,23 @@
         transform: translateX(100%);
       }
     }
-
   }
+  
+  .flag_info_section {
+    margin : 0.8rem;
+    color : #c2daf7;
+    border : 2px solid;
+    border-radius: 0.5em;
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    .flag_info_item {
+      flex: 1;
+    }
+  }
+
 
   //하단 버튼 에리어
   .btn_area {

@@ -82,6 +82,9 @@ export default {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
     this.fnStartTipRotation();
   },
+  activated() {
+    console.info('acac')
+  },
   beforeDestroy() {
     // 컴포넌트 파기 시에 Interval 정리
     clearInterval(this.tipRotationInterval);
