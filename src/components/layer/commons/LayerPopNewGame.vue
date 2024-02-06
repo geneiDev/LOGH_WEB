@@ -23,16 +23,18 @@ import { scenarioMeta } from "@/assets/txt/scenario";
 export default {
   data() {
     return {
+      scenarioFlag: 'T',    // T :튜토리얼 | S : 스탠다드 | F : 가상시나리오
       scenarioIdx : 0,
       scenarioObj : {},
     };
   },
   mounted() {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
-    this.fnCallScenarioMeta();
+    this.fnCallScenarioMeta('T');
   },
   methods : {
-    fnCallScenarioMeta() {
+    fnCallScenarioMeta(flg) {
+      this.scenarioFlag = flg;
       this.scenarioObj = scenarioMeta[this.scenarioIdx];
       console.info(scenarioMeta.length)
       console.info(this.scenarioObj)

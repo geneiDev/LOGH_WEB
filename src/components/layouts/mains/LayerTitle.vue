@@ -1,7 +1,6 @@
 <template>
   <div class="body_layer">
     <div :class="'subPop_container'+(layerPop ? ' on' : ' off')">
-      <h1>{{ layerPopName }}</h1>
       <div class="subPop_div">
         <component :is="layerPop"></component>
       </div>
@@ -20,15 +19,15 @@
         <h1>싱글플레이</h1>
         <h4>홀로 자유롭게 플레이할 수 있습니다.</h4>
       </button>
-      <button type="button" class="btn_title off" @click="setTitleFlag('M')">
+      <button type="button" class="btn_title" @click="setTitleFlag('M')" disabled>
         <h1>멀티플레이</h1>
         <h4>시즌별로 진행하는 멀티플레이입니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('O')">
+      <button type="button" class="btn_title" @click="setTitleFlag('O')" disabled>
         <h1>환경 설정</h1>
         <h4>여러 환경요소를 설정합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('G')">
+      <button type="button" class="btn_title" @click="setTitleFlag('G')" disabled>
         <h1>가이드</h1>
         <h4>게임을 진행하는데 있어 필요한 정보입니다.</h4>
       </button>
@@ -38,11 +37,11 @@
         <h1>새 게임</h1>
         <h4>새로운 시나리오와 인물을 선택하여 플레이합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('SC')">
+      <button type="button" class="btn_title" @click="setTitleFlag('SC')" disabled>
         <h1>계속하기</h1>
         <h4>마지막 플레이 이력 : 없음</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('SL')">
+      <button type="button" class="btn_title" @click="setTitleFlag('SL')" disabled>
         <h1>불러오기</h1>
         <h4>저장된 데이터 : 0개</h4>
       </button>
@@ -108,7 +107,6 @@ export default {
 
     //새 게임 호출
     fnCallNewGame () {
-      this.layerPopName = '새 게임 생성';
       this.layerPop = "LayerPopNewGame";
     },
 
