@@ -39,23 +39,25 @@ body {
 }
 
 #app_header {
-  height: 12vh;
+  height: 10vh;
   position: fixed;
   left: 0;
   width: 100%;
   z-index: 200;
+  overflow: hidden;
 }
 
 #app_body {
-  margin-top: 12vh;
+  margin-top: 10vh;
   margin-bottom: 12vh;
+  min-height: 76vh;
   overflow: auto;
   flex: 1;
   z-index: 100;
 }
 
 #app_footer {
-  height: 12vh;
+  min-height: 12vh;
   position: fixed;
   bottom: 0;
   left: 0;

@@ -1,15 +1,20 @@
 <template>
   <div class="pop_layer">
+    <div class="flag_section">
+      <button type="button" class="btn_prev" @click="fnSetMainFlag('P')"></button>
+      <h1>튜토리얼</h1>
+      <button type="button" class="btn_next" @click="fnSetMainFlag('N')"></button>
+    </div>
     <div>
       <h2></h2>
       <h2></h2>
       <h3></h3>
     </div>
     <div class="btn_area">
-      <button type="button" class="btn_next" @click="setTitleFlag('on')"><h1>인물 선택</h1></button>
+      <button type="button" class="btn_common" @click="fnSetScenario('on')"><h1>이전</h1></button>
+      <button type="button" class="btn_common" @click="setTitleFlag('on')"><h1>자세히</h1></button>
+      <button type="button" class="btn_common" @click="fnSetScenario('on')"><h1>다음</h1></button>
     </div>
-
-    
   </div>
 </template>
 
@@ -29,6 +34,7 @@ export default {
   methods : {
     fnCallScenarioMeta() {
       this.scenarioObj = scenarioMeta[this.scenarioIdx];
+      console.info(scenarioMeta.length)
       console.info(this.scenarioObj)
     },
   }

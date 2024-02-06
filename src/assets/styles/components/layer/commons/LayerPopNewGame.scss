@@ -2,17 +2,71 @@
 .pop_layer {
   z-index: 500 !important;
   min-height: 100%;
-  .selection_div {
-    width: 90vw;
+  .flag_section {
+    background-color: #c2daf7;
+    color: black;
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝에 버튼 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+    .btn_prev {
+      background-image: url("@/assets/images/common/icon/play_arrow.png");
+      width: 2rem;
+      height: 2rem;
+      transform: rotate(180deg);
+      background-size: cover;
+      // background-color: transparent;
+      border: none;
+    }
+    .btn_next {
+      background-image: url("@/assets/images/common/icon/play_arrow.png");
+      width: 2rem;
+      height: 2rem;
+      background-size: cover;
+      // background-color: transparent;
+      border: none;
+    }
+    h1 {
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+    h1::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent, rgb(111, 62, 156), transparent);
+      animation: textFlow 5s linear infinite;
+    }
+    @keyframes textFlow {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
   }
+
+  //하단 버튼 에리어
   .btn_area {
     position: absolute;
     bottom: 3rem;
     left: 0;
     width: 100%;
     margin-bottom: 0.8rem;
-    button {
+    display: flex;
+    .btn_common {
+      flex: 1;
       border-radius: 0.5em;
+      margin : 0.1rem;
+      color: #c2daf7;
+      background-color: rgba(0, 0, 0, 0);
     }
   }
 }
