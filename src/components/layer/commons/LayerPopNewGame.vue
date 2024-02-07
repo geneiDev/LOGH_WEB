@@ -5,12 +5,15 @@
       <h1>{{ currFlag.flagName }}</h1>
       <button type="button" class="btn_next" @click="fnSetMainFlag('N')"></button>
     </div>
-    <div class="flag_info_section">
-      <h3 class="flag_info_item">UC {{ scenarioObj.date }}</h3>
-      <h1 class="flag_info_item">{{ scenarioObj.title }}</h1>
-      <h3 class="flag_info_item">{{ scenarioObj.subtitle }}</h3>
+    <div class="scenario_section">
+      <div class="flag_info_section" v-for="scenario in scenarioArr" :key="scenario.idx" :aria-disabled="scenario.useYn ? 'false' : 'true'">
+        <!-- <div :class=""> -->
+          <h1 class="flag_info_item">{{ scenario.title }}</h1>
+          <h3 class="flag_info_item">UC {{ scenario.date }}</h3>
+          <h3 class="flag_info_item">{{ scenario.subtitle }}</h3>
+        <!-- </div> -->
+      </div>
     </div>
-
     <div class="btn_area">
       <button type="button" class="btn_common" @click="fnSetScenario('on')"><h1>이전</h1></button>
       <button type="button" class="btn_common" @click="fnSetScenario('on')"><h1>다음</h1></button>
@@ -35,8 +38,7 @@ export default {
         flagCode:''
       },
       //새 게임의 시나리오
-
-      scenarioIdx : 0,
+      scenarioArr : [],
       scenarioObj : {},
     };
   },
@@ -56,12 +58,11 @@ export default {
         newIdx = (this.currFlag.idx - 1 + this.menuFlag.length) % this.menuFlag.length;
       }
       this.currFlag = this.menuFlag[newIdx];
-      this.fnCallScenario(0);
+      this.fnCallScenario(this.currFlag.flagCode);
     },
     fnCallScenario(flg) {
-      this.scenarioFlag = flg;
-      this.scenarioObj = scenarioMeta[this.scenarioIdx];
-      console.info(this.scenarioObj)
+      this.scenarioArr = scenarioMeta.filter(scenario => scenario.flag === flg);
+      
     },
   }
 }

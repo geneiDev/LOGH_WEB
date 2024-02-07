@@ -2,19 +2,22 @@
 .pop_layer {
   z-index: 500 !important;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
+
   .flag_section {
     background-color: #c2daf7;
     color: black;
     display: flex;
-    justify-content: space-between; /* 양쪽 끝에 버튼 배치 */
-    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
     .btn_prev {
       background-image: url("@/assets/images/common/icon/play_arrow.png");
       width: 2rem;
       height: 2rem;
       transform: rotate(180deg);
       background-size: cover;
-      // background-color: transparent;
       border: none;
     }
     .btn_next {
@@ -22,7 +25,6 @@
       width: 2rem;
       height: 2rem;
       background-size: cover;
-      // background-color: transparent;
       border: none;
     }
     h1 {
@@ -51,24 +53,36 @@
       }
     }
   }
-  
-  .flag_info_section {
-    margin : 0.8rem;
-    color : #c2daf7;
-    border : 2px solid;
-    border-radius: 0.5em;
-    min-height: 8rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    .flag_info_item {
-      flex: 1;
+  .scenario_section {
+    max-height: 60vh;;
+    overflow: auto;
+    flex: 1;
+    .flag_info_section {
+      margin : 0.8rem;
+      color : #c2daf7;
+      // border : 2px solid;
+      // border-radius: 0.5em;
+      max-height: 8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .flag_info_item {
+        flex: 1;
+      }
     }
+    &.on {
+      border : 2px solid;
+      border-radius: 0.5em;
+    }
+    .flag_info_section[aria-disabled="true"] {
+      color:gray;
+    }
+
   }
+  
 
-
-  //하단 버튼 에리어
+  // 하단 버튼 에리어
   .btn_area {
     position: absolute;
     bottom: 3rem;
@@ -79,7 +93,7 @@
     .btn_common {
       flex: 1;
       border-radius: 0.5em;
-      margin : 0.1rem;
+      margin: 0.1rem;
       color: #c2daf7;
       background-color: rgba(0, 0, 0, 0);
     }
