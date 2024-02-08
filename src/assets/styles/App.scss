@@ -49,7 +49,6 @@ body {
 
 #app_body {
   margin-top: 10vh;
-  margin-bottom: 12vh;
   min-height: 76vh;
   overflow: auto;
   flex: 1;
@@ -57,7 +56,7 @@ body {
 }
 
 #app_footer {
-  height: 10vh;
+  max-height: 10vh;
   position: fixed;
   bottom: 0;
   left: 0;

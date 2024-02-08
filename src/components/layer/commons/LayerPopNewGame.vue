@@ -7,17 +7,15 @@
     </div>
     <div class="scenario_section">
       <div class="flag_info_section" v-for="scenario in scenarioArr" :key="scenario.idx" :aria-disabled="scenario.useYn ? 'false' : 'true'">
-        <!-- <div :class=""> -->
-          <h1 class="flag_info_item">{{ scenario.title }}</h1>
-          <h3 class="flag_info_item">UC {{ scenario.date }}</h3>
-          <h3 class="flag_info_item">{{ scenario.subtitle }}</h3>
-        <!-- </div> -->
+        <h1 class="flag_info_item">{{ scenario.title }}</h1>
+        <h3 class="flag_info_item">UC {{ scenario.date }}</h3>
+        <h3 class="flag_info_item">{{ scenario.subtitle }}</h3>
       </div>
     </div>
-    <div class="btn_area">
-      <button type="button" class="btn_common" @click="fnSetScenario('on')"><h1>이전</h1></button>
-      <button type="button" class="btn_common" @click="fnSetScenario('on')"><h1>다음</h1></button>
-    </div>
+    <!-- <div class="btn_area">
+      <button type="button" class="btn_common" @click="fnSetScenario('on')" disabled><h1>이전</h1></button>
+      <button type="button" class="btn_common" @click="fnSetScenario('on')" disabled><h1>다음</h1></button>
+    </div> -->
   </div>
 </template>
 
@@ -32,6 +30,7 @@ export default {
         {idx: 1, flagName:'스탠다드', flagCode:'S'},
         {idx: 2, flagName:'가상역사', flagCode:'F'}
       ],
+      //선택된 TYPE
       currFlag : {
         idx: 0,
         flagName:'',
@@ -39,6 +38,7 @@ export default {
       },
       //새 게임의 시나리오
       scenarioArr : [],
+      //선택된 시나리오
       scenarioObj : {},
     };
   },

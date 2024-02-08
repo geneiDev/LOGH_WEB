@@ -69,7 +69,7 @@ export const scenarioMeta = [
     flag : 'S',
     idx : 3,
     date : '794. 12. 01',
-    title: '천억의 별, 천억의 빛',
+    title: '천억의 별, 천억의 빛 II',
     subtitle: '제 6차 이제르론 공방전',
     desc : ''
   },

@@ -54,14 +54,12 @@
     }
   }
   .scenario_section {
-    max-height: 60vh;;
+    max-height: 75vh;
     overflow: auto;
     flex: 1;
     .flag_info_section {
       margin : 0.8rem;
       color : #c2daf7;
-      // border : 2px solid;
-      // border-radius: 0.5em;
       max-height: 8rem;
       display: flex;
       flex-direction: column;
@@ -70,18 +68,16 @@
       .flag_info_item {
         flex: 1;
       }
-    }
-    &.on {
-      border : 2px solid;
-      border-radius: 0.5em;
+      &.on {
+        box-shadow: 0 0 0 2px #c2daf7;
+        border-radius: 0.5em;
+      }
     }
     .flag_info_section[aria-disabled="true"] {
       color:gray;
     }
-
   }
   
-
   // 하단 버튼 에리어
   .btn_area {
     position: absolute;

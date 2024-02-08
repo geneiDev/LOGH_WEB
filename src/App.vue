@@ -7,8 +7,7 @@
     <div id="app_body">
       <component :is="LayerComponent"></component>
     </div>
-    <div id="app_footer"> 
-      <!-- v-if="fnGetFooterType()" -->
+    <div v-show="fnGetFooterType()" id="app_footer"> 
       <layout-footer></layout-footer>
     </div>
   </div>
