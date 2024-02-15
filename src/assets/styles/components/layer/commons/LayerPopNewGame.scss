@@ -54,9 +54,10 @@
     }
   }
   .scenario_section {
-    max-height: 75vh;
+    max-height: 70vh;
     overflow: auto;
     flex: 1;
+    // margin-bottom: 3rem;;
     .flag_info_section {
       margin : 0.8rem;
       color : #c2daf7;
@@ -84,14 +85,21 @@
     bottom: 3rem;
     left: 0;
     width: 100%;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
     display: flex;
     .btn_common {
       flex: 1;
-      border-radius: 0.5em;
+      border-radius: 0.1em;
       margin: 0.1rem;
-      color: #c2daf7;
-      background-color: rgba(0, 0, 0, 0);
+      color:gray;
+      background-color: rgba(0, 0, 0, 1);
+      box-shadow: 0 0 0 2px #c2daf7;
+      border-radius: 0.5em;
+      color : #c2daf7;
+    }
+    .btn_common[disabled] {
+      color:gray;
+      box-shadow: 0 0 0 2px gray;
     }
   }
 }

@@ -6,16 +6,16 @@
       <button type="button" class="btn_next" @click="fnSetMainFlag('N')"></button>
     </div>
     <div class="scenario_section">
-      <div class="flag_info_section" v-for="scenario in scenarioArr" :key="scenario.idx" :aria-disabled="scenario.useYn ? 'false' : 'true'">
+      <div :class="'flag_info_section'+(scenarioObj && scenarioObj.idx === scenario.idx ? ' on' : '')" v-for="scenario in scenarioArr" :key="scenario.idx" :aria-disabled="scenario.useYn ? 'false' : 'true'" @click="fnCallScenarioDetail(scenario)">
         <h1 class="flag_info_item">{{ scenario.title }}</h1>
         <h3 class="flag_info_item">UC {{ scenario.date }}</h3>
         <h3 class="flag_info_item">{{ scenario.subtitle }}</h3>
       </div>
     </div>
-    <!-- <div class="btn_area">
-      <button type="button" class="btn_common" @click="fnSetScenario('on')" disabled><h1>이전</h1></button>
-      <button type="button" class="btn_common" @click="fnSetScenario('on')" disabled><h1>다음</h1></button>
-    </div> -->
+    <div class="btn_area">
+      <!-- <button type="button" class="btn_common" @click="fnSetScenario('on')" disabled><h1>이전</h1></button> -->
+      <button type="button" class="btn_common" @click="fnSetScenario('on')" :disabled = '!scenarioObj.idx'><h1>다음</h1></button>
+    </div>
   </div>
 </template>
 
@@ -62,8 +62,16 @@ export default {
     },
     fnCallScenario(flg) {
       this.scenarioArr = scenarioMeta.filter(scenario => scenario.flag === flg);
-      
+      this.scenarioObj = {};
     },
+    fnCallScenarioDetail(data) {
+      if(!data.useYn) {
+        return;
+      }
+      this.scenarioObj = data;
+      console.info(this.scenarioObj)
+    },
+
   }
 }
 </script>
