@@ -2,15 +2,15 @@
 export const scenarioMeta = [
   {
     flag : 'T',
-    idx : 4,
+    idx : 1,
     date : '296. 04. 01',
-    title: '튜토리얼 - 정치 I',
+    title: '튜토리얼 I',
     subtitle: '베텔기우스 전역',
     pts : 1000,
     useYn : true,
-    desc : '우주력 296년, 4월\n'
-          +'베텔기우스 지역의 해적을 토벌하며, 과거의 명장 우드 제독에 비견할만한 칭송을 받던 28세의 젊은 군인 루돌프.'
-          +'강철 거인이라는 별명처럼 위풍당당한 그의 내면에 ',
+    preview : '우주력 296년, 4월\n'
+            + '베텔기우스 지역의 해적을 토벌하며, 과거의 명장 우드 제독에 비견할만한 칭송을 받던 28세의 젊은 군인 루돌프.',
+    previewImg : '',
     achive: ''
   },
   {
@@ -54,7 +54,7 @@ export const scenarioMeta = [
   },
   {
     flag : 'T',
-    idx : 1,
+    idx : 9,
     date : '668. 09. 01',
     title: '튜토리얼 - 내정 II',
     subtitle: '코르넬리우스 1세의 친정',

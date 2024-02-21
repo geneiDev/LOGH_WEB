@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="pop_layer">
     <div class="flag_section">
       <button type="button" class="btn_prev" @click="fnSetMainFlag('P')"></button>
@@ -13,15 +14,22 @@
       </div>
     </div>
     <div class="btn_area">
-      <!-- <button type="button" class="btn_common" @click="fnSetScenario('on')" disabled><h1>이전</h1></button> -->
       <button type="button" class="btn_common" @click="fnSetScenario('on')" :disabled = '!scenarioObj.idx'><h1>다음</h1></button>
     </div>
+    <div ref="scenarioDetailSection" class="scenario_detail_section">
+      <scenario-detail-info :scenarioObj="scenarioObj" @fnClosePop="fnCloseScenarioDetailInfo"/>
+    </div>
   </div>
+</div>
 </template>
 
 <script>
 import { scenarioMeta } from "@/assets/txt/scenario";
+import scenarioDetailInfo from '@/components/layer/item/scenarioDetailInfoArea.vue'
 export default {
+  components: {
+    scenarioDetailInfo,
+  },
   data() {
     return {
       //새 게임의 TYPE
@@ -69,7 +77,16 @@ export default {
         return;
       }
       this.scenarioObj = data;
-      console.info(this.scenarioObj)
+      this.fnShowScenarioDetailInfo();
+    },
+    fnShowScenarioDetailInfo() {
+      this.$refs.scenarioDetailSection.classList.add('on');
+    },
+    fnCloseScenarioDetailInfo() {
+      this.$refs.scenarioDetailSection.classList.remove('on');
+    },
+    fnSetScenario () {
+
     },
 
   }

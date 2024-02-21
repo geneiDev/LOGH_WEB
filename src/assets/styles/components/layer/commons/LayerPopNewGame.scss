@@ -78,7 +78,6 @@
       color:gray;
     }
   }
-  
   // 하단 버튼 에리어
   .btn_area {
     position: absolute;
@@ -100,6 +99,18 @@
     .btn_common[disabled] {
       color:gray;
       box-shadow: 0 0 0 2px gray;
+    }
+  }
+  .scenario_detail_section {
+    position: absolute;
+    height: 0%;
+    width: 100%;
+    z-index: 600;
+    bottom: 0;
+    display: none;
+    &.on {
+      display: block;
+      height: 100%;
     }
   }
 }
