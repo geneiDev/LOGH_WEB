@@ -1,13 +1,24 @@
-// src/main.js
 import Vue from 'vue'
 import App from './App.vue'
-import store from './common/store/';
 import Toasted from 'vue-toasted';
+import VueLazyload from 'vue-lazyload';
+
+//util
+import store from './common/store/';
+// import getUUID from '@/common/utils/commonutil/store/getUUID';
+// import COMM_CONST from '@/common/utils/commonutil/store/constants';
+// import localStorageUtil from '@/common/utils/commonutil/store/localStorageUtil';
 
 Vue.config.productionTip = false
 
 // Vue에 플러그인 등록
 Vue.use(Toasted);
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'path_to_your_error_image',
+  loading: 'path_to_your_loading_image',
+  attempt: 1
+});
 
 // 토스트 메시지 컴포넌트 등록
 Vue.toasted.register('my-toast', {

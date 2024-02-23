@@ -17,6 +17,7 @@ module.exports = defineConfig({
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
+        'crypto-js': require.resolve('crypto-js'),
       },
     },
   },

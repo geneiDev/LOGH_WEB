@@ -15,6 +15,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 //common
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
 import LayoutFooter from './components/layouts/items/LayoutFooter.vue'

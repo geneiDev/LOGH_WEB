@@ -16,7 +16,7 @@
     <div class="btn_area">
       <button type="button" class="btn_common" @click="fnSetScenario('on')" :disabled = '!scenarioObj.idx'><h1>다음</h1></button>
     </div>
-    <div ref="scenarioDetailSection" class="scenario_detail_section">
+    <div class="scenario_detail_section on" v-if="scenarioPop">
       <scenario-detail-info :scenarioObj="scenarioObj" @fnClosePop="fnCloseScenarioDetailInfo"/>
     </div>
   </div>
@@ -48,6 +48,8 @@ export default {
       scenarioArr : [],
       //선택된 시나리오
       scenarioObj : {},
+      //시니리오 팝업 컨트롤러
+      scenarioPop : false,
     };
   },
   mounted() {
@@ -80,10 +82,10 @@ export default {
       this.fnShowScenarioDetailInfo();
     },
     fnShowScenarioDetailInfo() {
-      this.$refs.scenarioDetailSection.classList.add('on');
+      this.scenarioPop = true;
     },
     fnCloseScenarioDetailInfo() {
-      this.$refs.scenarioDetailSection.classList.remove('on');
+      this.scenarioPop = false;
     },
     fnSetScenario () {
 
