@@ -1,7 +1,6 @@
 const path = require('path');
-const { defineConfig } = require('@vue/cli-service');
 
-module.exports = defineConfig({
+module.exports = {
   transpileDependencies: true,
   css: {
     loaderOptions: {
@@ -20,5 +19,11 @@ module.exports = defineConfig({
         'crypto-js': require.resolve('crypto-js'),
       },
     },
+    output: {
+      filename: 'js/[name].[hash].js',
+      chunkFilename: 'js/[name].[hash].js',
+    },
   },
-});
+  assetsDir: 'assets',
+  publicPath: './',
+};
