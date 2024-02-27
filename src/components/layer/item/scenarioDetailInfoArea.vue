@@ -23,15 +23,16 @@
 
       <!-- 개요 -->
       <div class="detail_info_section" v-if="majorItem === 'preview'">
-        <img class="preview_img" v-lazy="fnGetImage(scenarioObj.previewImg[previewPage])" alt="img"
-          @click="(previewPage < scenarioObj.previewTxt.length - 1) ? previewPage++ : ''" />
-        <div class="preview_txt" ref="textContainer" @click="(previewPage < scenarioObj.previewTxt.length - 1) ? previewPage++ : ''">
-          {{ scenarioObj.previewTxt[previewPage] }}
+        <div class="preview_img" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
+          <genei-img-area :imgSrc="scenarioObj.previewImg[previewPage]"/>
         </div>
-        <h5>{{ previewPage+1 }} / {{ scenarioObj.previewTxt.length }}</h5>
+        <div class="preview_txt" ref="textContainer" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
+          <scroll-text-area :options="{text : scenarioObj.preview[previewPage] , itv : 50 }" />
+        </div>
+        <h5>{{ previewPage+1 }} / {{ scenarioObj.preview.length }}</h5>
         <div class="preview_btn">
           <button type="button" class="ctl_common" @click="previewPage--" :disabled="previewPage == 0"><h1>이전</h1></button>
-          <button type="button" class="ctl_common" @click="previewPage++" :disabled="previewPage == scenarioObj.previewTxt.length-1"><h1>다음</h1></button>
+          <button type="button" class="ctl_common" @click="previewPage++" :disabled="previewPage == scenarioObj.preview.length-1"><h1>다음</h1></button>
         </div>
       </div>
 
@@ -39,6 +40,8 @@
       <div v-if="majorItem === 'subInfo'">
         추가 정보 출력란
       </div>
+
+      <!-- 목표 -->
       <div class="detail_info_section" v-if="majorItem === 'mission'">
         <div class="mission_txt" ref="textContainer" @click="(missionPage < scenarioObj.mission.length - 1) ? missionPage++ : ''">
           <h2 class="text_item">{{ scenarioObj.mission[missionPage].idx }}. {{ scenarioObj.mission[missionPage].title }}</h2>
@@ -49,6 +52,8 @@
           <button type="button" class="ctl_common" @click="missionPage++" :disabled="missionPage == scenarioObj.mission.length-1"><h1>다음</h1></button>
         </div>
       </div>
+
+      <!-- 보상 -->
       <div v-if="majorItem === 'rewards'">
         rewards
       </div>
@@ -62,10 +67,18 @@
 </template>
 
 <script>
+import GeneiImgArea from '@/components/layer/utils/geneiImgArea.vue'
+import ScrollTextArea from '@/components/layer/utils/scrollTextArea.vue'
+
 export default {
   props: {
     scenarioObj: Object
   },
+  components: {
+    GeneiImgArea,
+    ScrollTextArea,
+  },
+
   data() {
     return {
       dataLoading : false,
@@ -83,21 +96,8 @@ export default {
     };
   },
   watch : {
-    dataLoadingText: function(b, a) {
-      const minimumDuration = 1000; // 0.5초
-      this.displayText = b;
-      this.displayTime = Math.max(a, minimumDuration);
-      setTimeout(() => {
-        this.displayText = a;
-      }, this.displayTime);
-    },
     scenarioIdx: function() {
       this.fnInit();
-    },
-    previewPage: function(idx, pidx) {
-      if(pidx < idx) {
-        this.startTyping()
-      }
     },
   },
   activated() {
@@ -135,56 +135,46 @@ export default {
         // alert('시나리오 데이터를 초기화하는데 실패했습니다.')
         return;
       }
-      // this.majorItem = this.majorItemList.find(item => this.scenarioObj[item]) || '';
     },
     fnInitpreview() {
-      console.info('preview loading')
       this.dataLoadingText = '개요 정보를 초기화하는 중'
       this.previewArray =  []
       this.previewPage = 0
       
       let lastImgPath = "";
       this.dataLoadingText = '개요 정보를 세팅하는 중'
-      for(let i=0; i<this.scenarioObj.previewTxt.length; i++) {
+      for(let i=0; i<this.scenarioObj.preview.length; i++) {
+        // console.info(this.scenarioObj.preview[i])
+        // console.info(this.scenarioObj.previewImg[i])
         let image;
         if(this.scenarioObj.previewImg[i]) {
           lastImgPath = this.scenarioObj.previewImg[i];
-          image = require(`${lastImgPath}`);
+          // try {
+          //   image = require(`${lastImgPath}`);
+          //   import(`${lastImgPath}`).then(module => {
+          //     image = module.default;
+          //   });
+          // } catch (error) {
+          //   console.info('이미지 로딩 중 에러 :', lastImgPath)
+          //   image = '';
+          // }
         }
         this.previewArray.push({
-          text : this.scenarioObj.previewTxt[i],
+          text : this.scenarioObj.preview[i],
           imgPath : lastImgPath,
           img : image,
         });
       }
-
-      // this.scenarioObj.previewImg.forEach((imgPath, index) => {
-      //   const image = require(`@/path/to/images/${imgPath}`);
-      //   imageArray[index] = image.default; // default를 사용하여 이미지를 추출
-      // });
-
-      console.info(this.scenarioObj.previewTxt);
-      console.info(this.scenarioObj.previewImg);
-
-      // 0: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 1: "assets/images/common/event/scenario/PlvsVltra.webp"
-      // 2: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 3: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 4: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 5: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 6: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 7: "assets/images/common/event/scenario/GalacticFederation.webp"
-      // 8: "assets/images/common/event/scenario/GalacticFederation.webp"
-
-      
-      
+      if(this.previewArray) {
+        this.fnSetMajorItem('preview');
+      }
     },
 
     fnSetMajorItem(objId) {
+      console.info('objId:', objId)
       this.majorItem = objId;
       if(this.majorItem === 'preview') {
         this.previewPage = 0
-        this.startTyping();
       }
     },
     fnGetImage(path) {
@@ -199,21 +189,6 @@ export default {
       // 최종 경로 반환
       return `@/${filePath}/${fileName}`;
       
-    },
-    startTyping() {
-      // let index = 0;
-      // const typedText = this.scenarioObj.previewTxt[this.previewPage]
-      // console.info(typedText)
-      // if (typedText) {
-      //   const typingInterval = setInterval(() => {
-      //     this.typedText += typedText[index];
-      //     index++;
-
-      //       if (index === typedText.length) {
-      //         clearInterval(typingInterval);
-      //       }
-      //   }, 50);
-      // }
     },
     fnClosePop () {
       this.$parent.fnCloseScenarioDetailInfo();
@@ -285,7 +260,7 @@ export default {
         max-height: 12rem;
         background-color: black;
         border: 4px solid rgb(86, 22, 139);
-        margin-top: 1rem;
+        margin-top: 1rem; 
         font-size : 1.6rem;
         text-align: left;
         white-space: pre-line;

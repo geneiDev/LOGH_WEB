@@ -78,6 +78,7 @@ export default {
       if(!data.useYn) {
         return;
       }
+      console.info(this.scenarioObj)
       this.scenarioObj = data;
       this.fnShowScenarioDetailInfo();
     },
