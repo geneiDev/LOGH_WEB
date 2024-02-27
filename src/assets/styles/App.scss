@@ -30,13 +30,12 @@ body {
 }
 
 #app.sky {
-  background-image: url("@/assets/images/common/backgroundSky.jpg");
-  // background-image: url("~@/images/common/backgroundSky.jpg");
+  background-image: url("@/assets/images/common/background/backgroundSky.jpg");
   color: #c2daf7;
 }
 
 #app.univ {
-  background-image: url("~@/assets/images/common/background.jpg");
+  background-image: url("~@/assets/images/common/background/background.jpg");
   color: #c2daf7;
 }
 

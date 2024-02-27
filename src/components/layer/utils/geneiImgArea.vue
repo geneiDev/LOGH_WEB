@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import defaultImage from '@/assets/images/common/background.jpg';
+import defaultImage from '@/assets/images/common/background/background.jpg';
 
 export default {
   props: {
@@ -31,26 +31,13 @@ export default {
   methods: {
     fnGetImage() {
       if (this.imgSrc) {
-        // let srcString = this.imgSrc
+        let absolutePath = this.imgSrc
         try {
-          if(!this.imgSrc.includes('https:')) {
-            // console.info(this.imgSrc)
-            // const assetPath = 'assets/images/';
-            // if(!this.imgSrc.includes(assetPath)) {
-            //   srcString = assetPath+srcString;
-            //   console.info(srcString)
-            // }
-            // const imgPath = `@/${this.imgSrc}`;
-            const dynamicPath = `@/${this.imgSrc}`;
-            import(dynamicPath).then(imgImport => {
-              console.info('imgImport', imgImport)
-              const dynamicImg = require(dynamicPath);
-              console.info('dynamicImg:', dynamicImg)
-
-            }).catch(error => {
-              console.info('import', error)
-              this.currentImgSrc = defaultImage;
-            });
+          if(!absolutePath.includes('http')) {
+            const dynamicPath = `@/${absolutePath}`;
+            this.currentImgSrc = dynamicPath
+          } else {
+            this.currentImgSrc = this.imgSrc;
           }
           this.currentImgSrc = this.imgSrc;  
         } catch (error) {
@@ -78,7 +65,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  height: auto;
+  height: 100%;
   min-width: 100%;
   min-height: 100%;
 }

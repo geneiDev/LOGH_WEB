@@ -130,5 +130,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import "@/assets/styles/components/layer/mains/LayerTitle.scss"
+@import "@/assets/styles/components/layer/mains/LayerTitle.scss"
 </style>

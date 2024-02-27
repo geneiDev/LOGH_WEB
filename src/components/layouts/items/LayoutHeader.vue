@@ -4,7 +4,7 @@
 <template>
 <div class="layout_header">
   <div class="profile_container">
-    <img class="profile_img" src="@/assets/images/person/etc/user/silhouette-male-person.png" alt="" @click="fnGetUserData">
+    <img class="profile_img" src="@/assets/images/common/users/silhouette-male-person.png" alt="" @click="fnGetUserData">
     <ul>
       <li class="profile_data"><h3>{{ userData.name }}</h3></li>
       <li class="profile_data" v-if="userData.isLogin"><h3>{{ userData.points }}</h3></li>

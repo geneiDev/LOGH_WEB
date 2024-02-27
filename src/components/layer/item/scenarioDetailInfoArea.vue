@@ -38,7 +38,7 @@
 
       <!-- 정보 -->
       <div v-if="majorItem === 'subInfo'">
-        추가 정보 출력란
+        {{ scenarioObj.subInfo }}
       </div>
 
       <!-- 목표 -->
@@ -190,7 +190,7 @@ export default {
 .scenario_detail_info_area {
   position: relative;
   height: 100%;
-  background-image: url("@/assets/images/common/background.jpg");
+  background-image: url("@/assets/images/common/background/background.jpg");
   background-size: cover;
   background-position: center;
   background-color: rgba(0, 0, 0, 1);
