@@ -68,5 +68,8 @@ export default {
   height: 100%;
   min-width: 100%;
   min-height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  background-color: black;
 }
 </style>

@@ -15,7 +15,7 @@
           <li :class="{ 'on': majorItem === 'rewards' }" ref="ref_rewards"><h1 class="item" @click="fnSetMajorItem('rewards')">보상</h1></li>
         </ul>
       </div>
-      <!-- 준비중 -->
+      <!-- 로딩 텍스트 -->
       <div class="dimmed" v-if="majorItem === ''">
         <div class="loader"></div>
         <h2>{{ dataLoadingText }}</h2>
@@ -38,7 +38,17 @@
 
       <!-- 정보 -->
       <div v-if="majorItem === 'subInfo'">
-        {{ scenarioObj.subInfo }}
+        <!-- A타입 : 이미지 + 텍스트 -->
+        <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'A'" class="subInfoA">
+          TODO
+        </div>
+        <!-- C타입 : 캐릭터 + 텍스트 -->
+        <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'C'" class="subInfoC">
+          <character-info-area ></character-info-area>
+          DATA TEMPLATE ERROR
+          {{ scenarioObj.subInfo }}
+        </div>
+
       </div>
 
       <!-- 목표 -->
@@ -67,8 +77,9 @@
 </template>
 
 <script>
-import GeneiImgArea from '@/components/layer/utils/geneiImgArea.vue'
-import ScrollTextArea from '@/components/layer/utils/scrollTextArea.vue'
+import GeneiImgArea from '@/components/layer/utils/geneiImgArea'
+import ScrollTextArea from '@/components/layer/utils/scrollTextArea'
+import CharacterInfoArea from '@/components/layer/utils/characterInfoArea'
 
 export default {
   props: {
@@ -77,6 +88,7 @@ export default {
   components: {
     GeneiImgArea,
     ScrollTextArea,
+    CharacterInfoArea,
   },
 
   data() {
@@ -91,6 +103,8 @@ export default {
 
       previewArray: [],
       previewPage : 0,
+      
+      subInfoPage : 0,
 
       missionPage : 0,
     };

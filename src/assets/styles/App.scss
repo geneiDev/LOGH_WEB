@@ -98,3 +98,9 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.person_img {
+    height: 6.0rem;
+    border: 2px solid black;
+    margin: 0.4rem;
+}
