@@ -146,23 +146,12 @@ export default {
       for(let i=0; i<this.scenarioObj.preview.length; i++) {
         // console.info(this.scenarioObj.preview[i])
         // console.info(this.scenarioObj.previewImg[i])
-        let image;
         if(this.scenarioObj.previewImg[i]) {
           lastImgPath = this.scenarioObj.previewImg[i];
-          // try {
-          //   image = require(`${lastImgPath}`);
-          //   import(`${lastImgPath}`).then(module => {
-          //     image = module.default;
-          //   });
-          // } catch (error) {
-          //   console.info('이미지 로딩 중 에러 :', lastImgPath)
-          //   image = '';
-          // }
         }
         this.previewArray.push({
           text : this.scenarioObj.preview[i],
           imgPath : lastImgPath,
-          img : image,
         });
       }
       if(this.previewArray) {
@@ -177,19 +166,19 @@ export default {
         this.previewPage = 0
       }
     },
-    fnGetImage(path) {
-      if (!path) {
-        return null;
-      }
-      // 이미지 경로를 정규화하고 배열로 분해
-      const pathParts = path.replace(/\\/g, '/').split('/');
-      // 파일명과 파일이 위치한 경로로 나누기
-      const fileName = pathParts[pathParts.length - 1];
-      const filePath = pathParts.slice(0, pathParts.length - 1).join('/');
-      // 최종 경로 반환
-      return `@/${filePath}/${fileName}`;
+    // fnGetImage(path) {
+    //   if (!path) {
+    //     return null;
+    //   }
+    //   // 이미지 경로를 정규화하고 배열로 분해
+    //   const pathParts = path.replace(/\\/g, '/').split('/');
+    //   // 파일명과 파일이 위치한 경로로 나누기
+    //   const fileName = pathParts[pathParts.length - 1];
+    //   const filePath = pathParts.slice(0, pathParts.length - 1).join('/');
+    //   // 최종 경로 반환
+    //   return `@/${filePath}/${fileName}`;
       
-    },
+    // },
     fnClosePop () {
       this.$parent.fnCloseScenarioDetailInfo();
     },
