@@ -12,6 +12,17 @@ module.exports = {
       },
     },
   },
+  chainWebpack: (config) => {
+    config.module
+      .rule('xlsx')
+      .test(/\.(xlsx|xls|csv)$/)
+      .use('file-loader')
+      .loader('file-loader')
+      .options({
+        name: 'static/[name].[ext]',
+      })
+      .end();
+  },
   configureWebpack: {
     resolve: {
       alias: {

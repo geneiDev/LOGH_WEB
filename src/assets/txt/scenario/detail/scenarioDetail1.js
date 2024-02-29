@@ -1,9 +1,11 @@
 export const scenarioDetail1 = {
+    id: 'T1',
     flag : 'T',
     idx : 1,
     date : '296. 04. 01',
     title: '튜토리얼 I',
     subtitle: '베텔기우스 전역',
+    mod : 'Y',
     pts : 1000,
     useYn : true,
     preview : [

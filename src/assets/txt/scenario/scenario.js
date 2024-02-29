@@ -1,6 +1,6 @@
 // scenario.js
 
-import { scenarioDetail1 } from './scenarioDetail/scenarioDetail1';
+import { scenarioDetail1 } from './detail/scenarioDetail1';
 
 export const scenarioMeta = [
   scenarioDetail1,

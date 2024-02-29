@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { scenarioMeta } from "@/assets/txt/scenario";
+import { scenarioMeta } from "@/assets/txt/scenario/scenario";
 import scenarioDetailInfo from '@/components/layer/item/scenarioDetailInfoArea.vue'
 export default {
   components: {

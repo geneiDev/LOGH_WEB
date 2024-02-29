@@ -45,7 +45,7 @@ export default {
           this.currentImgSrc = defaultImage; 
         }
       }
-      console.info(this.currentImgSrc);
+      // console.info(this.currentImgSrc);
     },
   },
 };

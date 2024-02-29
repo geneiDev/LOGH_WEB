@@ -6,6 +6,7 @@ import Vuex from 'vuex';
 import storeMain from './storeMain';
 import storeUser from './storeUser';
 import storeInfo from './storeInfo';
+import storeScene from './storeScene';
 
 //util
 import layoutUtil from '@/common/utils/commonutil/store/layoutUtil';
@@ -19,5 +20,6 @@ export default new Vuex.Store({
     storeMain,
     storeUser,
     storeInfo,
+    storeScene,
   },
 });

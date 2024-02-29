@@ -44,7 +44,7 @@
         </div>
         <!-- C타입 : 캐릭터 + 텍스트 -->
         <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'C'" class="subInfoC">
-          <character-info-area ></character-info-area>
+          <character-info-area :charId="scenarioObj.subInfo[subInfoPage].data"></character-info-area>
           DATA TEMPLATE ERROR
           {{ scenarioObj.subInfo }}
         </div>
@@ -80,6 +80,7 @@
 import GeneiImgArea from '@/components/layer/utils/geneiImgArea'
 import ScrollTextArea from '@/components/layer/utils/scrollTextArea'
 import CharacterInfoArea from '@/components/layer/utils/characterInfoArea'
+import * as XLSX from 'xlsx';
 
 export default {
   props: {
@@ -139,6 +140,8 @@ export default {
             const functionName = 'fnInit' + majorItemId;
             if (typeof that[functionName] === 'function') {
               that['fnInit' + majorItemId]();
+            } else {
+              console.error('create function ', 'fnInit_' + majorItemId)
             }
           } else {
             console.info('nullobj', majorItemId)
@@ -149,8 +152,11 @@ export default {
         // alert('시나리오 데이터를 초기화하는데 실패했습니다.')
         return;
       }
+      this.fnGetScenarioCharData();
+
+
     },
-    fnInitpreview() {
+    fnInit_preview() {
       this.dataLoadingText = '개요 정보를 초기화하는 중'
       this.previewArray =  []
       this.previewPage = 0
@@ -158,8 +164,6 @@ export default {
       let lastImgPath = "";
       this.dataLoadingText = '개요 정보를 세팅하는 중'
       for(let i=0; i<this.scenarioObj.preview.length; i++) {
-        // console.info(this.scenarioObj.preview[i])
-        // console.info(this.scenarioObj.previewImg[i])
         if(this.scenarioObj.previewImg[i]) {
           lastImgPath = this.scenarioObj.previewImg[i];
         }
@@ -168,9 +172,7 @@ export default {
           imgPath : lastImgPath,
         });
       }
-      if(this.previewArray) {
-        this.fnSetMajorItem('preview');
-      }
+
     },
 
     fnSetMajorItem(objId) {
@@ -180,19 +182,35 @@ export default {
         this.previewPage = 0
       }
     },
-    // fnGetImage(path) {
-    //   if (!path) {
-    //     return null;
-    //   }
-    //   // 이미지 경로를 정규화하고 배열로 분해
-    //   const pathParts = path.replace(/\\/g, '/').split('/');
-    //   // 파일명과 파일이 위치한 경로로 나누기
-    //   const fileName = pathParts[pathParts.length - 1];
-    //   const filePath = pathParts.slice(0, pathParts.length - 1).join('/');
-    //   // 최종 경로 반환
-    //   return `@/${filePath}/${fileName}`;
-      
-    // },
+    fnGetScenarioCharData() {
+      // 엑셀에서 데이터를 가져온다.
+      // this.dataLoadingText = '인물 정보를 세팅하는 중';
+      let filePath = 'data/scenario/TN_GEN_CHAR.xlsx';
+      if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
+        filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR.xlsx`;
+      }
+      console.info('fnGetScenarioCharData FROM ', filePath)
+      const reader = new FileReader();
+      reader.onload = () => {
+        const arrayBuffer = reader.result;
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        if( jsonData && jsonData.length > 0) {
+          this.$store.commit('storeScene/setCharacterList', jsonData);
+          this.fnSetMajorItem('preview');
+        } else {
+          console.error('캐릭터 정보 onload failed');
+        }
+      };
+
+      fetch(filePath)
+        .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
+        .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
+
+
+    },
     fnClosePop () {
       this.$parent.fnCloseScenarioDetailInfo();
     },
@@ -291,7 +309,7 @@ export default {
         }
       }
       .mission_txt
-       {
+      {
         height: 24rem;
         background-color: black;
         border: 4px solid rgb(86, 22, 139);
