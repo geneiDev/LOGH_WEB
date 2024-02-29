@@ -146,37 +146,20 @@ export default {
           if(majorItemId === 'preview') {
             await this.fnInit_preview();
           }
-          
+          if(majorItemId === 'subInfo') {
+            await this.fnInit_subInfo();
+          }
         });
 
         await Promise.all(promises);
 
         if (this.majorItemList.length === 0) {
-          // alert('시나리오 데이터를 초기화하는데 실패했습니다.')
+          this.dataLoadingText = '시나리오 데이터를 불러오는데 실패했습니다.';
           return;
         }
-
-        this.fnGetScenarioCharData();
+        await this.fnGetScenarioCharData();
       }
     },
-    async fnInit_preview() {
-      console.info('fnInit_preview')
-      this.dataLoadingText = '개요 정보를 초기화하는 중';
-      this.previewArray =  [];
-      this.previewPage = 0;
-      
-      let lastImgPath = "";
-      for(let i=0; i<this.scenarioObj.preview.length; i++) {
-        if(this.scenarioObj.previewImg[i]) {
-          lastImgPath = this.scenarioObj.previewImg[i];
-        }
-        this.previewArray.push({
-          text : this.scenarioObj.preview[i],
-          imgPath : lastImgPath,
-        });
-      }
-    },
-
     async fnSetMajorItem(objId) {
       console.info('objId:', objId)
       this.majorItem = objId;
@@ -184,14 +167,53 @@ export default {
         this.previewPage = 0
       }
     },
+    // 개요
+    async fnInit_preview() {
+      console.info('fnInit_preview');
+      this.dataLoadingText = '개요 정보를 초기화하는 중';
+      this.previewArray =  [];
+      this.previewPage = 0;
+      //TODO
+      let lastImgPath = "";
+      const imagePromises = this.scenarioObj.previewImg.map(async (imgPath, index) => {
+        if (imgPath) {
+          try {
+            // 이미지를 미리 로드
+            const image = new Image();
+            await new Promise((resolve, reject) => {
+              image.onload = resolve;
+              image.onerror = reject;
+              image.src = imgPath;
+            });
+
+            // 이미지가 로드되었으면 lastImgPath 업데이트
+            lastImgPath = imgPath;
+          } catch (error) {
+            console.error('Error loading image', error);
+          }
+        }
+        // previewArray 업데이트
+        this.previewArray.push({
+          text: this.scenarioObj.preview[index],
+          imgPath: lastImgPath,
+        });
+      });
+      // 모든 이미지가 로드될 때까지 대기
+      await Promise.all(imagePromises);
+    },
+    async fnInit_subInfo() {
+      console.info('fnInit_preview');
+    },
+
+    // 엑셀에서 데이터를 가져온다.
     async fnGetScenarioCharData() {
-      // 엑셀에서 데이터를 가져온다.
-      // this.dataLoadingText = '인물 정보를 세팅하는 중';
+      this.dataLoadingText = '인물 정보를 세팅하는 중';
       let filePath = 'data/scenario/TN_GEN_CHAR.xlsx';
       if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
         filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR.xlsx`;
       }
       console.info('fnGetScenarioCharData FROM ', filePath)
+      
       const reader = new FileReader();
       reader.onload = () => {
         const arrayBuffer = reader.result;
