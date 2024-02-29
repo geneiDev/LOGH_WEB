@@ -44,8 +44,7 @@
         </div>
         <!-- C타입 : 캐릭터 + 텍스트 -->
         <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'C'" class="subInfoC">
-          <character-info-area :charId="scenarioObj.subInfo[subInfoPage].data"></character-info-area>
-          DATA TEMPLATE ERROR
+          <character-info-area :charId="scenarioObj.subInfo[subInfoPage].data" :option="{ 'scenario' : scenarioObj.id }"></character-info-area>
           {{ scenarioObj.subInfo }}
         </div>
 
@@ -119,44 +118,52 @@ export default {
     console.info('activated')
   },
   created() {
-    this.fnInit();
+    
   },
-  mounted() {
+  async mounted() {
     console.info('mounted!')
+    await this.fnInit();
   },
   methods: {
-    fnInit() {
-      this.dataLoadingText = '시나리오 초기화 중'
-      console.info('scenarioDetailInfoArea.vue initialize.')
+    async fnInit() {
+      // console.info('scenarioDetailInfoArea.vue initialize.');
+      this.dataLoadingText = '시나리오 초기화 중';
 
-      const that = this;
-      const majorItemArr = ['preview', 'infoma', 'mission', 'rewards'];
+      const majorItemArr = ['preview', 'subInfo', 'mission', 'rewards'];
       this.majorItemList = [];
-      if (typeof that.scenarioObj === 'object' && that.scenarioObj !== null && that.scenarioObj.idx) {
-        // console.info('>>>>', that.scenarioObj)
-        majorItemArr.forEach(function(majorItemId) {
-          if (majorItemId in  that.scenarioObj) {
-            that.majorItemList.push(majorItemId)
-            const functionName = 'fnInit' + majorItemId;
-            if (typeof that[functionName] === 'function') {
-              that['fnInit' + majorItemId]();
-            } else {
-              console.error('create function ', 'fnInit_' + majorItemId)
-            }
+
+      if (typeof this.scenarioObj === 'object' && this.scenarioObj !== null && this.scenarioObj.idx) {
+        for (const majorItemId of majorItemArr) {
+          if (majorItemId in this.scenarioObj) {
+            this.majorItemList.push(majorItemId);
           } else {
-            console.info('nullobj', majorItemId)
+            console.error(`create object: ${majorItemId}`);
+          }
+        }
+
+        const promises = this.majorItemList.map(async (majorItemId) => {
+          const functionName = 'fnInit' + majorItemId;
+          if (typeof this[functionName] === 'function') {
+            await this[functionName]();
+          } else {
+            console.error('create function ', 'fnInit_' + majorItemId);
           }
         });
-      }
-      if(this.majorItemList.length === 0 ) {
-        // alert('시나리오 데이터를 초기화하는데 실패했습니다.')
-        return;
-      }
-      this.fnGetScenarioCharData();
 
+        await Promise.all(promises);
 
+        if (this.majorItemList.length === 0) {
+          // alert('시나리오 데이터를 초기화하는데 실패했습니다.')
+          return;
+        }
+
+        this.fnGetScenarioCharData();
+      }
     },
-    fnInit_preview() {
+
+
+    async fnInit_preview() {
+      console.info('fnInit_preview')
       this.dataLoadingText = '개요 정보를 초기화하는 중'
       this.previewArray =  []
       this.previewPage = 0
@@ -172,17 +179,16 @@ export default {
           imgPath : lastImgPath,
         });
       }
-
     },
 
-    fnSetMajorItem(objId) {
+    async fnSetMajorItem(objId) {
       console.info('objId:', objId)
       this.majorItem = objId;
       if(this.majorItem === 'preview') {
         this.previewPage = 0
       }
     },
-    fnGetScenarioCharData() {
+    async fnGetScenarioCharData() {
       // 엑셀에서 데이터를 가져온다.
       // this.dataLoadingText = '인물 정보를 세팅하는 중';
       let filePath = 'data/scenario/TN_GEN_CHAR.xlsx';
@@ -204,11 +210,11 @@ export default {
           console.error('캐릭터 정보 onload failed');
         }
       };
-
       fetch(filePath)
         .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
         .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
-
+    },
+    async fnGetScenarioNationData() {
 
     },
     fnClosePop () {

@@ -15,6 +15,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+//common utils
+import '@/common/utils/global';
 
 //common
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
@@ -34,7 +36,7 @@ export default {
   data() {
     return {
       globals : {
-         Layer: '',
+        Layer: '',
       },
     };
   },
@@ -68,6 +70,9 @@ export default {
         return true;
       }
 
+    },
+    fnGetOuterLink() {
+      //    https://gineipaedia.com/
     }
   }
 }
