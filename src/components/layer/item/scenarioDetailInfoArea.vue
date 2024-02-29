@@ -20,53 +20,53 @@
         <div class="loader"></div>
         <h2>{{ dataLoadingText }}</h2>
       </div>
+      <div class="main_context">
+        <!-- 개요 -->
+        <div class="detail_info_section" v-if="majorItem === 'preview'">
+          <div class="preview_img" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
+            <genei-img-area :imgSrc="scenarioObj.previewImg[previewPage]"/>
+          </div>
+          <div class="preview_txt" ref="textContainer" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
+            <scroll-text-area :options="{text : scenarioObj.preview[previewPage] , itv : 50 }" />
+          </div>
+          <h5 class="page_box">{{ previewPage+1 }} / {{ scenarioObj.preview.length }}</h5>
+          <div class="preview_btn">
+            <button type="button" class="ctl_common" @click="previewPage--" :disabled="previewPage == 0"><h1>이전</h1></button>
+            <button type="button" class="ctl_common" @click="previewPage++" :disabled="previewPage == scenarioObj.preview.length-1"><h1>다음</h1></button>
+          </div>
+        </div>
 
-      <!-- 개요 -->
-      <div class="detail_info_section" v-if="majorItem === 'preview'">
-        <div class="preview_img" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
-          <genei-img-area :imgSrc="scenarioObj.previewImg[previewPage]"/>
+        <!-- 정보 -->
+        <div v-if="majorItem === 'subInfo'">
+          <!-- A타입 : 이미지 + 텍스트 -->
+          <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'A'" class="subInfoA">
+            TODO
+          </div>
+          <!-- C타입 : 캐릭터 + 텍스트 -->
+          <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'C'" class="subInfoC">
+            <character-info-area :charId="scenarioObj.subInfo[subInfoPage].data" :option="{ 'scenario' : scenarioObj.id }"></character-info-area>
+            {{ scenarioObj.subInfo }}
+          </div>
+
         </div>
-        <div class="preview_txt" ref="textContainer" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
-          <scroll-text-area :options="{text : scenarioObj.preview[previewPage] , itv : 50 }" />
+
+        <!-- 목표 -->
+        <div class="detail_info_section" v-if="majorItem === 'mission'">
+          <div class="preview_txt" ref="textContainer" @click="(missionPage < scenarioObj.mission.length - 1) ? missionPage++ : ''">
+            <h3 class="text_item">{{ scenarioObj.mission[missionPage].idx }}. {{ scenarioObj.mission[missionPage].title }}</h3>
+            <span class="desc_item">{{scenarioObj.mission[missionPage].desc}}</span>
+          </div>
+          <div class="preview_btn">
+            <button type="button" class="ctl_common" @click="missionPage--" :disabled="missionPage == 0"><h1>이전</h1></button>
+            <button type="button" class="ctl_common" @click="missionPage++" :disabled="missionPage == scenarioObj.mission.length-1"><h1>다음</h1></button>
+          </div>
         </div>
-        <h5>{{ previewPage+1 }} / {{ scenarioObj.preview.length }}</h5>
-        <div class="preview_btn">
-          <button type="button" class="ctl_common" @click="previewPage--" :disabled="previewPage == 0"><h1>이전</h1></button>
-          <button type="button" class="ctl_common" @click="previewPage++" :disabled="previewPage == scenarioObj.preview.length-1"><h1>다음</h1></button>
+
+        <!-- 보상 -->
+        <div v-if="majorItem === 'rewards'">
+          rewards
         </div>
       </div>
-
-      <!-- 정보 -->
-      <div v-if="majorItem === 'subInfo'">
-        <!-- A타입 : 이미지 + 텍스트 -->
-        <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'A'" class="subInfoA">
-          TODO
-        </div>
-        <!-- C타입 : 캐릭터 + 텍스트 -->
-        <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'C'" class="subInfoC">
-          <character-info-area :charId="scenarioObj.subInfo[subInfoPage].data" :option="{ 'scenario' : scenarioObj.id }"></character-info-area>
-          {{ scenarioObj.subInfo }}
-        </div>
-
-      </div>
-
-      <!-- 목표 -->
-      <div class="detail_info_section" v-if="majorItem === 'mission'">
-        <div class="mission_txt" ref="textContainer" @click="(missionPage < scenarioObj.mission.length - 1) ? missionPage++ : ''">
-          <h2 class="text_item">{{ scenarioObj.mission[missionPage].idx }}. {{ scenarioObj.mission[missionPage].title }}</h2>
-          <span class="desc_item">{{scenarioObj.mission[missionPage].desc}}</span>
-        </div>
-        <div class="preview_btn">
-          <button type="button" class="ctl_common" @click="missionPage--" :disabled="missionPage == 0"><h1>이전</h1></button>
-          <button type="button" class="ctl_common" @click="missionPage++" :disabled="missionPage == scenarioObj.mission.length-1"><h1>다음</h1></button>
-        </div>
-      </div>
-
-      <!-- 보상 -->
-      <div v-if="majorItem === 'rewards'">
-        rewards
-      </div>
-
         <!-- <h2 class="flag_info_item">{{ scenarioObj }}</h2> -->
     </div>
     <div class="controller_area">
@@ -142,12 +142,11 @@ export default {
         }
 
         const promises = this.majorItemList.map(async (majorItemId) => {
-          const functionName = 'fnInit' + majorItemId;
-          if (typeof this[functionName] === 'function') {
-            await this[functionName]();
-          } else {
-            console.error('create function ', 'fnInit_' + majorItemId);
+          console.info('INIT FUNCTION : ', majorItemId)
+          if(majorItemId === 'preview') {
+            await this.fnInit_preview();
           }
+          
         });
 
         await Promise.all(promises);
@@ -160,16 +159,13 @@ export default {
         this.fnGetScenarioCharData();
       }
     },
-
-
     async fnInit_preview() {
       console.info('fnInit_preview')
-      this.dataLoadingText = '개요 정보를 초기화하는 중'
-      this.previewArray =  []
-      this.previewPage = 0
+      this.dataLoadingText = '개요 정보를 초기화하는 중';
+      this.previewArray =  [];
+      this.previewPage = 0;
       
       let lastImgPath = "";
-      this.dataLoadingText = '개요 정보를 세팅하는 중'
       for(let i=0; i<this.scenarioObj.preview.length; i++) {
         if(this.scenarioObj.previewImg[i]) {
           lastImgPath = this.scenarioObj.previewImg[i];
@@ -204,6 +200,7 @@ export default {
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         if( jsonData && jsonData.length > 0) {
+          console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
           this.$store.commit('storeScene/setCharacterList', jsonData);
           this.fnSetMajorItem('preview');
         } else {
@@ -254,6 +251,9 @@ export default {
     .scene_info_section {
       margin-bottom: 1rem;
     }
+    .main_context {
+      flex : 1
+    }
     .scene_info_section ul {
       list-style: none;
       padding: 0;
@@ -272,41 +272,58 @@ export default {
     .detail_info_section {
       position: relative;
       display: flex;
+      height: 100%;
       flex-direction: column;
-      flex:1;
       overflow-y: auto;
+
       .preview_img {
         border: 3px solid rgb(202, 200, 52);
-        height: 10rem;
+        flex: 1;
+        max-height: 10rem;
         background: rgb(152, 152, 152);
       }
-      .preview_txt
-       {
-        height: 12rem;
-        min-height: 12rem;
-        max-height: 12rem;
+
+      .preview_txt {
+        flex : 1;
+        // min-height: 12rem;
+        // max-height: 12rem;
         background-color: black;
         border: 4px solid rgb(86, 22, 139);
         margin-top: 1rem; 
-        font-size : 1.6rem;
+        font-size: 1.6rem;
         text-align: left;
         white-space: pre-line;
         overflow-y: auto;
       }
+
+      .page_box {
+        flex : 1;
+        position: relative;
+        max-height: 2rem;
+        bottom: 0;
+        flex-shrink: 0;
+      }
+
       .preview_btn {
+        flex: 1;
+        margin-top: 8px;
+        max-height: 2.5rem;
+        position: relative;
         bottom: 0;
         flex-direction: row;
         justify-content: space-between;
         display: flex;
+        flex-shrink: 0;
+        width: 100%;
         .ctl_common {
           flex: 1;
           border-radius: 0.1em;
           margin: 0.1rem;
-          color:gray;
+          color: gray;
           background-color: rgba(0, 0, 0, 1);
           box-shadow: 0 0 0 2px #c2daf7;
           border-radius: 0.5em;
-          color : #c2daf7;
+          color: #c2daf7;
           z-index: 800;
         }
         .ctl_common:disabled {
@@ -314,8 +331,8 @@ export default {
           cursor: not-allowed;
         }
       }
-      .mission_txt
-      {
+
+      .mission_txt {
         height: 24rem;
         background-color: black;
         border: 4px solid rgb(86, 22, 139);
@@ -324,6 +341,8 @@ export default {
         white-space: pre-line;
         overflow-y: auto;
       }
+
+      margin-top: auto;
     }
   }
   .controller_area {
