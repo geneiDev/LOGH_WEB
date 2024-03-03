@@ -23,9 +23,6 @@ const nationUtils = {
   getNationInfo(id) {
     console.info('nationUtils.getNationInfo', id);
     const name = META_NATION.NAME.find(item => item.ID === id).kr;
-    
-
-
     return {
       id : id,
       name : name

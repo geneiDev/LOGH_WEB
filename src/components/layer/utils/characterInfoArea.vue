@@ -98,7 +98,7 @@ export default {
     /** @DESC : 현재 시나리오의 특정 인물 데이터를 가져온다. */
     async getCharacterData() {
       const storeCharData = this.$store.getters['storeScene/getCharacterData'](this.charId);
-      console.info(storeCharData)
+      console.info('storeCharData:', storeCharData)
       
 
 

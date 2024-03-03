@@ -54,6 +54,9 @@ const characterUtils = {
     console.info(charBirth);
     let age;
     return age;
-  }
+  },
+  getNationInfo(CHA_NATION) {
+    return global.nationUtils.getNationInfo(CHA_NATION);
+  },
 }
 export default characterUtils

@@ -8,8 +8,11 @@ export default {
     characterList : [],
   },
   mutations: {
+    setScenarioInfo(state, object) {
+      state.scenarioInfo = object;
+    },
     setCharacterList(state, array) {
-      const currArray = array.filter(row => row.RN).map(row => {
+      const currArray = array.filter(row => row.CHA_USEYN == 'Y').map(row => {
         if(!row.CHA_CODE) {
           const formatNumber = ('000000' + row.RN).slice(-6);
           row.CHA_CODE = `CH_${formatNumber}`;
@@ -51,7 +54,10 @@ export default {
             }
           }
         })
+        console.info('personalKeys')
         personalKeys.map(key => {
+          // if()
+
           console.info(key, row[key])
         })
         statsKeys.map(key => {
