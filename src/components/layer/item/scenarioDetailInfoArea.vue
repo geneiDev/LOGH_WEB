@@ -312,7 +312,7 @@ export default {
         background-color: black;
         border: 4px solid rgb(86, 22, 139);
         margin-top: 1rem; 
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         text-align: left;
         white-space: pre-line;
         overflow-y: auto;

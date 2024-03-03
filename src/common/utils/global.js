@@ -1,3 +1,7 @@
 // global.js -- src\common\utils\global.js
 
-import '@/common/utils/commonutil/nation/nationUtils.js';
+import nationUtils from '@/common/utils/commonutil/nation/nationUtils.js';
+import characterUtils from '@/common/utils/commonutil/character/characterUtils.js';
+import scenarioUtils from '@/assets/txt/scenario/scenario';
+
+export default {nationUtils, characterUtils, scenarioUtils}

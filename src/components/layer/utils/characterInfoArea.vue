@@ -1,5 +1,5 @@
 <template>
-  <div :class="'characterArea ' + option.displayType">
+  <div :class="'characterArea ' + optionsInfo.displayType">
     <div class="charTopInfo">
       <div class="charImg">
         <genei-img-area :imgSrc="'images/person/CH_000089N_H.webp'"/>
@@ -38,16 +38,10 @@ export default {
   },
   data() {
     return {
-      baseKeys : [
-        'RN',               //KEY
-        'CHA_CODE',         //REL_KEY
-        'CHA_USEYN',        //사용여부
-        'CHA_STD_NAME',     //KOR_NAME
-        'CHA_NAME',         //ENG_NAME
-        'CHA_STD_NICK',     //표시명
-      ],
-
-
+      optionsInfo : {
+        displayType : '',
+        scenario : '',
+      },
       charList : [],
       charData : {
 
@@ -61,12 +55,18 @@ export default {
     /** @DESC : GET DATA*/
     async fnInitData() {
       console.info('INIT : characterInfoArea.vue', this.charId, this.option);
+      await this.fnSetOption();
       await this.getCharacterList();
       if(this.charList.length == 0) {
         await this.fnGetScenarioCharData();
       } else {
         await this.getCharacterData();
       }
+    },
+    //옵션 세팅
+    async fnSetOption() {
+      this.optionsInfo.displayType = (this.option.displayType) ? this.option.displayType : 'H';
+      this.optionsInfo.scenario = (this.option.scenario) ? this.option.scenario : '';
     },
     async fnGetScenarioCharData() {
       // 엑셀에서 데이터를 가져온다.
@@ -86,85 +86,20 @@ export default {
           console.error('캐릭터 정보 onload failed')
         }
       };
-
       fetch(filePath)
         .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
         .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
     },
+
+    /** @DESC : 현재 시나리오의 전체 인물 데이터를 가져온다. */
     async getCharacterList() {
       this.charList = this.$store.getters['storeScene/getCharacterList'];
     },
+    /** @DESC : 현재 시나리오의 특정 인물 데이터를 가져온다. */
     async getCharacterData() {
       const storeCharData = this.$store.getters['storeScene/getCharacterData'](this.charId);
       console.info(storeCharData)
-      const personalKeys = [
-        'CHA_BIRTH',        //탄생년도
-        'CHA_NATION',       //소속국가
-        'CHA_MORAL',        //정치 선호도
-        'CHA_FRIEND',       //개인 진화도
-      ]
-      const statsKey = [
-        'CHA_ST_CMD',       //지휘
-        'CHA_ST_CSM',       //통솔
-        'CHA_ST_ATT',       //공격
-        'CHA_ST_DEF',       //방어
-        'CHA_ST_FST',       //기동
-        'CHA_ST_MNG',       //운영
-        'CHA_ST_AFG',       //공전
-        'CHA_ST_GFG',       //육전
-        'CHA_ST_INF',       //정보
-        'CHA_ST_MMP',       //전투공작
-        'CHA_ST_NMP',       //전투공작 회복치
-        'CHA_ST_MSP',       //정치공작
-        'CHA_ST_NSP',       //정치공작 회복치
-      ]
-      const representValue = (values) => {
-        for (const value of values) {
-          if (value) {
-            return value;
-          }
-        }
-        return null;
-      };
-
-      console.info('baseKeys')
-      this.$data.baseKeys.map(key => {
-        const charMainName = representValue([
-          storeCharData['CHA_STD_NAME'],
-          storeCharData['CHA_NAME'],
-          storeCharData['CHA_STD_NICK'],
-        ]);
-
-        if (!storeCharData[key]) {
-          //캐릭터정보 유효 여부(필수값)
-          if(key === 'RN' || key === 'CHA_CODE' || !charMainName) {
-            console.error('필수값 누락 : ', key);
-            this.fnSetErrorLog();
-          }
-          //캐릭터가 현재 활성화되어있는지 확인. 기본은 Y임.
-          if(key === 'CHA_USEYN') {
-            storeCharData[key] = 'Y';
-          }
-          if(key === 'CHA_STD_NAME' || key === 'CHA_NAME') {
-            storeCharData[key] = charMainName;
-          }
-          if(key === 'CHA_STD_NICK') {
-            const nicknames = charMainName.split(' ');
-            const nickname = nicknames.reduce((longest, current) => (current.length > longest.length ? current : longest), '');
-            storeCharData[key] = nickname;
-          }
-        }
-        console.info(key, storeCharData[key])
-      })
-
-      console.info('personalKeys')
-      personalKeys.map(key => {
-        console.info(key, storeCharData[key])
-      })
-      console.info('statsKey')
-      statsKey.map(key => {
-        console.info(key, storeCharData[key])
-      })
+      
 
 
       this.charData = storeCharData;
