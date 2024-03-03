@@ -49,11 +49,18 @@ const characterUtils = {
   fnGetStatsKey() {
     return META_CHARACTER.statsKeys;
   },
-  getAge(charBirth) {
-    console.info(global);
-    console.info(charBirth);
-    let age;
-    return age;
+  fnGetAge(scenBirth, charBirth) {
+    const baseDate = new Date(scenBirth);
+    const birthDate = new Date(charBirth);
+    let age = baseDate.getFullYear() - birthDate.getFullYear();
+    const monthDiff = baseDate.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && baseDate.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    if(age < 0 || age > 150) {
+      return '-';
+    }
+    return age.toString();
   },
   getNationInfo(CHA_NATION) {
     return global.nationUtils.getNationInfo(CHA_NATION);

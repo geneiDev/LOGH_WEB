@@ -12,7 +12,7 @@ export default {
       state.scenarioInfo = object;
     },
     setCharacterList(state, array) {
-      const currArray = array.filter(row => row.CHA_USEYN == 'Y').map(row => {
+      const currArray = array.filter(row => row.CHA_USEYN !== 'N').map(row => {
         if(!row.CHA_CODE) {
           const formatNumber = ('000000' + row.RN).slice(-6);
           row.CHA_CODE = `CH_${formatNumber}`;
@@ -56,12 +56,20 @@ export default {
         })
         console.info('personalKeys')
         personalKeys.map(key => {
-          // if()
+          if(key === 'CHA_BIRTH') {
+            if(state.scenarioInfo.date && row[key]) {
+              row['CHA_AGE'] = global.characterUtils.fnGetAge(state.scenarioInfo.date, row[key]);
+            } else {
+              row[key] = '-'
+            }
+          }
 
-          console.info(key, row[key])
+          
         })
         statsKeys.map(key => {
-          console.info(key, row[key])
+          if(key === 'CHA_BIRTH') {
+            console.info(key, row[key])
+          }
         })
 
         return row;

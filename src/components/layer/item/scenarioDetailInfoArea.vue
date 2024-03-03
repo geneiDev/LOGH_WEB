@@ -157,6 +157,7 @@ export default {
           this.dataLoadingText = '시나리오 데이터를 불러오는데 실패했습니다.';
           return;
         }
+        this.$store.commit('storeScene/setScenarioInfo', this.scenarioObj);
         await this.fnGetScenarioCharData();
       }
     },
