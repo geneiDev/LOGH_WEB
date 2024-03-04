@@ -5,20 +5,22 @@
         <genei-img-area :imgSrc="fnGetCharImg()"/>
       </div>
       <div class="charBase">
-        <h2 class="charText">{{ fnGetLocatonText(charData) }}</h2>
-        <h3 class="charText">{{charData.CHA_STD_NAME}}</h3>
-        <h3 class="charText">{{charData.CHA_AGE}}</h3>
+        <h3 class="charText">{{ fnGetLocatonText(charData) }}</h3>
+        <h2 class="charText">{{charData.CHA_STD_NAME}}</h2>
+        <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3>
       </div>
     </div>
     <div class="btnCharBox">
-      <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail('trait')">특성</button>
-      <button :class="'btnCharDetail'+(targetRefs === 'polit' ? ' on' : '')" id="polit" @click="fnShowCharDetail('polit')">내정</button>
-      <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail('stats')">능력치</button>
-      <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail('bioge')">열전</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">특성</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'polit' ? ' on' : '')" id="polit" @click="fnShowCharDetail">내정</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail">열전</button>
     </div>
     <div class="charDetail_stats" v-if="targetRefs === 'trait'">
+      특성특성
     </div>
     <div class="charDetail_stats" v-if="targetRefs === 'polit'">
+      내정내정
     </div>
     <div class="charDetail_stats" v-if="targetRefs === 'stats'">
       <ul class="stat_title"><li>지휘</li><li>통솔</li><li>공격</li><li>방어</li></ul>
@@ -30,6 +32,7 @@
       <ul class="stat_context"><li>{{charData.CHA_ST_MMP}}</li><li>{{charData.CHA_ST_NMP}}</li><li>{{charData.CHA_ST_MSP}}</li><li>{{charData.CHA_ST_NSP}}</li></ul>
     </div>
     <div class="charDetail_stats" v-if="targetRefs === 'bioge'">
+      열전열전
     </div>
 
     
@@ -39,9 +42,11 @@
 <script>
 import * as XLSX from 'xlsx';
 import GeneiImgArea from '@/components/layer/utils/geneiImgArea'
+// import ScrollTextArea from '@/components/layer/utils/scrollTextArea'
 export default {
   components: {
     GeneiImgArea,
+    // ScrollTextArea,
   },
   props: {
     charId: {
@@ -132,7 +137,8 @@ export default {
       rtnText = `${nationText}`;
       return rtnText;
     },
-    fnShowCharDetail(refsId) {
+    fnShowCharDetail(refs) {
+      const refsId = refs.target.id;
       this.targetRefs = refsId;
     },
     fnSetErrorLog() {

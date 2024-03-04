@@ -14,7 +14,6 @@ export default {
     setCharacterList(state, array) {
       const currArray = array.filter(row => row.CHA_USEYN !== 'N').map(row => {
         global.characterUtils.fnGetCharacterInfo(row);
-        
         row.CHA_AGE = global.characterUtils.fnGetAge(state.scenarioInfo.date, row.CHA_BIRTH);
 
         return row;

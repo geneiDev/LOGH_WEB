@@ -226,7 +226,7 @@ export default {
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         if( jsonData && jsonData.length > 0) {
-          // console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
+          console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
           this.$store.commit('storeScene/setCharacterList', jsonData);
           this.fnSetMajorItem('preview');
         } else {

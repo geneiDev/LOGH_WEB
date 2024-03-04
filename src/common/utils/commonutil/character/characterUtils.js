@@ -14,6 +14,7 @@ const META_CHARACTER = {
   personalKeys : [
     'CHA_BIRTH',        //탄생년도
     'CHA_NATION',       //소속국가
+    'CHA_IDEA',         //개인 성향
     'CHA_MORAL',        //정치 선호도
     'CHA_FRIEND',       //개인 진화도
     'CHA_AMBITION',     //야망
@@ -122,16 +123,19 @@ const characterUtils = {
 
     
     META_CHARACTER.personalKeys.forEach(function(key) {
+      // if(key === 'CHA_IDEA') {
+      //   console.info('히히')
+      // }
+      if(!row[key]) {
+        // row.key = 0;
+        row[key] = 'null';
+      }
       if(row[key]) {
         if(key === 'CHA_NATION') {
           const nationInfo = global.characterUtils.getNationInfo(row.CHA_NATION);
           row.CHA_NATION_NAME = (nationInfo?.name) ? nationInfo.name : '';
         }
-  
-      } else {
-        row[key] = 0;
       }
-
     })
 
 
