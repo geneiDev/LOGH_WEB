@@ -127,7 +127,7 @@ export default {
       await this.fnCallTraitData();
     },
     async fnCallTraitData() {
-      this.$store.commit('storeInfo/setTraitList', 'Init');
+      this.$store.commit('storeInfo/setTraitList', 'I');
 
     },
   }

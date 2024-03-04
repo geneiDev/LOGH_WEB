@@ -6,8 +6,8 @@ export default {
   },
   mutations: {
     setTraitList(state, flag) {
-      console.info('setTraitList', flag);
-      state.traitList = ['aa'];
+      console.info('setTraitList',state, flag);
+      // state.traitList = ['aa'];
     },
   },
   actions: {

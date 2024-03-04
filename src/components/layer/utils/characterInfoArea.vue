@@ -1,5 +1,13 @@
 <template>
   <div :class="'characterArea ' + optionsInfo.displayType">
+    <div v-if="optionsInfo.displayType != 'M'">
+      <div class="btnCharBox">
+        <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'skill' ? ' on' : '')" id="skill" @click="fnShowCharDetail">기술</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail">열전</button>
+      </div>
+    </div>
     <div class="charTopInfo">
       <div class="charImg" v-if="fnGetCharImg()">
         <genei-img-area :imgSrc="fnGetCharImg()"/>
@@ -11,14 +19,8 @@
       </div>
     </div>
     <div v-if="optionsInfo.displayType != 'M'">
-      <div class="btnCharBox">
-        <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
-        <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
-        <button :class="'btnCharDetail'+(targetRefs === 'skill' ? ' on' : '')" id="skill" @click="fnShowCharDetail">기술</button>
-        <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail">열전</button>
-      </div>
       <div class="charDetail_stats" v-if="targetRefs === 'trait'">
-        특성특성
+        특성특성{{ charData }}
       </div>
       <div class="charDetail_stats" v-if="targetRefs === 'stats'">
         <ul class="stat_title"><li>지휘</li><li>통솔</li><li>공격</li><li>방어</li></ul>

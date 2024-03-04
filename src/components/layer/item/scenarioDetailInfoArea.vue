@@ -173,7 +173,7 @@ export default {
     // 개요
     async fnInit_preview() {
       console.info('fnInit_preview');
-      this.dataLoadingText = '개요 정보를 초기화하는 중';
+    this.dataLoadingText = '개요 정보를 초기화하는 중';
       this.previewArray =  [];
       this.previewPage = 0;
       //TODO
@@ -233,7 +233,6 @@ export default {
         if( jsonData && jsonData.length > 0) {
           console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
           this.$store.commit('storeScene/setCharacterList', jsonData);
-          this.fnSetMajorItem('preview');
           this.fnGetScenarioCharTraitData();
         } else {
           console.error('캐릭터 정보 onload failed');
@@ -255,6 +254,7 @@ export default {
       console.info('fnGetScenarioCharData FROM ', filePath)
       this.traitList = this.$store.getters['storeInfo/getTraitList'];
       console.info('traitList', this.traitList);
+      //traitList가 비었을 경우 처리
       
       const reader = new FileReader();
       reader.onload = () => {
@@ -265,9 +265,8 @@ export default {
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         if( jsonData && jsonData.length > 0) {
           console.info('캐릭터 TRAIT 정보 onload ', jsonData.length, '-> ', jsonData)
-          // this.$store.commit('storeScene/setCharacterList', jsonData);
+          this.$store.commit('storeScene/setCharacterTraitList', jsonData);
           this.fnSetMajorItem('preview');
-          // this.fnGetScenarioCharTraitData();
         } else {
           console.error('캐릭터 TRAIT 정보 onload failed');
         }
