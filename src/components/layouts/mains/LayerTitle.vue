@@ -80,10 +80,11 @@ export default {
   },
   mounted() {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
+    this.fnInitData();
+
     this.fnStartTipRotation();
   },
   activated() {
-    console.info('acac')
   },
   beforeDestroy() {
     // 컴포넌트 파기 시에 Interval 정리
@@ -107,16 +108,10 @@ export default {
     fnCallLayerPop(flg) {
       this.layerPop  = flg;
     },
-
     //새 게임 호출
     fnCallNewGame () {
       this.layerPop = "LayerPopNewGame";
     },
-
-
-
-
-
     fnChangeMainLayer () {
       var id  = ''
       if(this.userData.isLogin) {
@@ -125,7 +120,16 @@ export default {
         id    = 'Login'
       }
       this.$store.commit('storeMain/setLayer', id);
-    }
+    },
+    //초기 데이터 처리
+    async fnInitData() {
+      //Trait데이터 가져오기
+      await this.fnCallTraitData();
+    },
+    async fnCallTraitData() {
+      this.$store.commit('storeInfo/setTraitList', 'Init');
+
+    },
   }
 }
 </script>

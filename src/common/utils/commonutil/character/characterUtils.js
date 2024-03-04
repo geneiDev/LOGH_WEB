@@ -120,7 +120,6 @@ const characterUtils = {
     //   'CHA_MIL_EXP',      //군공
     //   'CHA_SOC_EXP',      //명성
     // ],
-
     
     META_CHARACTER.personalKeys.forEach(function(key) {
       // if(key === 'CHA_IDEA') {

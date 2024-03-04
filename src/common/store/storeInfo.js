@@ -1,14 +1,19 @@
+//storeInfo.js
 export default {
   state: {
-    // state for layer module
+    traitList : [],
+    
   },
   mutations: {
-    // mutations for layer module
+    setTraitList(state, flag) {
+      console.info('setTraitList', flag);
+      state.traitList = ['aa'];
+    },
   },
   actions: {
     // actions for layer module
   },
   getters: {
-    // getters for layer module
+    getTraitList: (state) => state.traitList,
   },
 };

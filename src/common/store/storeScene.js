@@ -4,11 +4,13 @@ import global from '@/common/utils/global.js';
 export default {
   namespaced: true,
   state: {
+    currentScene : {},
     scenarioInfo : {},
     characterList : [],
   },
   mutations: {
     setScenarioInfo(state, object) {
+      state.currentScene.id = object.id;
       state.scenarioInfo = object;
     },
     setCharacterList(state, array) {
@@ -23,14 +25,11 @@ export default {
   },
   actions: {
     fetchCharacterList({ commit }) {
-      const mockData = [
-        { id: 1, name: 'Item 1', value: 'Value 1' },
-        { id: 2, name: 'Item 2', value: 'Value 2' },
-      ];
-      commit('setCharacterList', mockData);
+      commit('setCharacterList', []);
     },
   },
   getters: {
+    getCurrentScene: (state) => state.currentScene,
     getScenarioInfo: (state) => state.scenarioInfo,
     getCharacterList: (state) => state.characterList,
     getCharacterData: (state) => (id) => {

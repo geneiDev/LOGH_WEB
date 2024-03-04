@@ -159,7 +159,6 @@ export default {
           this.dataLoadingText = '시나리오 데이터를 불러오는데 실패했습니다.';
           return;
         }
-        //
         this.$store.commit('storeScene/setScenarioInfo', this.scenarioObj);
         await this.fnGetScenarioCharData();
       }
@@ -218,9 +217,12 @@ export default {
       }
       console.info('fnGetScenarioCharData FROM ', filePath)
       this.charList = this.$store.getters['storeScene/getCharacterList'];
-      console.info('beforeCharList', this.charList);
-
-      
+      const CurrentScene = this.$store.getters['storeScene/getCurrentScene'];
+      console.info('beforeCharList', CurrentScene);
+      if (CurrentScene.id === this.scenarioObj.id) {
+        console.info('기존 캐릭터 정보와 가져올 캐릭터 정보가 일치함.')
+        return this.fnGetScenarioCharTraitData();
+      }
       const reader = new FileReader();
       reader.onload = () => {
         const arrayBuffer = reader.result;
@@ -232,6 +234,7 @@ export default {
           console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
           this.$store.commit('storeScene/setCharacterList', jsonData);
           this.fnSetMajorItem('preview');
+          this.fnGetScenarioCharTraitData();
         } else {
           console.error('캐릭터 정보 onload failed');
         }
@@ -244,7 +247,34 @@ export default {
 
     },
     async fnGetScenarioCharTraitData() {
-
+      this.dataLoadingText = '인물 정보를 세팅하는 중';
+      let filePath = 'data/scenario/TN_GEN_CHAR_TRAITS.xlsx';
+      if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
+        filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR_TRAITS.xlsx`;
+      }
+      console.info('fnGetScenarioCharData FROM ', filePath)
+      this.traitList = this.$store.getters['storeInfo/getTraitList'];
+      console.info('traitList', this.traitList);
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        const arrayBuffer = reader.result;
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        if( jsonData && jsonData.length > 0) {
+          console.info('캐릭터 TRAIT 정보 onload ', jsonData.length, '-> ', jsonData)
+          // this.$store.commit('storeScene/setCharacterList', jsonData);
+          this.fnSetMajorItem('preview');
+          // this.fnGetScenarioCharTraitData();
+        } else {
+          console.error('캐릭터 TRAIT 정보 onload failed');
+        }
+      };
+      fetch(filePath)
+        .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
+        .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
     },
     fnClosePop () {
       this.$parent.fnCloseScenarioDetailInfo();
