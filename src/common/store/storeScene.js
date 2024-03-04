@@ -23,22 +23,23 @@ export default {
       state.characterList = currArray;
     },
     setCharacterTraitList(state, arrObj) {
-      console.info('setCharacterTraitList:', state, arrObj);
-      // Check if TRAIT exists in arrObj
-      const traitsString = arrObj.TRAIT ? (typeof arrObj.TRAIT === 'object' ? JSON.stringify(arrObj.TRAIT) : arrObj.TRAIT) : '{}';
-
-      const updatedCharacterList = state.characterList.map(row => {
-          if (arrObj.CHA_CODE === row.CHA_CODE) {
-              // 해당하는 CHA_CODE가 있다면 TRAIT 값을 업데이트
-              return { ...row, CHA_TRAITS: traitsString };
-          } else {
-              // 업데이트할 필요 없는 행은 그대로 반환하면서 TRAIT을 빈 객체로 설정
-              return { ...row, CHA_TRAITS: '{}' };
-          }
+      // console.info('setCharacterTraitList:', state, arrObj);
+      arrObj.forEach(objToUpdate => {
+          // Check if TRAIT exists in objToUpdate
+          const traitsString = objToUpdate.TRAITS ? (typeof objToUpdate.TRAITS === 'object' ? JSON.stringify(objToUpdate.TRAITS) : objToUpdate.TRAITS) : '{}';
+      
+          const updatedCharacterList = state.characterList.map(row => {
+              if (objToUpdate.CHA_CODE === row.CHA_CODE) {
+                  // If CHA_CODE matches, update the CHA_TRAITS
+                  return { ...row, CHA_TRAITS: traitsString };
+              } else {
+                  // If CHA_CODE doesn't match, keep the row unchanged
+                  return row;
+              }
+          });
+          state.characterList = updatedCharacterList;
       });
-      state.characterList = updatedCharacterList;
-      console.info('>>>>>', state.characterList);
-
+      // console.info('>>>>>', state.characterList);
     },
     setCharacterTrait(state, row) {
       console.info(state, row)
