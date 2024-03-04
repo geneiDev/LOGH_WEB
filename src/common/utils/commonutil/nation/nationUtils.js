@@ -21,11 +21,21 @@ const META_NATION = {
 }
 const nationUtils = {
   getNationInfo(id) {
-    console.info('nationUtils.getNationInfo', id);
-    const name = META_NATION.NAME.find(item => item.ID === id).kr;
+    // console.info('nationUtils.getNationInfo', id);
+    // const name = META_NATION.NAME.find(item => item.ID === id).kr;
+    if(!id) {
+      // console.error(`Nation with ID ${id} is null`);
+      return '';
+    }
+    const langId = 'kr';
+    const nationInfo = META_NATION.NAME.find(item => item.ID === id);
+    if (!nationInfo) {
+      console.error(`Nation with ID ${id} not found`);
+      return '';
+    }
     return {
       id : id,
-      name : name
+      name : nationInfo[langId]
     };
   }
 }

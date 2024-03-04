@@ -1,17 +1,30 @@
 <template>
   <div :class="'characterArea ' + optionsInfo.displayType">
     <div class="charTopInfo">
-      <div class="charImg">
-        <genei-img-area :imgSrc="'images/person/CH_000089N_H.webp'"/>
+      <div class="charImg" v-if="fnGetCharImg()">
+        <genei-img-area :imgSrc="fnGetCharImg()"/>
       </div>
       <div class="charBase">
-        <h2 class="charName">{{charData.CHA_STD_NAME}}</h2>
-        <h3 class="charName">{{charData.CHA_STD_NAME}}</h3>
-        <h3 class="charName">{{charData.CHA_STD_NAME}}</h3>
-        <h3 class="charName">{{charData.CHA_STD_NAME}}</h3>
+        <h2 class="charText">{{ fnGetLocatonText(charData) }}</h2>
+        <h3 class="charText">{{charData.CHA_STD_NAME}}</h3>
+        <h3 class="charText">{{charData.CHA_AGE}}</h3>
       </div>
     </div>
-    <div>{{charData}}</div>
+    <div class="btnCharBox">
+      <button class="btnCharDetail" id="trait">특성</button>
+      <button class="btnCharDetail" id="polit">내정</button>
+      <button class="btnCharDetail" id="stats">능력치</button>
+      <button class="btnCharDetail" id="bioge">열전</button>
+    </div>
+    <div class="charDetail_stats">
+      <ul class="stat_title"><li>지휘</li><li>통솔</li><li>공격</li><li>방어</li></ul>
+      <ul class="stat_context"><li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li></ul>
+      <ul class="stat_title"><li>기동</li><li>운영</li><li>정보</li><li>공전</li><li>육전</li></ul>
+      <ul class="stat_context"><li>{{charData.CHA_ST_FST}}</li><li>{{charData.CHA_ST_MNG}}</li><li>{{charData.CHA_ST_INF}}</li><li>{{charData.CHA_ST_AFG}}</li><li>{{charData.CHA_ST_GFG}}</li></ul>
+
+      <ul class="stat_title"><li>전투공작</li><li>회복치</li><li>정치공작</li><li>회복치</li></ul>
+      <ul class="stat_context"><li>{{charData.CHA_ST_MMP}}</li><li>{{charData.CHA_ST_NMP}}</li><li>{{charData.CHA_ST_MSP}}</li><li>{{charData.CHA_ST_NSP}}</li></ul>
+    </div>
     
   </div>
 </template>
@@ -104,6 +117,19 @@ export default {
 
       this.charData = storeCharData;
     },
+    fnGetCharImg() {
+      if(!this.charData.CHA_CODE || !this.optionsInfo.displayType) return false;
+
+      const imgSrc = `images/person/${this.charData.CHA_CODE}N_${this.optionsInfo.displayType}.webp`;
+      return imgSrc;
+    },
+    fnGetLocatonText() {
+      //소속 국가
+      let rtnText = '';
+      const nationText = (!this.charData.CHA_NATION_NAME ? '국적없음' : `${this.charData.CHA_NATION_NAME} 소속`);
+      rtnText = `${nationText}`;
+      return rtnText;
+    },
     fnSetErrorLog() {
 
     },
@@ -120,26 +146,108 @@ export default {
   overflow: hidden;
   box-shadow: 0 0 0 3px #c2daf7;
   &.H {
-    height: 12rem;
+    // max-height: 12rem;
     margin: 3px 3px;
     .charTopInfo {
       max-height: 7rem;
       display: flex;
       flex-direction: row;
       .charImg {
-        height: 6.8rem;
+        height: 6.9rem;
         width : 6rem;
         border: 4px solid rgb(202, 200, 52);
         border-radius: 5%;
       }
-      .charBase {
-        flex : 1;
-        overflow: hidden;
-        .charName {
+      .charName {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
         }
+      .charText {
+        height: 2.3rem;
+        background-color: gray;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border: 4px solid rgb(128, 128, 128);
+      }
+      .charBase {
+        flex : 1;
+        overflow: hidden;
+      }
+      .charIcon {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.2rem;
+        color: rgb(255, 255, 255);
+        cursor: pointer;
+      }
+    }
+    .btnCharBox {
+      margin-bottom: 0.5rem;
+      .btnCharDetail {
+        background-color: black;
+        position: relative;
+        width: 25%;
+        height: 2rem;
+        font-size: 1.2rem;
+        color: rgb(255, 255, 255);
+      }
+    }
+    
+    .charDetail_stats {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: row;
+      .stat_title {
+        width : 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        background-color: steelblue;
+        color:black;
+        font-weight: bolder;
+      }
+      .stat_title li {
+        flex : 1;
+        border-width: 2px 2px 0px 2px;
+        border-style: solid;
+        border-color: rgb(255, 255, 255);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .stat_context {
+        width : 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        background-color: rgb(91, 161, 218);
+        color:black;
+      }
+      .stat_context li {
+        flex: 1;
+        border-width: 0 2px 2px 2px;
+        border-style: solid;
+        border-color: rgb(255, 255, 255);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      &.on {
+        text-align: center;
+        border: 4px solid rgb(202, 200, 52);
       }
     }
   }

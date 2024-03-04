@@ -45,7 +45,9 @@
           <!-- C타입 : 캐릭터 + 텍스트 -->
           <div v-if="scenarioObj.subInfo[subInfoPage].displayType === 'C'" class="subInfoC">
             <character-info-area :charId="scenarioObj.subInfo[subInfoPage].data" :option="{ 'scenario' : scenarioObj.id }"></character-info-area>
-            {{ scenarioObj.subInfo }}
+            <div class="preview_txt" ref="textContainer" @click="(previewPage < scenarioObj.preview.length - 1) ? previewPage++ : ''">
+              <scroll-text-area :options="{text : scenarioObj.subInfo.text , itv : 50 }" />
+            </div>
           </div>
 
         </div>
@@ -157,6 +159,7 @@ export default {
           this.dataLoadingText = '시나리오 데이터를 불러오는데 실패했습니다.';
           return;
         }
+        //
         this.$store.commit('storeScene/setScenarioInfo', this.scenarioObj);
         await this.fnGetScenarioCharData();
       }
@@ -223,7 +226,7 @@ export default {
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         if( jsonData && jsonData.length > 0) {
-          console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
+          // console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
           this.$store.commit('storeScene/setCharacterList', jsonData);
           this.fnSetMajorItem('preview');
         } else {
