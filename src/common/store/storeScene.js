@@ -34,12 +34,12 @@ export default {
                   return { ...row, CHA_TRAITS: traitsString };
               } else {
                   // If CHA_CODE doesn't match, keep the row unchanged
-                  return row;
+                  return { ...row, CHA_TRAITS: {} };
               }
           });
           state.characterList = updatedCharacterList;
       });
-      // console.info('>>>>>', state.characterList);
+      console.info('캐릭터 트레잇 정보 세팅 완료.', state.characterList);
     },
     setCharacterTrait(state, row) {
       console.info(state, row)
