@@ -11,12 +11,16 @@
       </div>
     </div>
     <div class="btnCharBox">
-      <button class="btnCharDetail" id="trait">특성</button>
-      <button class="btnCharDetail" id="polit">내정</button>
-      <button class="btnCharDetail" id="stats">능력치</button>
-      <button class="btnCharDetail" id="bioge">열전</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail('trait')">특성</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'polit' ? ' on' : '')" id="polit" @click="fnShowCharDetail('polit')">내정</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail('stats')">능력치</button>
+      <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail('bioge')">열전</button>
     </div>
-    <div class="charDetail_stats">
+    <div class="charDetail_stats" v-if="targetRefs === 'trait'">
+    </div>
+    <div class="charDetail_stats" v-if="targetRefs === 'polit'">
+    </div>
+    <div class="charDetail_stats" v-if="targetRefs === 'stats'">
       <ul class="stat_title"><li>지휘</li><li>통솔</li><li>공격</li><li>방어</li></ul>
       <ul class="stat_context"><li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li></ul>
       <ul class="stat_title"><li>기동</li><li>운영</li><li>정보</li><li>공전</li><li>육전</li></ul>
@@ -25,6 +29,9 @@
       <ul class="stat_title"><li>전투공작</li><li>회복치</li><li>정치공작</li><li>회복치</li></ul>
       <ul class="stat_context"><li>{{charData.CHA_ST_MMP}}</li><li>{{charData.CHA_ST_NMP}}</li><li>{{charData.CHA_ST_MSP}}</li><li>{{charData.CHA_ST_NSP}}</li></ul>
     </div>
+    <div class="charDetail_stats" v-if="targetRefs === 'bioge'">
+    </div>
+
     
   </div>
 </template>
@@ -56,9 +63,8 @@ export default {
         scenario : '',
       },
       charList : [],
-      charData : {
-
-      },
+      charData : {},
+      targetRefs : 'stats',
     };
   },
   mounted() {
@@ -112,14 +118,10 @@ export default {
     async getCharacterData() {
       const storeCharData = this.$store.getters['storeScene/getCharacterData'](this.charId);
       console.info('storeCharData:', storeCharData)
-      
-
-
       this.charData = storeCharData;
     },
     fnGetCharImg() {
       if(!this.charData.CHA_CODE || !this.optionsInfo.displayType) return false;
-
       const imgSrc = `images/person/${this.charData.CHA_CODE}N_${this.optionsInfo.displayType}.webp`;
       return imgSrc;
     },
@@ -129,6 +131,9 @@ export default {
       const nationText = (!this.charData.CHA_NATION_NAME ? '국적없음' : `${this.charData.CHA_NATION_NAME} 소속`);
       rtnText = `${nationText}`;
       return rtnText;
+    },
+    fnShowCharDetail(refsId) {
+      this.targetRefs = refsId;
     },
     fnSetErrorLog() {
 
@@ -195,6 +200,9 @@ export default {
         font-size: 1.2rem;
         color: rgb(255, 255, 255);
       }
+      .btnCharDetail.on {
+        font-weight: bold;
+      }
     }
     
     .charDetail_stats {
@@ -202,6 +210,7 @@ export default {
       padding: 0;
       margin: 0;
       display: row;
+      height: 8rem;
       .stat_title {
         width : 100%;
         list-style: none;

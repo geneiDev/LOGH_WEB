@@ -278,7 +278,8 @@ export default {
       margin-bottom: 1rem;
     }
     .main_context {
-      flex : 1
+      flex : 1;
+      flex-direction: row;
     }
     .scene_info_section ul {
       list-style: none;
