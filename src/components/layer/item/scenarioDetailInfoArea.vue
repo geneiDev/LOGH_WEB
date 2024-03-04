@@ -219,7 +219,7 @@ export default {
       this.charList = this.$store.getters['storeScene/getCharacterList'];
       const CurrentScene = this.$store.getters['storeScene/getCurrentScene'];
       console.info('beforeCharList', CurrentScene);
-      if (CurrentScene.id === this.scenarioObj.id) {
+      if (CurrentScene.id === this.scenarioObj.id && this.charList.length > 0) {
         console.info('기존 캐릭터 정보와 가져올 캐릭터 정보가 일치함.')
         return this.fnGetScenarioCharTraitData();
       }
