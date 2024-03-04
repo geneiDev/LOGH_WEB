@@ -10,31 +10,32 @@
         <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3>
       </div>
     </div>
-    <div class="btnCharBox">
-      <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">특성</button>
-      <button :class="'btnCharDetail'+(targetRefs === 'polit' ? ' on' : '')" id="polit" @click="fnShowCharDetail">내정</button>
-      <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
-      <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail">열전</button>
-    </div>
-    <div class="charDetail_stats" v-if="targetRefs === 'trait'">
-      특성특성
-    </div>
-    <div class="charDetail_stats" v-if="targetRefs === 'polit'">
-      내정내정
-    </div>
-    <div class="charDetail_stats" v-if="targetRefs === 'stats'">
-      <ul class="stat_title"><li>지휘</li><li>통솔</li><li>공격</li><li>방어</li></ul>
-      <ul class="stat_context"><li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li></ul>
-      <ul class="stat_title"><li>기동</li><li>운영</li><li>정보</li><li>공전</li><li>육전</li></ul>
-      <ul class="stat_context"><li>{{charData.CHA_ST_FST}}</li><li>{{charData.CHA_ST_MNG}}</li><li>{{charData.CHA_ST_INF}}</li><li>{{charData.CHA_ST_AFG}}</li><li>{{charData.CHA_ST_GFG}}</li></ul>
+    <div v-if="optionsInfo.displayType != 'M'">
+      <div class="btnCharBox">
+        <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'skill' ? ' on' : '')" id="skill" @click="fnShowCharDetail">기술</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail">열전</button>
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'trait'">
+        특성특성
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'stats'">
+        <ul class="stat_title"><li>지휘</li><li>통솔</li><li>공격</li><li>방어</li></ul>
+        <ul class="stat_context"><li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li></ul>
+        <ul class="stat_title"><li>기동</li><li>운영</li><li>정보</li><li>공전</li><li>육전</li></ul>
+        <ul class="stat_context"><li>{{charData.CHA_ST_FST}}</li><li>{{charData.CHA_ST_MNG}}</li><li>{{charData.CHA_ST_INF}}</li><li>{{charData.CHA_ST_AFG}}</li><li>{{charData.CHA_ST_GFG}}</li></ul>
 
-      <ul class="stat_title"><li>전투공작</li><li>회복치</li><li>정치공작</li><li>회복치</li></ul>
-      <ul class="stat_context"><li>{{charData.CHA_ST_MMP}}</li><li>{{charData.CHA_ST_NMP}}</li><li>{{charData.CHA_ST_MSP}}</li><li>{{charData.CHA_ST_NSP}}</li></ul>
+        <ul class="stat_title"><li>전투공작</li><li>회복치</li><li>정치공작</li><li>회복치</li></ul>
+        <ul class="stat_context"><li>{{charData.CHA_ST_MMP}}</li><li>{{charData.CHA_ST_NMP}}</li><li>{{charData.CHA_ST_MSP}}</li><li>{{charData.CHA_ST_NSP}}</li></ul>
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'polit'">
+        내정내정
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'bioge'">
+        열전열전
+      </div>
     </div>
-    <div class="charDetail_stats" v-if="targetRefs === 'bioge'">
-      열전열전
-    </div>
-
     
   </div>
 </template>
@@ -56,7 +57,7 @@ export default {
     option: {
       type : Object,
       default: () => ({
-        displayType : 'H',  //H : 머리만 | U : 상반신 | F : 전체
+        displayType : 'H',  //M: 최소정보 | H : 머리만 | U : 상반신 | F : 전체
         scenario : '',      //값이 존재하면 새로 해당 시나리오의 캐릭터 정보를 가져온다.
       })
     }
@@ -114,7 +115,9 @@ export default {
         .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
         .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
     },
-
+    async fnGetCharTraitData() {
+      
+    },
     /** @DESC : 현재 시나리오의 전체 인물 데이터를 가져온다. */
     async getCharacterList() {
       this.charList = this.$store.getters['storeScene/getCharacterList'];

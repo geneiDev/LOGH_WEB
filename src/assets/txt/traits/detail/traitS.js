@@ -1,6 +1,7 @@
 export const traitS = [
   { code : 'S00',
     ico : 'S00',
+    type : '',
     name : [
       '',
       '',
@@ -19,6 +20,7 @@ export const traitS = [
   },
   { code : 'S01',
     ico : 'S01',
+    type : 'C',
     name : [
       '강철거인',
       '鋼鉄の巨人',

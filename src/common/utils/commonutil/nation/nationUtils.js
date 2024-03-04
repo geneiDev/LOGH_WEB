@@ -17,7 +17,6 @@ const META_NATION = {
     { ID: 'TER', kr: '지구교', jp: '地球教', en: 'Terraism' },
     { ID: 'DOP', kr: '페잔 자치령', jp: 'フェザーン自治領', en: 'Dominion of Phezzan' },
   ],
-  
 }
 const nationUtils = {
   getNationInfo(id) {

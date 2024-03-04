@@ -217,6 +217,9 @@ export default {
         filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR.xlsx`;
       }
       console.info('fnGetScenarioCharData FROM ', filePath)
+      this.charList = this.$store.getters['storeScene/getCharacterList'];
+      console.info('beforeCharList', this.charList);
+
       
       const reader = new FileReader();
       reader.onload = () => {
@@ -238,6 +241,9 @@ export default {
         .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
     },
     async fnGetScenarioNationData() {
+
+    },
+    async fnGetScenarioCharTraitData() {
 
     },
     fnClosePop () {
