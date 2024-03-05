@@ -27,23 +27,40 @@
         <h1>환경 설정</h1>
         <h4>여러 환경요소를 설정합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('G')" disabled>
+      <button type="button" class="btn_title" @click="setTitleFlag('G')">
         <h1>가이드</h1>
         <h4>게임을 진행하는데 있어 필요한 정보입니다.</h4>
       </button>
     </div>
     <div class="title_container" v-if="titleFlag === 'S'">
-      <button type="button" class="btn_title" @click="fnCallNewGame()">
+      <button type="button" class="btn_title" @click="fnCallLayerPop('SN')">
         <h1>새 게임</h1>
         <h4>새로운 시나리오와 인물을 선택하여 플레이합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('SC')" disabled>
+      <button type="button" class="btn_title" @click="fnCallLayerPop('SC')" disabled>
         <h1>계속하기</h1>
         <h4>마지막 플레이 이력 : 없음</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('SL')" disabled>
+      <button type="button" class="btn_title" @click="fnCallLayerPop('SL')" disabled>
         <h1>불러오기</h1>
         <h4>저장된 데이터 : 0개</h4>
+      </button>
+      <button type="button" class="btn_title" @click="setTitleFlag('on')">
+        <h1>뒤로</h1>
+      </button>
+    </div>
+    <div class="title_container" v-if="titleFlag === 'M'">
+    </div>
+    <div class="title_container" v-if="titleFlag === 'O'">
+    </div>
+    <div class="title_container" v-if="titleFlag === 'G'">
+      <button type="button" class="btn_title" @click="fnCallLayerPop('GP')">
+        <h1>인물 사전</h1>
+        <h4>시나리오별 인물 정보를 검색합니다.</h4>
+      </button>
+      <button type="button" class="btn_title" @click="fnCallLayerPop('GT')" disabled>
+        <h1>특성표</h1>
+        <h4>인물의 특성 정보를 검색합니다.</h4>
       </button>
       <button type="button" class="btn_title" @click="setTitleFlag('on')">
         <h1>뒤로</h1>
@@ -54,12 +71,16 @@
 
 <script>
 import { tipMeta } from "@/assets/txt/tip.js";
-import LayerPopNewGame from '@/components/layer/commons/LayerPopNewGame.vue'
+import LayerPopNewGame from '@/components/layouts/mains/title/details/LayerPopNewGame.vue'
+import LayerPopDicPerson from '@/components/layouts/mains/title/details/LayerPopDicPerson.vue'
 
 export default {
   name: 'layerTitle',
   components: {
     LayerPopNewGame,
+    // LayerPopMultiGame,
+    // LayerPopOption,
+    LayerPopDicPerson,
   },
   props: {
     
@@ -80,8 +101,6 @@ export default {
   },
   mounted() {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
-    this.fnInitData();
-
     this.fnStartTipRotation();
   },
   activated() {
@@ -106,11 +125,19 @@ export default {
     },
     //LayerTitle영역에서 호출할 SubPopup을 세팅한다.
     fnCallLayerPop(flg) {
-      this.layerPop  = flg;
-    },
-    //새 게임 호출
-    fnCallNewGame () {
-      this.layerPop = "LayerPopNewGame";
+      let layerName = ''
+      switch (flg) {
+        case 'SN': layerName = "LayerPopNewGame"; break;  //새 게임 호출
+        case 'SC': layerName = ""; break;  //계속하기
+        case 'SL': layerName = ""; break;  //계속하기
+        case 'GP': layerName = "LayerPopDicPerson"; break;  //계속하기
+      
+        default:
+          break;
+      }
+      console.info(flg, layerName)
+
+      this.layerPop  = layerName;
     },
     fnChangeMainLayer () {
       var id  = ''
@@ -120,15 +147,6 @@ export default {
         id    = 'Login'
       }
       this.$store.commit('storeMain/setLayer', id);
-    },
-    //초기 데이터 처리
-    async fnInitData() {
-      //Trait데이터 가져오기
-      await this.fnCallTraitData();
-    },
-    async fnCallTraitData() {
-      this.$store.commit('storeInfo/setTraitList', 'I');
-
     },
   }
 }

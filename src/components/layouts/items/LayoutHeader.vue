@@ -42,19 +42,26 @@
       
     },
     created() {
-      this.fnGetUserData()
+      this.fnInitData();
+      
     },
     mounted() {
 
     },
     methods : {
-      fnGetUserData() {
+      async fnInitData() {
+        //Trait정보 초기화
+        const traitData = this.$store.getters['storeInfo/getTraitList'];
+        console.info(traitData);
+        await this.fnGetUserData();
+      },
+      async fnGetUserData() {
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
         if(this.userData.isLogin) {
-          console.info('fnGetUserData', this.userData)
+          console.info('fnGetUserData', this.userData);
         } else {
           //로그인 세션 이동
-          console.info('fnGetUserData', this.userData)
+          console.info('fnGetUserData', this.userData);
         }
       },
     }

@@ -22,7 +22,8 @@ import '@/common/utils/global';
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
 import LayoutFooter from './components/layouts/items/LayoutFooter.vue'
 //Body
-import LayerTitle from './components/layouts/mains/LayerTitle.vue'
+//src\components\layouts\mains\title\LayerTitle.vue
+import LayerTitle from './components/layouts/mains/title/LayerTitle.vue'
 import LayerLogin from './components/layouts/users/LayerLogin.vue'
 
 export default {
