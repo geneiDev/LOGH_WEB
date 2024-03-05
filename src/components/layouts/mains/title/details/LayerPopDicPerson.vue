@@ -16,11 +16,12 @@
       <button type="button" class="btn_next" @click="fnBtnScenario('N')"></button>
     </div>
     <div class="character_search_section">
-      <input type="text" class="">
+      <h3>총 {{ characterInfo.length }} / {{ characterArr.length }} 명</h3>
+      <input type="text" class="" v-model="characterInfoKey">
     </div>
 
     <div class="character_list_section">
-      <div v-for="characterRow in characterArr" :key="characterRow.RN">
+      <div v-for="characterRow in characterInfo" :key="characterRow.RN">
         <h3>{{characterRow.CHA_STD_NAME}}</h3>
       </div>
       
@@ -48,13 +49,17 @@ export default {
       scenarioObj : {},
 
       characterArr: [],
+      characterInfo : [],
+      characterInfoKey : "",
     };
   },
   watch: {
     'scenarioObj.rn'() {
       this.fnGetCharacterInfo();
     },
-
+    'characterInfoKey' (newVal) {
+      this.fnFilterCharacterInfo(newVal)
+    },
   },
   mounted() {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
@@ -124,6 +129,7 @@ export default {
           this.$store.commit('storeScene/setCharacterList', jsonData);
           this.characterArr = jsonData;
           console.info('characterArr', this.characterArr)
+          this.fnFilterCharacterInfo('')
         } else {
           console.error('캐릭터 정보 NULL');
         }
@@ -135,8 +141,16 @@ export default {
       } catch (error) {
         console.error(error)
       }
-      
     },
+    fnFilterCharacterInfo(newVal) {
+      const lowerCaseVal = newVal.toLowerCase();
+      this.characterInfo = this.characterArr.filter(character => {
+        const lowerCaseName = character.CHA_STD_NAME.toLowerCase();
+        const lowerCaseNick = character.CHA_STD_NICK.toLowerCase();
+        return lowerCaseName.includes(lowerCaseVal) || lowerCaseNick.includes(lowerCaseVal);
+      });
+    },
+
   }
 }
 </script>
