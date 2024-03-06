@@ -1,6 +1,6 @@
 <template>
   <div :class="'characterArea ' + optionsInfo.displayType" :id="charData.CHA_CODE">
-    <div v-if="optionsInfo.displayType != 'M'">
+    <div v-if="optionsInfo.displayType">
       <div class="btnCharBox">
         <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
         <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
@@ -15,9 +15,29 @@
       <div class="charBase">
         <h3 class="charText">{{ fnGetLocatonText()}} {{ charData.JOB }} {{ charData.CHA_USEYN }}</h3>
         <h2 class="charText">{{charData.CHA_STD_NAME}}</h2>
-        <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3>
+        <!-- <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3> -->
       </div>
     </div>
+    <div class="charDetail" v-if="optionsInfo.displayType == 'M'">
+      <div class="charDetail_stats" v-if="targetRefs === 'trait'">
+        특성특성{{ charData }}
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'stats'">
+        <ul class="stat_context">
+          <li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li>
+          <li>{{charData.CHA_ST_FST}}</li><li>{{charData.CHA_ST_MNG}}</li><li>{{charData.CHA_ST_INF}}</li><li>{{charData.CHA_ST_AFG}}</li><li>{{charData.CHA_ST_GFG}}</li>
+        </ul>
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'polit'">
+        내정내정
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'bioge'">
+        열전열전
+      </div>
+    </div>
+
+
+
     <div v-if="optionsInfo.displayType != 'M'">
       <div class="charDetail_stats" v-if="targetRefs === 'trait'">
         특성특성{{ charData }}
@@ -170,145 +190,159 @@ export default {
   height: 100%;
   overflow: hidden;
   box-shadow: 0 0 0 3px #c2daf7;
-  &.M {
-    margin: 2px 0;
-    .charTopInfo {
-      max-height: 7rem;
-      display: flex;
-      flex-direction: row;
-      .charImg {
-        height: 6.9rem;
-        width : 6rem;
-        border: 1px solid rgb(202, 200, 52);
-      }
-      .charName {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      .charBase {
-        text-align: left;
-        overflow: hidden;
-      }
+  .btnCharBox {
+    margin-bottom: 0.5rem;
+    .btnCharDetail {
+      background-color: black;
+      position: relative;
+      width: 25%;
+      height: 2rem;
+      font-size: 1.2rem;
+      color: rgb(255, 255, 255);
+    }
+    .btnCharDetail.on {
+      font-weight: bold;
     }
   }
-
-  &.H {
-    // max-height: 12rem;
-    margin: 3px 3px;
-    .charTopInfo {
-      max-height: 7rem;
-      display: flex;
-      flex-direction: row;
-      .charImg {
-        height: 6.9rem;
-        width : 6rem;
-        border: 4px solid rgb(202, 200, 52);
-        border-radius: 5%;
-      }
-      .charName {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      .charText {
-        height: 2.3rem;
-        background-color: gray;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        border: 4px solid rgb(128, 128, 128);
-      }
-      .charBase {
-        flex : 1;
-        overflow: hidden;
-      }
-      .charIcon {
-        position: relative;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2.2rem;
-        color: rgb(255, 255, 255);
-        cursor: pointer;
-      }
+}
+.characterArea.M {
+  margin: 2px 0;
+  .charTopInfo {
+    max-height: 7rem;
+    display: flex;
+    flex-direction: row;
+    .charImg {
+      height: 7rem;
+      width : 6rem;
+      border: 1px solid rgb(202, 200, 52);
     }
-    .btnCharBox {
-      margin-bottom: 0.5rem;
-      .btnCharDetail {
-        background-color: black;
-        position: relative;
-        width: 25%;
-        height: 2rem;
-        font-size: 1.2rem;
-        color: rgb(255, 255, 255);
-      }
-      .btnCharDetail.on {
-        font-weight: bold;
-      }
+    .charName {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
-    
-    .charDetail_stats {
+    .charBase {
+      text-align: left;
+      overflow: hidden;
+    }
+  }
+  .charDetail {
+    height: 6rem;
+    .stat_context {
       list-style: none;
       padding: 0;
       margin: 0;
-      display: row;
-      height: 8rem;
-      .stat_title {
-        width : 100%;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        background-color: steelblue;
-        color:black;
-        font-weight: bolder;
-      }
-      .stat_title li {
-        flex : 1;
-        border-width: 2px 2px 0px 2px;
-        border-style: solid;
-        border-color: rgb(255, 255, 255);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .stat_context {
-        width : 100%;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        background-color: rgb(91, 161, 218);
-        color:black;
-      }
-      .stat_context li {
-        flex: 1;
-        border-width: 0 2px 2px 2px;
-        border-style: solid;
-        border-color: rgb(255, 255, 255);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      &.on {
-        text-align: center;
-        border: 4px solid rgb(202, 200, 52);
-      }
+      display: flex;
+      flex-direction: row;
+    }
+    .stat_context li {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+  }
+}
+.characterArea.H {
+  // max-height: 12rem;
+  margin: 3px 3px;
+  .charTopInfo {
+    max-height: 7rem;
+    display: flex;
+    flex-direction: row;
+    .charImg {
+      height: 6.9rem;
+      width : 6rem;
+      border: 4px solid rgb(202, 200, 52);
+      border-radius: 5%;
+    }
+    .charName {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .charText {
+      height: 2.3rem;
+      background-color: gray;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      border: 4px solid rgb(128, 128, 128);
+    }
+    .charBase {
+      flex : 1;
+      overflow: hidden;
+    }
+    .charIcon {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.2rem;
+      color: rgb(255, 255, 255);
+      cursor: pointer;
     }
   }
-  &.U {
-    margin: 8px 0;
+  
+  
+  .charDetail_stats {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: row;
+    height: 8rem;
+    .stat_title {
+      width : 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      background-color: steelblue;
+      color:black;
+      font-weight: bolder;
+    }
+    .stat_title li {
+      flex : 1;
+      border-width: 2px 2px 0px 2px;
+      border-style: solid;
+      border-color: rgb(255, 255, 255);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat_context {
+      width : 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      background-color: rgb(91, 161, 218);
+      color:black;
+    }
+    .stat_context li {
+      flex: 1;
+      border-width: 0 2px 2px 2px;
+      border-style: solid;
+      border-color: rgb(255, 255, 255);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &.on {
+      text-align: center;
+      border: 4px solid rgb(202, 200, 52);
+    }
   }
-  &.F {
-    margin: 6px 0;
-  }
-
 }
+
 </style>

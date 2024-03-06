@@ -25,9 +25,7 @@
       <div class="info_box"><h4>{{ characterInfoPageObj.currentPage+1 }} / {{ characterInfoPageObj.totalPages }}</h4></div>
       <button class="ctl_common" @click="characterInfoPageObj.currentPage++">다음페이지</button>
     </div>
-
     <div class="character_list_section" v-if="characterInfo.length > 0">
-      <div></div>
       <div v-for="characterRow in characterInfo[this.characterInfoPageObj.currentPage]" :key="characterRow.RN">
         <character-info-area :charObj="characterRow" :option="{ 'displayType' : 'M' }"></character-info-area>
       </div>
