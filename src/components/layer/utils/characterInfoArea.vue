@@ -24,6 +24,9 @@
       </div>
       <div class="charDetail_stats" v-if="targetRefs === 'stats'">
         <ul class="stat_context">
+          <li>지휘</li><li>통솔</li><li>공격</li><li>방어</li><li>기동</li><li>운영</li><li>정보</li><li>공전</li><li>육전</li>
+        </ul>
+        <ul class="stat_context">
           <li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li>
           <li>{{charData.CHA_ST_FST}}</li><li>{{charData.CHA_ST_MNG}}</li><li>{{charData.CHA_ST_INF}}</li><li>{{charData.CHA_ST_AFG}}</li><li>{{charData.CHA_ST_GFG}}</li>
         </ul>
@@ -228,12 +231,18 @@ export default {
   }
   .charDetail {
     height: 6rem;
+    display: grid;
+    align-items: center;
+    justify-content: center;
     .stat_context {
       list-style: none;
       padding: 0;
       margin: 0;
       display: flex;
       flex-direction: row;
+      border-width: 2px 0px 2px 2px;
+      border-style: solid;
+      border-color: rgb(255, 255, 255);
     }
     .stat_context li {
       flex: 1;
@@ -243,6 +252,9 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      border-width: 0 2px 2px 2px;
+      border-style: solid;
+      border-color: rgb(255, 255, 255);
     }
     
   }
