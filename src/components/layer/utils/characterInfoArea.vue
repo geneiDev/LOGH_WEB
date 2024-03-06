@@ -13,7 +13,7 @@
         <genei-img-area :imgSrc="fnGetCharImg()"/>
       </div>
       <div class="charBase">
-        <h3 class="charText">{{ fnGetLocatonText()}} {{ charData.JOB }} {{ charData.CHA_USEYN }}</h3>
+        <h3 class="charText">{{ fnGetLocatonText()}} {{ charData.JOB }}</h3>
         <h2 class="charText">{{charData.CHA_STD_NAME}}</h2>
         <!-- <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3> -->
       </div>
@@ -230,11 +230,16 @@ export default {
     }
   }
   .charDetail {
+    width: 100%;
     height: 6rem;
-    display: grid;
+    display: flex;
     align-items: center;
     justify-content: center;
+    .charDetail_stats {
+      width: 100%;
+    }
     .stat_context {
+      width: 100%;
       list-style: none;
       padding: 0;
       margin: 0;

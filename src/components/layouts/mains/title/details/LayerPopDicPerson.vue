@@ -25,13 +25,16 @@
       <div class="info_box"><h4>{{ characterInfoPageObj.currentPage+1 }} / {{ characterInfoPageObj.totalPages }}</h4></div>
       <button class="ctl_common" @click="characterInfoPageObj.currentPage++">다음페이지</button>
     </div>
+    <div class="character_filter_section">
+      <select><option>능력치</option></select> 중<select><option>통솔력</option></select>
+      <span>이 </span><select><option>10</option></select>
+      <span>보다 </span><select><option>큰</option></select>
+    </div>
     <div class="character_list_section" v-if="characterInfo.length > 0">
       <div v-for="characterRow in characterInfo[this.characterInfoPageObj.currentPage]" :key="characterRow.RN">
         <character-info-area :charObj="characterRow" :option="{ 'displayType' : 'M' }"></character-info-area>
       </div>
     </div>
-    
-    
   </div>
 </div>
 </template>
@@ -156,7 +159,7 @@ export default {
         console.error(error)
       }
     },
-    //필터와 페이징
+    //페이징
     async fnFilterCharacterInfo() {
       if (!this.characterArr || !Array.isArray(this.characterArr)) {
         console.error('Invalid or undefined characterArr.');
@@ -181,6 +184,11 @@ export default {
         const currentPageData = filteredData.slice(startIndex, endIndex);
         this.$set(this.characterInfo, i, currentPageData);
       }
+      console.info('::', this.characterInfoPageObj)
+      if(this.characterInfoPageObj.currentPage > this.characterInfoPageObj.totalPages) {
+        this.characterInfoPageObj.currentPage = 0;
+      }
+
     },
 
 
@@ -256,9 +264,15 @@ export default {
         height: 2rem;
       }
     }
+    .character_filter_section {
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .character_list_section {
       position: relative;
-      height: calc(100% - 6rem);
+      height: calc(100% - 9rem);
       overflow-y: auto;
     }
     .paging_div {
