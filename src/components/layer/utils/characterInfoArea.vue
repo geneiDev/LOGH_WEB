@@ -1,5 +1,5 @@
 <template>
-  <div :class="'characterArea ' + optionsInfo.displayType">
+  <div :class="'characterArea ' + optionsInfo.displayType" :id="charData.CHA_CODE">
     <div v-if="optionsInfo.displayType != 'M'">
       <div class="btnCharBox">
         <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
@@ -13,7 +13,7 @@
         <genei-img-area :imgSrc="fnGetCharImg()"/>
       </div>
       <div class="charBase">
-        <h3 class="charText">{{ fnGetLocatonText(charData) }}</h3>
+        <h3 class="charText">{{ fnGetLocatonText()}} {{ charData.JOB }} {{ charData.CHA_USEYN }}</h3>
         <h2 class="charText">{{charData.CHA_STD_NAME}}</h2>
         <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3>
       </div>
@@ -54,7 +54,9 @@ export default {
   props: {
     charId: {
       type : String,
-      default: 'CH_000000'
+    },
+    charObj: {
+      type : Object,
     },
     option: {
       type : Object,
@@ -81,10 +83,16 @@ export default {
   methods: {
     /** @DESC : GET DATA*/
     async fnInitData() {
-      console.info('INIT : characterInfoArea.vue', this.charId, this.option);
+      console.info('INIT : characterInfoArea.vue', (this.charObj || this.charId), this.option);
       await this.fnSetOption();
+      if (this.charObj) {
+        this.charData = this.charObj;
+        return;
+      }
+
       await this.getCharacterList();
       if(this.charList.length == 0) {
+        console.info('get')
         await this.fnGetScenarioCharData();
       } else {
         await this.getCharacterData();
@@ -132,7 +140,8 @@ export default {
     },
     fnGetCharImg() {
       if(!this.charData.CHA_CODE || !this.optionsInfo.displayType) return false;
-      const imgSrc = `images/person/${this.charData.CHA_CODE}N_${this.optionsInfo.displayType}.webp`;
+      const displayType = this.optionsInfo.displayType === 'M' ? 'H' : this.optionsInfo.displayType;
+      const imgSrc = `images/person/${this.charData.CHA_CODE}N_${displayType}.webp`;
       return imgSrc;
     },
     fnGetLocatonText() {
@@ -161,6 +170,29 @@ export default {
   height: 100%;
   overflow: hidden;
   box-shadow: 0 0 0 3px #c2daf7;
+  &.M {
+    margin: 2px 0;
+    .charTopInfo {
+      max-height: 7rem;
+      display: flex;
+      flex-direction: row;
+      .charImg {
+        height: 6.9rem;
+        width : 6rem;
+        border: 1px solid rgb(202, 200, 52);
+      }
+      .charName {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .charBase {
+        text-align: left;
+        overflow: hidden;
+      }
+    }
+  }
+
   &.H {
     // max-height: 12rem;
     margin: 3px 3px;
@@ -175,10 +207,10 @@ export default {
         border-radius: 5%;
       }
       .charName {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
       .charText {
         height: 2.3rem;
         background-color: gray;

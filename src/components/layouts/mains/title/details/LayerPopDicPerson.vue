@@ -16,26 +16,35 @@
       <button type="button" class="btn_next" @click="fnBtnScenario('N')"></button>
     </div>
     <div class="character_search_section">
-      <h3>총 {{ characterInfo.length }} / {{ characterArr.length }} 명</h3>
-      <input type="text" class="" v-model="characterInfoKey">
+      <h4>총 {{ characterArr.length }} 명 중</h4>
+      <h4>'{{ (characterInfoSearchKey || '모든 데이터') }}'(으)로 검색</h4>
+      <input type="text" class="" v-model="characterInfoSearchKey">
+    </div>
+    <div class="paging_div">
+      <button class="ctl_common" @click="characterInfoPageObj.currentPage--">이전페이지</button>
+      <div class="info_box"><h4>{{ characterInfoPageObj.currentPage+1 }} / {{ characterInfoPageObj.totalPages }}</h4></div>
+      <button class="ctl_common" @click="characterInfoPageObj.currentPage++">다음페이지</button>
     </div>
 
-    <div class="character_list_section">
-      <div v-for="characterRow in characterInfo" :key="characterRow.RN">
-        <h3>{{characterRow.CHA_STD_NAME}}</h3>
+    <div class="character_list_section" v-if="characterInfo.length > 0">
+      <div></div>
+      <div v-for="characterRow in characterInfo[this.characterInfoPageObj.currentPage]" :key="characterRow.RN">
+        <character-info-area :charObj="characterRow" :option="{ 'displayType' : 'M' }"></character-info-area>
       </div>
-      
     </div>
+    
     
   </div>
 </div>
 </template>
 
 <script>
-import { scenarioMeta } from "@/assets/txt/scenario/scenarioMeta";
 import * as XLSX from 'xlsx';
+import { scenarioMeta } from "@/assets/txt/scenario/scenarioMeta";
+import CharacterInfoArea from '@/components/layer/utils/characterInfoArea'
 export default {
   components: {
+    CharacterInfoArea,
   },
   data() {
     return {
@@ -49,16 +58,22 @@ export default {
       scenarioObj : {},
 
       characterArr: [],
+      
+      characterInfoSearchKey : "",
+      characterInfoPageObj : {
+        itemsPerPage : 20,
+        currentPage : 0,
+        totalPages : 0
+      },
       characterInfo : [],
-      characterInfoKey : "",
     };
   },
   watch: {
     'scenarioObj.rn'() {
       this.fnGetCharacterInfo();
     },
-    'characterInfoKey' (newVal) {
-      this.fnFilterCharacterInfo(newVal)
+    'characterInfoSearchKey'() {
+      this.fnFilterCharacterInfo();
     },
   },
   mounted() {
@@ -107,6 +122,7 @@ export default {
       this.scenarioObj = this.scenarioArr[rn];
       this.fnToggleSceneList();
     },
+
     //캐릭터
     async fnGetCharacterInfo() {
       await this.fnGetScenarioCharData();
@@ -117,7 +133,7 @@ export default {
       if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
         filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR.xlsx`;
       }
-
+      console.info('시나리오 코드 :', this.scenarioObj.id)
       const reader = new FileReader();
       reader.onload = () => {
         const arrayBuffer = reader.result;
@@ -128,28 +144,47 @@ export default {
         if( jsonData && jsonData.length > 0) {
           this.$store.commit('storeScene/setCharacterList', jsonData);
           this.characterArr = jsonData;
-          console.info('characterArr', this.characterArr)
-          this.fnFilterCharacterInfo('')
+          console.info('characterArr', this.characterArr);
         } else {
           console.error('캐릭터 정보 NULL');
         }
+        this.fnFilterCharacterInfo();        
       };
       try {
         fetch(filePath)
         .then(response => response.blob())
-        .then(blob => reader.readAsArrayBuffer(blob));  
+        .then(blob => reader.readAsArrayBuffer(blob))
       } catch (error) {
         console.error(error)
       }
     },
-    fnFilterCharacterInfo(newVal) {
-      const lowerCaseVal = newVal.toLowerCase();
-      this.characterInfo = this.characterArr.filter(character => {
-        const lowerCaseName = character.CHA_STD_NAME.toLowerCase();
-        const lowerCaseNick = character.CHA_STD_NICK.toLowerCase();
-        return lowerCaseName.includes(lowerCaseVal) || lowerCaseNick.includes(lowerCaseVal);
+    //필터와 페이징
+    async fnFilterCharacterInfo() {
+      if (!this.characterArr || !Array.isArray(this.characterArr)) {
+        console.error('Invalid or undefined characterArr.');
+        return;
+      }
+
+      const filteredData = this.characterArr.filter((character) => {
+        const nameIncludes = character.CHA_STD_NAME ? character.CHA_STD_NAME.includes(this.characterInfoSearchKey) : false;
+        const nickIncludes = character.CHA_STD_NICK ? character.CHA_STD_NICK.includes(this.characterInfoSearchKey) : false;
+        const engNameIncludes = character.CHA_ENG_NAME ? character.CHA_ENG_NAME.includes(this.characterInfoSearchKey) : false;
+        return nameIncludes || nickIncludes || engNameIncludes;
       });
+
+
+      const totalItemCount = filteredData.length;
+      this.characterInfoPageObj.totalPages = Math.ceil(totalItemCount / this.characterInfoPageObj.itemsPerPage);
+
+      this.characterInfo = Array.from({ length: this.characterInfoPageObj.totalPages }, () => []);
+      for (let i = 0; i < this.characterInfoPageObj.totalPages; i++) {
+        const startIndex = i * this.characterInfoPageObj.itemsPerPage;
+        const endIndex = startIndex + this.characterInfoPageObj.itemsPerPage;
+        const currentPageData = filteredData.slice(startIndex, endIndex);
+        this.$set(this.characterInfo, i, currentPageData);
+      }
     },
+
 
   }
 }
@@ -158,7 +193,7 @@ export default {
 <style lang="scss" scoped>
   @charset "UTF-8";
 .pop_dictionary {
-  height: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -175,7 +210,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       overflow: auto;
-      height: 3rem;
+      height: 4rem;
       border-top: 3px solid #ffffff;
       border-bottom: 3px solid #ffffff;
       .btn_prev {
@@ -215,11 +250,9 @@ export default {
         
       }
     }
-    .scenario_list_section.on {
-      height: auto;
-    }
     .character_search_section {
       border: 2px solid white;
+      padding-bottom: 1.2rem;
       input {
         width: 80%;
         height: 2rem;
@@ -227,43 +260,38 @@ export default {
     }
     .character_list_section {
       position: relative;
-      max-height: 200px;
+      height: calc(100% - 6rem);
       overflow-y: auto;
     }
-
-    // 하단 버튼 에리어
-    .btn_area {
-      position: absolute;
-      bottom: 3rem;
-      left: 0;
-      width: 100%;
-      margin-bottom: 0.5rem;
+    .paging_div {
+      position: relative;
+      border: 2px solid white;
+      color: #c2daf7;
+      width: 100vw;
+      background-color: rgba(0, 0, 0, 1);
+      height: 3rem;
+      overflow-y: hidden;
+      flex-direction: row;
+      justify-content: space-between;
       display: flex;
-      .btn_common {
+      align-items: center;
+      width: 100%;
+      .info_box {
         flex: 1;
-        border-radius: 0.1em;
+      }
+      .ctl_common {
+        flex: 1;
         margin: 0.1rem;
-        color:gray;
         background-color: rgba(0, 0, 0, 1);
         box-shadow: 0 0 0 2px #c2daf7;
-        border-radius: 0.5em;
-        color : #c2daf7;
-      }
-      .btn_common[disabled] {
-        color:gray;
-        box-shadow: 0 0 0 2px gray;
-      }
-    }
-    .scenario_detail_section {
-      position: absolute;
-      height: 0%;
-      width: 100%;
-      z-index: 600;
-      bottom: 0;
-      display: none;
-      &.on {
-        display: block;
+        border-radius: 0.1em;
+        color: #c2daf7;
+        z-index: 800;
         height: 100%;
+      }
+      .ctl_common:disabled {
+        color: grey;
+        cursor: not-allowed;
       }
     }
   }
