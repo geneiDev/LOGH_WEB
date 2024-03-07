@@ -215,25 +215,28 @@ export default {
       if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
         filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR.xlsx`;
       }
-      console.info('fnGetScenarioCharData FROM ', filePath)
-      this.charList = this.$store.getters['storeScene/getCharacterList'];
-      const CurrentScene = this.$store.getters['storeScene/getCurrentScene'];
+      this.charList = await this.$store.getters['storeScene/getCharacterList'];
+      const CurrentScene = await this.$store.getters['storeScene/getCurrentScene'];
       console.info('beforeCharList', CurrentScene);
       if (CurrentScene.id === this.scenarioObj.id && this.charList.length > 0) {
-        console.info('기존 캐릭터 정보와 가져올 캐릭터 정보가 일치함.')
-        return this.fnGetScenarioCharTraitData();
+        console.info('store와 기존 캐릭터 정보와 가져올 캐릭터 정보가 일치함. 로드하지 않음.')
+        // return this.fnSetMajorItem('preview');
       }
+      this.$store.commit('storeScene/createCharacterList', this.scenarioObj.id);
+
       const reader = new FileReader();
       reader.onload = () => {
         const arrayBuffer = reader.result;
         const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
         const sheetName = workbook.SheetNames[0];
+        console.info(workbook.sheetName)
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         if( jsonData && jsonData.length > 0) {
           console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData)
           this.$store.commit('storeScene/setCharacterList', jsonData);
-          this.fnGetScenarioCharTraitData();
+          this.fnSetMajorItem('preview');
+          // this.fnGetScenarioCharTraitData();
         } else {
           console.error('캐릭터 정보 onload failed');
         }

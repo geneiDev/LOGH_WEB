@@ -9,9 +9,26 @@ export default {
     characterList : [],
   },
   mutations: {
+    //시나리오
     setScenarioInfo(state, object) {
       state.currentScene.id = object.id;
       state.scenarioInfo = object;
+      return true;
+    },
+    //캐릭터
+    async createCharacterList(state, scenarioId) {
+      console.info(`prev:${state.currentScene.id} to:${scenarioId}`);
+      const filePath = `data/scenario${scenarioId ? `/${scenarioId}` : ''}/TN_GEN_CHAR.xlsx`;
+
+      if( state.currentScene.filePath == filePath && state.characterList.length > 0) {
+        return console.info(`이미 동일한 시나리오가 로드되어 있음 : ${scenarioId}}`)
+      }
+      const currArray = global.characterUtils.fnInitCharacterData(filePath);
+      if(currArray &&currArray.length > 0) {
+        state.currentScene.id = scenarioId;
+        state.currentScene.charFilePath = filePath;
+        state.characterList = currArray;
+      }
     },
     setCharacterList(state, array) {
       //.filter(row => row.CHA_USEYN !== 'N')

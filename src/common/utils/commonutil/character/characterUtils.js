@@ -1,4 +1,6 @@
 import global from '@/common/utils/global.js';
+import { utils as XLSXUtils, read as XLSXRead, } from 'xlsx';
+const XLSX = { utils: XLSXUtils, read: XLSXRead, };
 
 const META_CHARACTER = {
   baseKeys : [
@@ -39,6 +41,58 @@ const META_CHARACTER = {
   ]
 }
 const characterUtils = {
+  fnInitInfo(list) {
+    console.info(list);
+  },
+  fnInitDetail(list) {
+    console.info(list);
+  },
+  fnInitTrait(list) {
+    console.info(list);
+  },
+  fnInitJob(list) {
+    console.info(list);
+  },
+
+
+  fnInitCharacterData(filePath) {
+    console.info('datapath', filePath);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const arrayBuffer = reader.result;
+      const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+      const sheetNames = workbook.SheetNames;
+      sheetNames.map(sheetName => {
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        console.info(sheetName, jsonData);
+        let functionName = ('fn-init-' + sheetName).replace(/[-_](.)/g, (_, c) => c.toUpperCase())
+          .replace(/^[a-zA-Z]/, c => c.toLowerCase());
+        console.info(functionName);
+        if (typeof this[functionName] === 'function') {
+          return;
+        } else {
+          console.error(`plz create function in characterUtils -> ${functionName}`)
+        }
+      })
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet);
+      if( jsonData && jsonData.length > 0) {
+        console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData);
+      } else {
+        console.error('캐릭터 정보 onload failed');
+      }
+    };
+    fetch(filePath)
+    .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
+    .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
+  },
+
+
+
+
+
   fnGetChaKeys() {
     const resultSet = META_CHARACTER.baseKeys.concat(META_CHARACTER.personalKeys).concat(META_CHARACTER.statsKeys);
     return resultSet;

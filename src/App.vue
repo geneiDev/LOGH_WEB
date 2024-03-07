@@ -49,6 +49,7 @@ export default {
   },
   mounted() {
     this.$store.commit('storeMain/setLayer', 'Title');
+    this.$store.commit('storeScene/createCharacterList', 'T1');
   },
   watch: {
     async '$store.state.storeMain.layer'(newLayer, oldLayer) {

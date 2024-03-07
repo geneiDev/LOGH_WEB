@@ -26,12 +26,30 @@
       <button class="ctl_common" @click="characterInfoPageObj.currentPage++" :disabled="characterInfoPageObj.currentPage >= characterInfoPageObj.totalPages-1">다음페이지</button>
     </div>
     <div class="character_filter_section">
-      <select><option>능력치</option></select> 중<select><option>통솔력</option></select>
-      <span>이 </span><select><option>10</option></select>
-      <span>보다 </span><select><option>큰</option></select>
+      <div class="selector">
+        <div>
+          <select class="input_select" disabled><option v-for="filter in characterFilterObj.filterLV1" :key="filter.rn" :value="filter.value">{{ filter.value }}</option></select>
+        </div>
+        <div>
+          <select class="input_select" disabled><option>지휘가</option></select>
+        </div>
+        <div>
+          <select class="input_select" disabled><option>0보다</option></select>
+        </div>
+        <div>
+          <select class="input_select" disabled><option>크다</option></select>
+        </div>
+        <div>
+          <button class="ctl_common" disabled>필터 추가</button>
+        </div>
+
+      </div>
+      <div class="filter">
+        <span>적용된 필터가 없습니다.</span>
+      </div>
     </div>
     <div class="character_list_section" v-if="characterInfo.length > 0">
-      <div v-for="characterRow in characterInfo[this.characterInfoPageObj.currentPage]" :key="characterRow.RN">
+      <div :id="characterRow.CHA_CODE" v-for="characterRow in characterInfo[this.characterInfoPageObj.currentPage]" :key="characterRow.RN">
         <character-info-area :charObj="characterRow" :option="{ 'displayType' : 'M' }"></character-info-area>
       </div>
     </div>
@@ -60,6 +78,15 @@ export default {
 
       characterArr: [],
       
+      characterFilterObj : {
+        filterLV1 : [
+          { rn: 0, id : "status" , value : "능력치 중" },
+          { rn: 1, id : "nation" , value : "국가 가" },
+        ],
+
+      },
+      
+
       characterInfoSearchKey : "",
       characterInfoPageObj : {
         itemsPerPage : 20,
@@ -80,9 +107,17 @@ export default {
   mounted() {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
     console.info('userData', this.userData);
+    this.fnInitScreenFunc();
     this.fnInitScenarioMeta();
   },
   methods : {
+    //화면
+    fnInitScreenFunc() {
+      this.fnSetFilterFunc(); 
+    },
+    fnSetFilterFunc() {
+      
+    },
     //시나리오
     fnInitScenarioMeta() {
       this.scenarioArr = scenarioMeta;
@@ -172,7 +207,6 @@ export default {
         const engNameIncludes = character.CHA_ENG_NAME ? character.CHA_ENG_NAME.includes(this.characterInfoSearchKey) : false;
         return nameIncludes || nickIncludes || engNameIncludes;
       });
-
 
       const totalItemCount = filteredData.length;
       this.characterInfoPageObj.totalPages = Math.ceil(totalItemCount / this.characterInfoPageObj.itemsPerPage);
@@ -265,10 +299,33 @@ export default {
       }
     }
     .character_filter_section {
-      height: 3rem;
+      min-height: 5rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 2px solid white;
+      flex-direction: column;
+      .selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height : 3rem;
+        width: 100%;
+        border: 0.5px solid white;
+        div {
+          flex : 1;
+          .input_select {
+            background: black;
+            color: #c2daf7;
+            font-size: 1.4rem;
+            option {
+              font-size: 1rem;
+              height: 0.8rem;
+            }
+          }
+        }
+      }
+      
     }
     .character_list_section {
       position: relative;
@@ -291,21 +348,23 @@ export default {
       .info_box {
         flex: 1;
       }
-      .ctl_common {
-        flex: 1;
-        margin: 0.1rem;
-        background-color: rgba(0, 0, 0, 1);
-        box-shadow: 0 0 0 2px #c2daf7;
-        border-radius: 0.1em;
-        color: #c2daf7;
-        z-index: 800;
-        height: 100%;
-      }
-      .ctl_common:disabled {
-        color: grey;
-        cursor: not-allowed;
-      }
+      
     }
   }
+  .ctl_common {
+    flex: 1;
+    margin: 0.1rem;
+    background-color: rgba(0, 0, 0, 1);
+    box-shadow: 0 0 0 2px #c2daf7;
+    border-radius: 0.1em;
+    color: #c2daf7;
+    z-index: 800;
+    height: 100%;
+  }
+  .ctl_common:disabled {
+    color: grey;
+    cursor: not-allowed;
+  }
+
 }
 </style>
