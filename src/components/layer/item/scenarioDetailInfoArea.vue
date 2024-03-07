@@ -245,7 +245,7 @@ export default {
     async fnGetScenarioNationData() {
 
     },
-    fnGetScenarioCharTraitData() {
+    async fnGetScenarioCharTraitData() {
       this.dataLoadingText = '인물 정보를 세팅하는 중';
       let filePath = 'data/scenario/TN_GEN_CHAR_TRAITS.xlsx';
       if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
