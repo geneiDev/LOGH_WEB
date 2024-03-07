@@ -4,9 +4,11 @@
       <div class="subPop_div">
         <component :is="layerPop"></component>
       </div>
-      <button type="button" class="btn_back" @click="fnCallLayerPop('')">
-        <h1>뒤로</h1>
-      </button>
+      <div class="bottom_btn_area">
+        <button type="button" class="btn_back" @click="fnCallLayerPop('')">
+          <h1>뒤로</h1>
+        </button>
+      </div>
     </div>
     <div class="tip_container">
       <span id="tips" style="white-space: pre-line;">{{ tipTxt }}</span>

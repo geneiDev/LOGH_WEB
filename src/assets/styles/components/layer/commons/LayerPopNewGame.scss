@@ -1,10 +1,9 @@
 @charset "UTF-8";
 .pop_layer {
-  z-index: 500 !important;
-  min-height: 100%;
+  z-index: 500;
+  height: auto;
   display: flex;
   flex-direction: column;
-
   .flag_section {
     background-color: #c2daf7;
     color: black;
@@ -80,8 +79,8 @@
   }
   // 하단 버튼 에리어
   .btn_area {
-    position: absolute;
-    bottom: 3rem;
+    position: relative;
+    bottom: 0;
     left: 0;
     width: 100%;
     margin-bottom: 0.5rem;

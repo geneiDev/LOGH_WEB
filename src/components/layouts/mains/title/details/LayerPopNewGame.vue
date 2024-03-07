@@ -1,5 +1,4 @@
 <template>
-<div>
   <div class="pop_layer">
     <div class="flag_section">
       <button type="button" class="btn_prev" @click="fnSetMainFlag('P')"></button>
@@ -20,7 +19,6 @@
       <scenario-detail-info :scenarioObj="scenarioObj" @fnClosePop="fnCloseScenarioDetailInfo"/>
     </div>
   </div>
-</div>
 </template>
 
 <script>
