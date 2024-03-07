@@ -21,9 +21,9 @@
       <input type="text" class="" v-model="characterInfoSearchKey">
     </div>
     <div class="paging_div">
-      <button class="ctl_common" @click="characterInfoPageObj.currentPage--">이전페이지</button>
+      <button class="ctl_common" @click="characterInfoPageObj.currentPage--" :disabled="characterInfoPageObj.currentPage == 0">이전페이지</button>
       <div class="info_box"><h4>{{ characterInfoPageObj.currentPage+1 }} / {{ characterInfoPageObj.totalPages }}</h4></div>
-      <button class="ctl_common" @click="characterInfoPageObj.currentPage++">다음페이지</button>
+      <button class="ctl_common" @click="characterInfoPageObj.currentPage++" :disabled="characterInfoPageObj.currentPage >= characterInfoPageObj.totalPages-1">다음페이지</button>
     </div>
     <div class="character_filter_section">
       <select><option>능력치</option></select> 중<select><option>통솔력</option></select>
