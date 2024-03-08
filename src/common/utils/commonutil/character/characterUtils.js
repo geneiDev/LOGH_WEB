@@ -2,6 +2,9 @@ import global from '@/common/utils/global.js';
 import { utils as XLSXUtils, read as XLSXRead, } from 'xlsx';
 const XLSX = { utils: XLSXUtils, read: XLSXRead, };
 
+const DATA = {
+  characterList : [],
+}
 const META_CHARACTER = {
   baseKeys : [
     'RN',               //KEY
@@ -16,7 +19,8 @@ const META_CHARACTER = {
   personalKeys : [
     'CHA_BIRTH',        //탄생년도
     'CHA_NATION',       //소속국가
-    'CHA_IDEA',         //개인 성향
+    'CHA_TENDENCY',     //성향 코드
+    'CHA_ACTIVE',       //적극성
     'CHA_MORAL',        //정치 선호도
     'CHA_FRIEND',       //개인 진화도
     'CHA_AMBITION',     //야망
@@ -38,23 +42,10 @@ const META_CHARACTER = {
     'CHA_ST_NMP',       //전투공작 회복치
     'CHA_ST_MSP',       //정치공작
     'CHA_ST_NSP',       //정치공작 회복치
-  ]
+  ],
 }
 const characterUtils = {
-  fnInitInfo(list) {
-    console.info(list);
-  },
-  fnInitDetail(list) {
-    console.info(list);
-  },
-  fnInitTrait(list) {
-    console.info(list);
-  },
-  fnInitJob(list) {
-    console.info(list);
-  },
-
-
+  //GET CHAR DATA FROM DB
   fnInitCharacterData(filePath) {
     console.info('datapath', filePath);
     const reader = new FileReader();
@@ -65,44 +56,41 @@ const characterUtils = {
       sheetNames.map(sheetName => {
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-        console.info(sheetName, jsonData);
         let functionName = ('fn-init-' + sheetName).replace(/[-_](.)/g, (_, c) => c.toUpperCase())
           .replace(/^[a-zA-Z]/, c => c.toLowerCase());
-        console.info(functionName);
         if (typeof this[functionName] === 'function') {
-          return;
+          this[functionName](jsonData);
         } else {
           console.error(`plz create function in characterUtils -> ${functionName}`)
         }
       })
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet);
-      if( jsonData && jsonData.length > 0) {
-        console.info('캐릭터 정보 onload ', jsonData.length, '-> ', jsonData);
-      } else {
-        console.error('캐릭터 정보 onload failed');
-      }
     };
     fetch(filePath)
     .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
     .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
   },
-
-
-
-
-
-  fnGetChaKeys() {
-    const resultSet = META_CHARACTER.baseKeys.concat(META_CHARACTER.personalKeys).concat(META_CHARACTER.statsKeys);
-    return resultSet;
+  //SET MAIN INFO LIST
+  fnInitInfo(list) {
+    list.map(row => {
+      this.fnGetCharacterInfo(row);
+    })
+    DATA.characterList = list;
   },
-  fnGetBaseKeys() {
-    return META_CHARACTER.baseKeys;
+  //SET MAIN INFO LIST -> ROW
+  async fnGetCharacterInfo(row) {
+    await this.fnGetBaseKeysInfo(row);
+    await this.fnGetPersonalKeysInfo(row);
+    await this.fnGetStatsKeyInfo(row);
+    return row;
   },
+  //SET MAIN INFO LIST -> ROW -> BASE_KEY
   fnGetBaseKeysInfo(row) {
+    //CHA_CODE & RN
     if(!row.CHA_CODE && !row.RN) {
-      return null;
+      const errorMsg = `KEY값을 추출할 수 없는 ROW입니다. ${JSON.stringify(row)}`
+      console.info(errorMsg)
+      row.ERROR = errorMsg;
+      return row;
     } else {
       if(!row.CHA_CODE) {
         const formatNumber = ('000000' + row.RN).slice(-6);
@@ -113,18 +101,7 @@ const characterUtils = {
         row.RN = parseInt(charNumber, 10);
       }
     }
-    /** imgFlag > M :미치하라 카츠미판 / F : 후지사키 류 / A : 구애니 / N : 신애니 / Gn : 게임  */
-    const imgFlag = ['M', 'F', 'A', 'N', 'G3', 'G4', 'G5', 'G6', 'G7', 'GB'];
-    /** imgType > H : 머리만 | U : 상반신 | F : 전체  */
-    const imgType = ['H', 'U', 'A']
-    const imgSrc = [];
-    imgFlag.forEach(flag => {
-      imgType.forEach(type => {
-        imgSrc.push(`images/person/${flag}N_${type}.webp`);
-      });
-    });
-    row.CHA_IMGS = imgSrc;
-
+    //NAME SET
     const representName = (values) => {
       for (const value of values) {
         if (value) {
@@ -140,16 +117,19 @@ const characterUtils = {
       ]);
       //빈 값 처리
       if (!row[key]) {
-        //캐릭터정보 유효 여부(필수값)
-        if(key === 'RN' || key === 'CHA_CODE' || !charMainName) {
-          console.error('필수값 누락 : ', key);
+        if(key === 'CHA_JAP_NAME') {
+          if(row['CHA_ENG_NAME']) {
+            row[key] = row['CHA_ENG_NAME'];
+          } else {
+            row[key] = charMainName;
+          }
         }
-        //캐릭터가 현재 활성화되어있는지 확인. 기본은 Y임.
-        if(key === 'CHA_USEYN') {
-          row[key] = 'Y';
-        }
-        if(key === 'CHA_JAP_NAME' || key === 'CHA_ENG_NAME') {
-          row[key] = charMainName;
+        if(key === 'CHA_ENG_NAME') {
+          if(row['CHA_JAP_NAME']) {
+            row[key] = row['CHA_JAP_NAME'];
+          } else {
+            row[key] = charMainName;
+          }
         }
         if(key === 'CHA_STD_NICK') {
           const nicknames = charMainName.split(' ');
@@ -158,30 +138,57 @@ const characterUtils = {
         }
       }
     })
+    //USE_YN
+    if(!row.CHA_USEYN || row.CHA_USEYN === 'N') {
+      row.CHA_USEYN = 'N';
+      return;
+    }
+    //IMG_SET
+    /** imgFlag > M :미치하라 카츠미판 / F : 후지사키 류 / A : 구애니 / N : 신애니 / Gn : 게임  */
+    const imgFlag = ['M', 'F', 'A', 'N', 'G3', 'G4', 'G5', 'G6', 'G7', 'GB'];
+    /** imgType > H : 머리만 | U : 상반신 | F : 전체  */
+    const imgType = ['H', 'U', 'A']
+
+    const imgSrc = [];
+    async function checkImgExist(url) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
+    }
+    async function processImages() {
+      for (const flag of imgFlag) {
+        for (const type of imgType) {
+          const imgUrl = `images/person/${row.CHA_CODE}${flag}_${type}.webp`;
+          if (await checkImgExist(imgUrl)) {
+            const imgData = {
+              imgFlg : `${flag}${type}`,
+              imgSrc : imgUrl
+            }
+            imgSrc.push(imgData);
+          }
+        }
+      }
+    }
+    processImages();
+    row.CHA_IMGS = imgSrc;
     return row;
   },
-  fnGetPersonalKeys() {
-    return META_CHARACTER.personalKeys;
-  },
+  //SET MAIN INFO LIST -> ROW -> PERSONAL_KEY
   fnGetPersonalKeysInfo(row) {
-    // personalKeys : [
-    //   'CHA_BIRTH',        //탄생년도
-    //   'CHA_NATION',       //소속국가
-    //   'CHA_MORAL',        //정치 선호도
-    //   'CHA_FRIEND',       //개인 진화도
-    //   'CHA_AMBITION',     //야망
-    //   'CHA_JOB',          //직업
-    //   'CHA_MIL_EXP',      //군공
-    //   'CHA_SOC_EXP',      //명성
-    // ],
-    
+    if(row.CHA_USEYN == 'N') {
+      return row;
+    }
     META_CHARACTER.personalKeys.forEach(function(key) {
-      // if(key === 'CHA_IDEA') {
-      //   console.info('히히')
-      // }
       if(!row[key]) {
-        // row.key = 0;
-        row[key] = 'null';
+        if(key === 'CHA_BIRTH') {
+          row[key] = 0;
+        }
+        if(key === 'CHA_NATION') {
+          row[key] = '';
+        }
       }
       if(row[key]) {
         if(key === 'CHA_NATION') {
@@ -190,30 +197,61 @@ const characterUtils = {
         }
       }
     })
-
-
-
-    META_CHARACTER.personalKeys
-
     return row;
   },
-  fnGetStatsKey() {
-    return META_CHARACTER.statsKeys;
-  },
   fnGetStatsKeyInfo(row) {
+    if(row.CHA_USEYN == 'N') {
+      return row;
+    }
     META_CHARACTER.statsKeys.forEach(function(key) {
       if(!row[key]) {
         row[key] = 0;
       }
-    }) 
+    })
     return row;
   },
-  fnGetCharacterInfo(row) {
-    this.fnGetBaseKeysInfo(row);
-    this.fnGetPersonalKeysInfo(row);
-    this.fnGetStatsKeyInfo(row);
-    return row;
+  //SET DETAIL INFO LIST
+  async fnInitDetail(list) {
+    DATA.characterList.map(row => {
+      if (row.CHA_USEYN === 'Y') {
+        const matchingDetails = list.filter(item => item.RN === row.RN);
+        console.info(row.RN, matchingDetails);
+        return { ...row, TRAIT: matchingDetails };
+      }
+      return row;
+    });
   },
+  //SET TRAIT INFO LIST
+  async fnInitTrait(list) {
+    DATA.characterList.map(row => {
+      if (row.CHA_USEYN === 'Y') {
+        const matchingTraits = list.filter(item => item.RN === row.RN);
+        console.info(row.RN, matchingTraits);
+        // matchingTraitInfo(matchingTraits); // matchingTraitInfo 함수가 비동기로 처리되기 때문에 await 필요 없음
+        return { ...row, TRAIT: matchingTraits };
+      }
+      return row;
+    });
+  },
+  //SET TRAIT INFO LIST
+  async fnInitJob(list) {
+    console.info(DATA.characterList)
+    console.info(list)
+  },
+
+  fnGetBaseKeys() {
+    return META_CHARACTER.baseKeys;
+  },
+  
+  fnGetPersonalKeys() {
+    return META_CHARACTER.personalKeys;
+  },
+  
+  fnGetStatsKey() {
+    return META_CHARACTER.statsKeys;
+  },
+
+
   fnGetAge(scenBirth, charBirth) {
     const baseDate = new Date(scenBirth);
     const birthDate = new Date(charBirth);

@@ -4,7 +4,9 @@ import global from '@/common/utils/global.js';
 export default {
   namespaced: true,
   state: {
-    currentScene : {},
+    currentScene : {
+      id : '',
+    },
     scenarioInfo : {},
     characterList : [],
   },
@@ -17,7 +19,7 @@ export default {
     },
     //캐릭터
     async createCharacterList(state, scenarioId) {
-      console.info(`prev:${state.currentScene.id} to:${scenarioId}`);
+      console.info(`prev:${state.currentScene.id} > to:${scenarioId}`);
       const filePath = `data/scenario${scenarioId ? `/${scenarioId}` : ''}/TN_GEN_CHAR.xlsx`;
 
       if( state.currentScene.filePath == filePath && state.characterList.length > 0) {
