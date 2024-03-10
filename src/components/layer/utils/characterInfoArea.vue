@@ -2,8 +2,8 @@
   <div :class="'characterArea ' + optionsInfo.displayType" :id="charData.CHA_CODE">
     <div v-if="optionsInfo.displayType">
       <div class="btnCharBox">
-        <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
         <button :class="'btnCharDetail'+(targetRefs === 'stats' ? ' on' : '')" id="stats" @click="fnShowCharDetail">능력치</button>
+        <button :class="'btnCharDetail'+(targetRefs === 'trait' ? ' on' : '')" id="trait" @click="fnShowCharDetail">보유특성</button>
         <button :class="'btnCharDetail'+(targetRefs === 'skill' ? ' on' : '')" id="skill" @click="fnShowCharDetail">기술</button>
         <button :class="'btnCharDetail'+(targetRefs === 'bioge' ? ' on' : '')" id="bioge" @click="fnShowCharDetail">열전</button>
       </div>
@@ -18,10 +18,7 @@
         <!-- <h3 class="charText">{{charData.CHA_AGE}}, 오리온 성계 베텔기우스</h3> -->
       </div>
     </div>
-    <div class="charDetail" v-if="optionsInfo.displayType == 'M'">
-      <div class="charDetail_stats" v-if="targetRefs === 'trait'">
-        특성특성{{ charData }}
-      </div>
+    <div class="charDetail">
       <div class="charDetail_stats" v-if="targetRefs === 'stats'">
         <ul class="stat_context">
           <li>지휘</li><li>통솔</li><li>공격</li><li>방어</li><li>기동</li><li>운영</li><li>정보</li><li>공전</li><li>육전</li>
@@ -30,6 +27,9 @@
           <li>{{charData.CHA_ST_CMD}}</li><li>{{charData.CHA_ST_CSM}}</li><li>{{charData.CHA_ST_ATT}}</li><li>{{charData.CHA_ST_DEF}}</li>
           <li>{{charData.CHA_ST_FST}}</li><li>{{charData.CHA_ST_MNG}}</li><li>{{charData.CHA_ST_INF}}</li><li>{{charData.CHA_ST_AFG}}</li><li>{{charData.CHA_ST_GFG}}</li>
         </ul>
+      </div>
+      <div class="charDetail_stats" v-if="targetRefs === 'trait'">
+        특성특성{{ charData }}
       </div>
       <div class="charDetail_stats" v-if="targetRefs === 'polit'">
         내정내정
@@ -41,7 +41,7 @@
 
 
 
-    <div v-if="optionsInfo.displayType != 'M'">
+    <!-- <div v-if="optionsInfo.displayType != 'M'">
       <div class="charDetail_stats" v-if="targetRefs === 'trait'">
         특성특성{{ charData }}
       </div>
@@ -60,7 +60,7 @@
       <div class="charDetail_stats" v-if="targetRefs === 'bioge'">
         열전열전
       </div>
-    </div>
+    </div> -->
     
   </div>
 </template>

@@ -40,7 +40,7 @@
           <select class="input_select" disabled><option>크다</option></select>
         </div>
         <div>
-          <button class="ctl_common" disabled>필터 추가</button>
+          <button class="ctl_common" disabled>적용</button>
         </div>
 
       </div>
@@ -233,6 +233,7 @@ export default {
 <style lang="scss" scoped>
   @charset "UTF-8";
 .pop_dictionary {
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -317,7 +318,7 @@ export default {
           .input_select {
             background: black;
             color: #c2daf7;
-            font-size: 1.4rem;
+            font-size: 1.0rem;
             option {
               font-size: 1rem;
               height: 0.8rem;
