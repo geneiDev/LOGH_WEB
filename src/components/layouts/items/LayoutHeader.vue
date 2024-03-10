@@ -42,18 +42,15 @@
       
     },
     created() {
-      this.fnInitData();
-      
     },
     mounted() {
-
+      this.fnInitData();
     },
     methods : {
       async fnInitData() {
-        //Trait정보 초기화
-        const traitData = this.$store.getters['storeInfo/getTraitList'];
-        console.info(traitData);
         await this.fnGetUserData();
+        await this.$store.commit('storeInfo/createTraitList');
+        // await this.$store.commit('storeScene/createCharacterList', 'T1');
       },
       async fnGetUserData() {
         this.userData = this.$store.getters['storeUser/getCurrentUser'];

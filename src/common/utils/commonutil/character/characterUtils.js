@@ -215,8 +215,7 @@ const characterUtils = {
     DATA.characterList.map(row => {
       if (row.CHA_USEYN === 'Y') {
         const matchingDetails = list.filter(item => item.RN === row.RN);
-        console.info(row.RN, matchingDetails);
-        return { ...row, TRAIT: matchingDetails };
+        return { ...row, DETAIL: matchingDetails };
       }
       return row;
     });
@@ -226,10 +225,13 @@ const characterUtils = {
     DATA.characterList.map(row => {
       if (row.CHA_USEYN === 'Y') {
         const matchingTraits = list.filter(item => item.RN === row.RN);
-        console.info(row.RN, matchingTraits);
         // matchingTraitInfo(matchingTraits); // matchingTraitInfo 함수가 비동기로 처리되기 때문에 await 필요 없음
-        return { ...row, TRAIT: matchingTraits };
+        row = { ...row, TRAIT: matchingTraits };
+        
+        // console.info(row.RN, matchingTraits);
+        return row;
       }
+      
       return row;
     });
   },

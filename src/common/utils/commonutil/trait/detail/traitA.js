@@ -1,4 +1,4 @@
-export const traitA = [
+export const traitList = [
   { code : 'S00',
     ico : 'S00',
     type : '',

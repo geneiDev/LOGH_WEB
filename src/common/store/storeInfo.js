@@ -1,15 +1,17 @@
 //storeInfo.js
 import global from '@/common/utils/global.js';
 export default {
+  namespaced: true,
   state: {
     traitList: [],
   },
   mutations: {
-    setTraitList(state, flag) {
-      console.info('setTraitList', state.traitList, flag);
-      console.info(global.traitUtils);
+    createTraitList(state, flag) {
+      console.info('createTraitList', state, flag);
+      console.info(global.traitUtils.getTraitList());
       state.traitList = ['aa']; // 또는 원하는 값을 설정
     },
+    
   },
   actions: {
     
