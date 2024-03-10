@@ -59,6 +59,7 @@ const characterUtils = {
         let functionName = ('fn-init-' + sheetName).replace(/[-_](.)/g, (_, c) => c.toUpperCase())
           .replace(/^[a-zA-Z]/, c => c.toLowerCase());
         if (typeof this[functionName] === 'function') {
+          console.info('call ',functionName);
           this[functionName](jsonData);
         } else {
           console.error(`plz create function in characterUtils -> ${functionName}`)
@@ -227,13 +228,12 @@ const characterUtils = {
         const matchingTraits = list.filter(item => item.RN === row.RN);
         // matchingTraitInfo(matchingTraits); // matchingTraitInfo 함수가 비동기로 처리되기 때문에 await 필요 없음
         row = { ...row, TRAIT: matchingTraits };
-        
         // console.info(row.RN, matchingTraits);
         return row;
       }
-      
       return row;
     });
+    console.info('fnInitTrait ',list)
   },
   //SET TRAIT INFO LIST
   async fnInitJob(list) {

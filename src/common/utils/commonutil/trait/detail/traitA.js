@@ -15,7 +15,7 @@ export const traitList = [
     effect : [ 
       '',
       '',
-      '',
+    '',
     ]
   },
   { code : 'A01',

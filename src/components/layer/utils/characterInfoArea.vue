@@ -29,7 +29,7 @@
         </ul>
       </div>
       <div class="charDetail_stats" v-if="targetRefs === 'trait'">
-        특성특성{{ charData }}
+        {{ charData.TRAIT }}
       </div>
       <div class="charDetail_stats" v-if="targetRefs === 'polit'">
         내정내정
