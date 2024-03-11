@@ -2,31 +2,30 @@
     @DESC : 사용자의 정보를 출력한다.
 -->
 <template>
-<div class="layout_header">
-  <div class="profile_container">
-    <img class="profile_img" src="@/assets/images/common/users/silhouette-male-person.png" alt="" @click="fnGetUserData">
-    <ul>
-      <li class="profile_data"><h3>{{ userData.name }}</h3></li>
-      <li class="profile_data" v-if="userData.isLogin"><h3>{{ userData.points }}</h3></li>
-    </ul>
-    <div class="btn_menu">
-      <input class="menu-check" type="checkbox" id="menu-check" />
-      <label class="menu-icon" for="menu-check">
-        <span class="menu-sticks"></span>
-      </label>
-      <div class="menu">
-        <div>
-          <layer-header-menu></layer-header-menu>
+  <div class="layout_header">
+    <div class="profile_container">
+      <img class="profile_img" src="@/assets/images/common/users/silhouette-male-person.png" alt="" @click="fnGetUserData">
+      <ul>
+        <li class="profile_data"><h3>{{ userData.name }}</h3></li>
+        <li class="profile_data" v-if="userData.isLogin"><h3>{{ userData.points }}</h3></li>
+      </ul>
+      <div class="btn_menu">
+        <input class="menu-check" type="checkbox" id="menu-check" />
+        <label class="menu-icon" for="menu-check">
+          <span class="menu-sticks"></span>
+        </label>
+        <div class="menu">
+          <div>
+            <layer-header-menu></layer-header-menu>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
   import LayerHeaderMenu from '@/components/layer/commons/LayerHeaderMenu.vue'
-
   export default {
     components: {
       LayerHeaderMenu,
@@ -38,19 +37,16 @@
         userData : {},
       };
     },
-    computed: {
-      
-    },
-    created() {
-    },
     mounted() {
       this.fnInitData();
     },
     methods : {
       async fnInitData() {
         await this.fnGetUserData();
-        await this.$store.commit('storeInfo/createTraitList');
-        // await this.$store.commit('storeScene/createCharacterList', 'T1');
+        await this.fnInitTraitData();
+        await this.fnInitCharacterData();
+
+        await this.fnInitializeLogger();
       },
       async fnGetUserData() {
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
@@ -61,6 +57,23 @@
           console.info('fnGetUserData', this.userData);
         }
       },
+      async fnInitTraitData() {
+        await this.$store.dispatch('storeInfo/createTraitList');
+        const traitData = await this.$store.getters['storeInfo/getTraitList'];
+        if(traitData && traitData.length > 0) {
+          return true;
+        }
+      },
+      async fnInitCharacterData() {
+        await this.$store.commit('storeScene/createCharacterList', 'T1')
+      },
+
+      async fnInitializeLogger() {
+        console.info('※ fnInitializeLogger');
+        const charData = this.$store.getters['storeScene/getCharacterList'];
+        console.info('init end char : ', charData);
+        return true;
+      }
     }
   };
 </script>

@@ -1,13 +1,13 @@
 //App.vue
 <template>
-<div id="app" class="sky">
+  <div id="app" class="sky">
     <div id="app_header">
       <layout-header></layout-header>
     </div>
     <div id="app_body">
       <component :is="LayerComponent"></component>
     </div>
-    <div v-show="fnGetFooterType()" id="app_footer"> 
+    <div v-show="fnGetFooterType()" id="app_footer">
       <layout-footer></layout-footer>
     </div>
   </div>

@@ -255,9 +255,9 @@ export default {
         filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR_TRAITS.xlsx`;
       }
       console.info('fnGetScenarioCharData FROM ', filePath)
-      this.traitList = this.$store.getters['storeInfo/getTraitList'];
-      console.info('traitList', this.traitList);
-      //traitList가 비었을 경우 처리
+      // this.traitList = await this.$store.getters['storeInfo/getTraitList'];
+      // console.info('traitList', this.traitList);
+
       
       const reader = new FileReader();
       reader.onload = () => {

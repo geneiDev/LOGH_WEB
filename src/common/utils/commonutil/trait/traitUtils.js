@@ -1,26 +1,32 @@
 // import traitData from '@/common/utils/commonutil/trait/traitData.js';
 
 const META_TRAIT = {
-  LIST : [
-    
-  ],
-  
+  INFO : {  
+    code : '',
+    ico : '',
+    type : '',
+    name : '',
+    desc : '',
+    effect : '',
+  },
+  LIST : [],
 }
 const traitUtils = {
-  getTraitList() {
+  getTraitList(langType) {
+    if(!langType) {
+      langType = '';
+    }
     const requireContext = require.context('./detail', false, /\.js$/);
     const traitModules = requireContext.keys().map(requireContext);
     traitModules.map(list => {
       const traits = list.traitList;
-      traits.map(row =>  {
-        console.info(row)
-      })
       META_TRAIT.LIST = META_TRAIT.LIST.concat(traits)
     })
-    console.info(META_TRAIT.LIST)
+    return META_TRAIT.LIST;
   },
   getTraitInfo(id) {
     console.info(id, META_TRAIT)
+    
   },
 }
 export default traitUtils

@@ -1,4 +1,6 @@
+// import store from '@/common/store';
 import global from '@/common/utils/global.js';
+// import store from '@/common/store/index.js';
 import { utils as XLSXUtils, read as XLSXRead, } from 'xlsx';
 const XLSX = { utils: XLSXUtils, read: XLSXRead, };
 
@@ -46,46 +48,78 @@ const META_CHARACTER = {
 }
 const characterUtils = {
   //GET CHAR DATA FROM DB
-  fnInitCharacterData(filePath) {
-    console.info('datapath', filePath);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const arrayBuffer = reader.result;
-      const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-      const sheetNames = workbook.SheetNames;
-      sheetNames.map(sheetName => {
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        let functionName = ('fn-init-' + sheetName).replace(/[-_](.)/g, (_, c) => c.toUpperCase())
-          .replace(/^[a-zA-Z]/, c => c.toLowerCase());
-        if (typeof this[functionName] === 'function') {
-          console.info('call ',functionName);
-          this[functionName](jsonData);
-        } else {
-          console.error(`plz create function in characterUtils -> ${functionName}`)
-        }
-      })
-    };
-    fetch(filePath)
-    .then(response => response.blob()) // 파일을 Blob으로 변환합니다.
-    .then(blob => reader.readAsArrayBuffer(blob)); // FileReader를 사용해 Blob을 읽습니다.
+  async fnInitCharacterData(filePath) {
+    console.info('fnInitCharacterData START')
+    const arrayBuffer = await this.readFileAsArrayBuffer(filePath);
+    const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+    const sheetNames = workbook.SheetNames;
+    for (const sheetName of sheetNames) {
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet);
+      let functionName = ('fn-init-' + sheetName).replace(/[-_](.)/g, (_, c) => c.toUpperCase()).replace(/^[a-zA-Z]/, c => c.toLowerCase());
+      console.info('CALL ', functionName);
+      if (functionName === 'fnInitInfo') {
+        await this.fnInitInfo(jsonData);
+      } else if (functionName === 'fnInitDetail') {
+        await this.fnInitDetail(jsonData);
+      } else if (functionName === 'fnInitTrait') {
+        await this.fnInitTrait(jsonData);
+      } else if (functionName === 'fnInitJob') {
+        await this.fnInitJob(jsonData);
+      } else {
+        console.error(`create function >> ${functionName}`);
+      }
+    }
+    console.info('fnInitCharacterData END');
+    return DATA.characterList;
   },
+  readFileAsArrayBuffer(filePath) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      
+      fetch(filePath)
+        .then(response => response.blob())
+        .then(blob => reader.readAsArrayBuffer(blob))
+        .catch(reject);
+    });
+  },
+  /** @DEPTH1 */
   //SET MAIN INFO LIST
-  fnInitInfo(list) {
-    list.map(row => {
-      this.fnGetCharacterInfo(row);
-    })
+  async fnInitInfo(list) {
+    await Promise.all(list.map(row => this.fnGetCharacterInfo(row)));
     DATA.characterList = list;
+    console.info('fnInitInfo END');
+    return true;
   },
+    
+  //SET DETAIL INFO LIST
+  async fnInitDetail(list) {
+    DATA.characterList.map(row => {
+      if (row.CHA_USEYN === 'Y') {
+        const matchingDetails = list.filter(item => item.RN === row.RN);
+        return { ...row, TRAIT: matchingDetails };
+      }
+      return row;
+    });
+    console.info('fnInitDetail END');
+  },
+  
   //SET MAIN INFO LIST -> ROW
   async fnGetCharacterInfo(row) {
-    await this.fnGetBaseKeysInfo(row);
-    await this.fnGetPersonalKeysInfo(row);
-    await this.fnGetStatsKeyInfo(row);
+    // 동시에 호출되도록 Promise.all 사용
+    await Promise.all([
+      this.fnGetBaseKeysInfo(row),
+      this.fnGetPersonalKeysInfo(row),
+      this.fnGetStatsKeyInfo(row),
+    ]);
     return row;
   },
   //SET MAIN INFO LIST -> ROW -> BASE_KEY
-  fnGetBaseKeysInfo(row) {
+  async fnGetBaseKeysInfo(row) {
     //CHA_CODE & RN
     if(!row.CHA_CODE && !row.RN) {
       const errorMsg = `KEY값을 추출할 수 없는 ROW입니다. ${JSON.stringify(row)}`
@@ -111,7 +145,7 @@ const characterUtils = {
       }
       return null;
     };
-    this.fnGetBaseKeys().map(key => {
+    META_CHARACTER.baseKeys.map(key => {
       const charMainName = representName([
         row['CHA_STD_NAME'],
         row['CHA_STD_NICK'],
@@ -146,19 +180,24 @@ const characterUtils = {
     }
     //IMG_SET
     /** imgFlag > M :미치하라 카츠미판 / F : 후지사키 류 / A : 구애니 / N : 신애니 / Gn : 게임  */
-    const imgFlag = ['M', 'F', 'A', 'N', 'G3', 'G4', 'G5', 'G6', 'G7', 'GB'];
+    // const imgFlag = ['M', 'F', 'A', 'N', 'G3', 'G4', 'G5', 'G6', 'G7', 'GB'];
+    const imgFlag = ['N'];
     /** imgType > H : 머리만 | U : 상반신 | F : 전체  */
-    const imgType = ['H', 'U', 'A']
+    const imgType = ['H']
 
     const imgSrc = [];
+
     async function checkImgExist(url) {
       return new Promise(resolve => {
         const img = new Image();
         img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
+        img.onerror = () => {
+          resolve(false); // 이미지 로딩에 실패했음을 명시적으로 resolve
+        };
         img.src = url;
       });
     }
+    
     async function processImages() {
       for (const flag of imgFlag) {
         for (const type of imgType) {
@@ -175,6 +214,7 @@ const characterUtils = {
     }
     processImages();
     row.CHA_IMGS = imgSrc;
+    console.info(row.RN, row.CHA_IMGS);
     return row;
   },
   //SET MAIN INFO LIST -> ROW -> PERSONAL_KEY
@@ -185,13 +225,15 @@ const characterUtils = {
     META_CHARACTER.personalKeys.forEach(function(key) {
       if(!row[key]) {
         if(key === 'CHA_BIRTH') {
-          row[key] = 0;
+          row[key] = '-';
         }
         if(key === 'CHA_NATION') {
           row[key] = '';
         }
       }
       if(row[key]) {
+        // if(key === 'CHA_BIRTH') {
+        // }
         if(key === 'CHA_NATION') {
           const nationInfo = global.characterUtils.getNationInfo(row.CHA_NATION);
           row.CHA_NATION_NAME = (nationInfo?.name) ? nationInfo.name : '';
@@ -211,48 +253,33 @@ const characterUtils = {
     })
     return row;
   },
-  //SET DETAIL INFO LIST
-  async fnInitDetail(list) {
-    DATA.characterList.map(row => {
-      if (row.CHA_USEYN === 'Y') {
-        const matchingDetails = list.filter(item => item.RN === row.RN);
-        return { ...row, DETAIL: matchingDetails };
-      }
-      return row;
-    });
-  },
   //SET TRAIT INFO LIST
   async fnInitTrait(list) {
     DATA.characterList.map(row => {
       if (row.CHA_USEYN === 'Y') {
         const matchingTraits = list.filter(item => item.RN === row.RN);
         // matchingTraitInfo(matchingTraits); // matchingTraitInfo 함수가 비동기로 처리되기 때문에 await 필요 없음
-        row = { ...row, TRAIT: matchingTraits };
-        // console.info(row.RN, matchingTraits);
-        return row;
+        if(matchingTraits.length > 0) {
+          console.info('matchingTraits:', matchingTraits)
+        }
+        return { ...row, TRAIT: matchingTraits };
       }
       return row;
     });
-    console.info('fnInitTrait ',list)
+    console.info('fnInitTrait END');
   },
   //SET TRAIT INFO LIST
   async fnInitJob(list) {
-    console.info(DATA.characterList)
-    console.info(list)
+    DATA.characterList.map(row => {
+      if (row.CHA_USEYN === 'Y') {
+        const matchingJobs = list.filter(item => item.RN === row.RN);
+        // matchingTraitInfo(matchingTraits); // matchingTraitInfo 함수가 비동기로 처리되기 때문에 await 필요 없음
+        return { ...row, JOBS : matchingJobs };
+      }
+      return row;
+    });
+    console.info('fnInitJob END');
   },
-
-  fnGetBaseKeys() {
-    return META_CHARACTER.baseKeys;
-  },
-  
-  fnGetPersonalKeys() {
-    return META_CHARACTER.personalKeys;
-  },
-  
-  fnGetStatsKey() {
-    return META_CHARACTER.statsKeys;
-  },
-
 
   fnGetAge(scenBirth, charBirth) {
     const baseDate = new Date(scenBirth);
@@ -262,7 +289,7 @@ const characterUtils = {
     if (monthDiff < 0 || (monthDiff === 0 && baseDate.getDate() < birthDate.getDate())) {
         age--;
     }
-    if(age < 0 || age > 150) {
+    if(!isNaN(age) ||age < 0 || age > 150) {
       return '-';
     }
     return `${age.toString()}세`;
