@@ -46,7 +46,7 @@
         await this.fnInitTraitData();
         await this.fnInitCharacterData();
 
-        await this.fnInitializeLogger();
+        // await this.fnInitializeLogger();
       },
       async fnGetUserData() {
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
@@ -58,11 +58,12 @@
         }
       },
       async fnInitTraitData() {
+        console.info('기본정보 : 특성 데이터')
         await this.$store.dispatch('storeInfo/createTraitList');
-        const traitData = await this.$store.getters['storeInfo/getTraitList'];
-        if(traitData && traitData.length > 0) {
-          return true;
-        }
+        // const traitData = await this.$store.getters['storeInfo/getTraitList'];
+        // if(traitData && traitData.length > 0) {
+        //   return true;
+        // }
       },
       async fnInitCharacterData() {
         await this.$store.commit('storeScene/createCharacterList', 'T1')

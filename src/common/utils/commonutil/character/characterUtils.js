@@ -192,11 +192,18 @@ const characterUtils = {
         const img = new Image();
         img.onload = () => resolve(true);
         img.onerror = () => {
-          resolve(false); // 이미지 로딩에 실패했음을 명시적으로 resolve
+          try {
+            throw new Error(`Image not found: ${url}`);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            resolve(false); // 이미지 로딩에 실패했음을 명시적으로 resolve
+          }
         };
         img.src = url;
       });
     }
+    
     
     async function processImages() {
       for (const flag of imgFlag) {
@@ -212,7 +219,7 @@ const characterUtils = {
         }
       }
     }
-    processImages();
+    await processImages();
     row.CHA_IMGS = imgSrc;
     console.info(row.RN, row.CHA_IMGS);
     return row;

@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import * as XLSX from 'xlsx';
 import { scenarioMeta } from "@/assets/txt/scenario/scenarioMeta";
 import CharacterInfoArea from '@/components/layer/utils/characterInfoArea'
 export default {
@@ -165,34 +164,17 @@ export default {
     },
     // 엑셀에서 데이터를 가져온다.
     async fnGetScenarioCharData() {
-      let filePath = 'data/scenario/TN_GEN_CHAR.xlsx';
-      if (this.scenarioObj.mod === 'Y' && this.scenarioObj.id) {
-        filePath = `data/scenario/${this.scenarioObj.id}/TN_GEN_CHAR.xlsx`;
+      const baseScenarioInfo = this.$store.getters['storeScene/getScenarioInfo'];
+      if(baseScenarioInfo.id === this.scenarioObj.id) {
+        console.info('//기존거')
+        this.characterArr = this.$store.getters['storeScene/getCharacterList'];
+      } else {
+        console.info('//새로')
+        this.$store.commit('storeScene/setScenarioInfo', this.scenarioObj);
+        this.$store.commit('storeScene/createCharacterList', this.scenarioObj.id)
+        this.characterArr = this.$store.getters['storeScene/getCharacterList'];
       }
-      console.info('시나리오 코드 :', this.scenarioObj.id)
-      const reader = new FileReader();
-      reader.onload = () => {
-        const arrayBuffer = reader.result;
-        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        if( jsonData && jsonData.length > 0) {
-          this.$store.commit('storeScene/setCharacterList', jsonData);
-          this.characterArr = jsonData;
-          console.info('characterArr', this.characterArr);
-        } else {
-          console.error('캐릭터 정보 NULL');
-        }
-        this.fnFilterCharacterInfo();        
-      };
-      try {
-        fetch(filePath)
-        .then(response => response.blob())
-        .then(blob => reader.readAsArrayBuffer(blob))
-      } catch (error) {
-        console.error(error)
-      }
+      this.fnFilterCharacterInfo();
     },
     //페이징
     async fnFilterCharacterInfo() {
@@ -272,25 +254,29 @@ export default {
     }
     .scenario_list_section {
       top: 3rem;
-      position: absolute;
+      position: fixed;
       overflow: hidden;
-      transition: height 3s ease;
+      transition: height 1.2s ease;
       height: 0;
-      max-height: 40rem;
+      max-height: 45rem;
       width: 100%;
       background-color: black;
       z-index: 500;
-      border: none;
+      border: 2px solid white;
+      box-shadow: 10px 10px 10px rgba(255, 255, 255, 0.5);
       overflow-y: auto;
       .scenario_row_section {
         margin: 0.5rem;
         border-bottom: 1px solid #ffffff;
       }
-      .scenario_row_section.on {
+      .scenario_row_section .on {
         border: 2px solid white;
-        
       }
     }
+    .scenario_list_section.on {
+      height: 100%;
+    }
+
     .character_search_section {
       border: 2px solid white;
       padding-bottom: 1.2rem;
@@ -359,7 +345,6 @@ export default {
     box-shadow: 0 0 0 2px #c2daf7;
     border-radius: 0.1em;
     color: #c2daf7;
-    z-index: 800;
     height: 100%;
   }
   .ctl_common:disabled {

@@ -21,28 +21,29 @@ export default {
     },
     //캐릭터
     async createCharacterList(state, scenarioId, callback) {
+      console.info(`prev:${state.currentScene.id} > to:${scenarioId}`, state.characterList.length);
       if(state.currentScene.id !== scenarioId || state.characterList.length === 0) {
-        console.info(`prev:${state.currentScene.id} > to:${scenarioId}`);
         const matchingScenario = scenarioMeta.find(item => item.id === scenarioId);
         if(matchingScenario) {
           console.info(`시나리오 로드됨 : `, matchingScenario)
           state.currentScene.id = matchingScenario.id;
           state.scenarioInfo = matchingScenario;
         }
+      } else {
+        return console.info(`이미 동일한 시나리오가 로드되어 있음 : ${scenarioId}`)
       }
       const filePath = `data/scenario${scenarioId ? `/${scenarioId}` : ''}/TN_GEN_CHAR.xlsx`;
 
       if( state.currentScene.filePath == filePath && state.characterList.length > 0) {
-        return console.info(`이미 동일한 시나리오가 로드되어 있음 : ${scenarioId}}`)
+        return console.info(`이미 동일한 시나리오가 로드되어 있음 : ${scenarioId}`)
       }
       
       const charData = await global.characterUtils.fnInitCharacterData(filePath);
-      console.info('createCharacterList ed', charData);
-      this.state.characterList = charData;
-
+      state.characterList = charData;
       if (typeof callback === 'function') {
         callback();
       }
+      console.info('createCharacterList ed', state.characterList);
       return charData
     },
     fnSetCharacterList(state, charlist) {
@@ -53,6 +54,7 @@ export default {
     resetCharacterList({ commit }) {
       commit('setCharacterList', []);
     },
+    
   },
   getters: {
     getCurrentScene: (state) => state.currentScene,
