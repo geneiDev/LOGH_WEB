@@ -7,6 +7,7 @@ export default {
       lastLogin: 'K',
       id: '',
       name: 'GUEST',
+      langType : 'KR',
       pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
       points: 0,
     },

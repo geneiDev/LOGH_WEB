@@ -234,6 +234,7 @@ export default {
       align-items: center;
       overflow: auto;
       height: 4rem;
+      min-height: 4rem;
       border-top: 3px solid #ffffff;
       border-bottom: 3px solid #ffffff;
       .btn_prev {
@@ -253,12 +254,12 @@ export default {
       }
     }
     .scenario_list_section {
-      top: 3rem;
+      top: 4rem;
       position: fixed;
       overflow: hidden;
       transition: height 1.2s ease;
       height: 0;
-      max-height: 45rem;
+      max-height: 40rem;
       width: 100%;
       background-color: black;
       z-index: 500;

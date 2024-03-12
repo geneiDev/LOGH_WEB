@@ -59,8 +59,8 @@
         <h1>인물</h1>
         <h4>인물 관련 정보를 검색합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="fnCallLayerPop('GT')" disabled>
-        <h1>성계</h1>
+      <button type="button" class="btn_title" @click="fnCallLayerPop('DS')">
+        <h1>성계표</h1>
         <h4>성계 정보를 검색합니다.</h4>
       </button>
       <button type="button" class="btn_title" @click="fnCallLayerPop('GT')" disabled>
@@ -77,7 +77,7 @@
           <h1>캐릭터</h1>
           <h4>시나리오별 캐릭터 데이터입니다.</h4>
         </button>
-        <button type="button" class="sub_layout_btn" @click="fnCallLayerPop('GT')" disabled>
+        <button type="button" class="sub_layout_btn" @click="fnCallLayerPop('DPT')" disabled>
           <h1>특성</h1>
           <h4>공통 특성 데이터입니다.</h4>
         </button>
@@ -95,6 +95,7 @@
 import { tipMeta } from "@/assets/txt/tip.js";
 import LayerPopNewGame from '@/components/layouts/mains/title/details/LayerPopNewGame.vue'
 import LayerPopDicPerson from '@/components/layouts/mains/title/details/LayerPopDicPerson.vue'
+import LayerPopDicStarzone from '@/components/layouts/mains/title/details/LayerPopDicStarzone.vue'
 
 export default {
   name: 'layerTitle',
@@ -103,6 +104,7 @@ export default {
     // LayerPopMultiGame,
     // LayerPopOption,
     LayerPopDicPerson,
+    LayerPopDicStarzone,
   },
   props: {
     
@@ -154,6 +156,7 @@ export default {
         case 'SN': layerName = "LayerPopNewGame"; break;  //새 게임 호출
         case 'SC': layerName = ""; break;  //계속하기
         case 'SL': layerName = ""; break;  //계속하기
+        case 'DS': layerName = "LayerPopDicStarzone"; break;  //계속하기
         case 'DPP': layerName = "LayerPopDicPerson"; break;  //계속하기
       
         default:

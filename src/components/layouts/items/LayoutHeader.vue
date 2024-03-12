@@ -60,9 +60,9 @@
         await this.fnGetUserData();
         await this.fnInitTraitData();
         await this.fnInitScenarioData();
-        await this.fnInitSheepsData();
-        await this.fnInitUniverseData();
-        await this.fnInitCharacterData();
+        // await this.fnInitSheepsData();
+        // await this.fnInitStarzoneData();
+        // await this.fnInitCharacterData();
         await this.fnInitializeEnds();
       },
       async fnAddSystemMsg (text) {
@@ -99,9 +99,9 @@
         // const scenarioList = this.$store.getters['storeScene/getScenarioList'];
         this.fnAddSystemMsg(`>총 0건의 함선 데이터`);
       },
-      async fnInitUniverseData() {
-        this.fnAddSystemMsg('다음 기본 정보 로딩 중 : 성계');
-        // this.$store.commit('storeScene/createScenarioList')
+      async fnInitStarzoneData() {
+        this.fnAddSystemMsg('성계 지도를 가져오는 중');
+        this.$store.commit('storeScene/createStarzoneList');
         // const scenarioList = this.$store.getters['storeScene/getScenarioList'];
         this.fnAddSystemMsg(`>총 0건의 성계 데이터`);
       },
