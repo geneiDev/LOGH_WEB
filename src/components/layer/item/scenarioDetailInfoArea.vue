@@ -18,7 +18,7 @@
       <!-- 로딩 텍스트 -->
       <div class="dimmed" v-if="majorItem === ''">
         <div class="loader"></div>
-        <h2>{{ dataLoadingText }}</h2>
+        <h4>{{ dataLoadingText }}</h4>
       </div>
       <div class="main_context">
         <!-- 개요 -->

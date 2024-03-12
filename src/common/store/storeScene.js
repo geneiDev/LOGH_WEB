@@ -9,10 +9,14 @@ export default {
     currentScene : {
       id : '',
     },
+    scenarioList : [],
     scenarioInfo : {},
     characterList : [],
   },
   mutations: {
+    createScenarioList(state) {
+      state.scenarioList = scenarioMeta;
+    },
     //시나리오
     async setScenarioInfo(state, object) {
       state.currentScene.id = object.id;
@@ -58,6 +62,7 @@ export default {
   },
   getters: {
     getCurrentScene: (state) => state.currentScene,
+    getScenarioList: (state) => state.scenarioList,
     getScenarioInfo: (state) => state.scenarioInfo,
     getCharacterList: (state) => state.characterList,
     getCharacterData: (state) => (id) => {

@@ -13,6 +13,7 @@ const META_TRAIT = {
 }
 const traitUtils = {
   getTraitList(langType) {
+    META_TRAIT.LIST = [];
     if(!langType) {
       langType = '';
     }

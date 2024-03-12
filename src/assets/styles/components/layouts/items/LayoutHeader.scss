@@ -8,6 +8,13 @@
 	.tips_container {
 		border: 2px solid white;
 		height: 100%;
+		white-space: pre-line;
+	}
+	.preloader_text {
+		background-color: black;
+		min-width: 100%;
+		min-height: 50%;
+		white-space: pre-line;
 	}
 
 	.profile_container {

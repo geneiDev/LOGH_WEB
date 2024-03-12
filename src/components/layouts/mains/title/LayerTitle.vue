@@ -27,9 +27,9 @@
         <h1>환경 설정</h1>
         <h4>여러 환경요소를 설정합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('G')">
-        <h1>가이드</h1>
-        <h4>게임을 진행하는데 있어 필요한 정보입니다.</h4>
+      <button type="button" class="btn_title" @click="setTitleFlag('D')">
+        <h1>데이터</h1>
+        <h4>게임의 데이터 정보입니다.</h4>
       </button>
     </div>
     <div class="title_container" v-if="titleFlag === 'S'">
@@ -53,19 +53,41 @@
     </div>
     <div class="title_container" v-if="titleFlag === 'O'">
     </div>
-    <div class="title_container" v-if="titleFlag === 'G'">
-      <button type="button" class="btn_title" @click="fnCallLayerPop('GP')">
-        <h1>인물 사전</h1>
-        <h4>시나리오별 인물 정보를 검색합니다.</h4>
+    <!-- Data -->
+    <div class="title_container" v-if="titleFlag === 'D'">
+      <button type="button" class="btn_title" @click="fnCallSubMenu('DP')">
+        <h1>인물</h1>
+        <h4>인물 관련 정보를 검색합니다.</h4>
       </button>
       <button type="button" class="btn_title" @click="fnCallLayerPop('GT')" disabled>
-        <h1>특성표</h1>
-        <h4>인물의 특성 정보를 검색합니다.</h4>
+        <h1>성계</h1>
+        <h4>성계 정보를 검색합니다.</h4>
+      </button>
+      <button type="button" class="btn_title" @click="fnCallLayerPop('GT')" disabled>
+        <h1>함선</h1>
+        <h4>함선 정보를 검색합니다.</h4>
       </button>
       <button type="button" class="btn_title" @click="setTitleFlag('on')">
         <h1>뒤로</h1>
       </button>
     </div>
+    <div class="sub_layout_container" v-if="subMenuFlag" @click="fnCallSubMenu('')">
+      <div class="sub_layout_btn_area" v-if="subMenuFlag === 'DP'">
+        <button type="button" class="sub_layout_btn" @click="fnCallLayerPop('DPP')">
+          <h1>캐릭터</h1>
+          <h4>시나리오별 캐릭터 데이터입니다.</h4>
+        </button>
+        <button type="button" class="sub_layout_btn" @click="fnCallLayerPop('GT')" disabled>
+          <h1>특성</h1>
+          <h4>공통 특성 데이터입니다.</h4>
+        </button>
+
+
+      </div>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -95,8 +117,9 @@ export default {
       tipIdx: 0,
       tipTxt : '',
       //login영역
-      
       isLogin : false,
+      //subMenu
+      subMenuFlag : '',
     };
   },
   mounted() {
@@ -125,12 +148,13 @@ export default {
     },
     //LayerTitle영역에서 호출할 SubPopup을 세팅한다.
     fnCallLayerPop(flg) {
+      console.info('fnCallLayerPop', flg)
       let layerName = ''
       switch (flg) {
         case 'SN': layerName = "LayerPopNewGame"; break;  //새 게임 호출
         case 'SC': layerName = ""; break;  //계속하기
         case 'SL': layerName = ""; break;  //계속하기
-        case 'GP': layerName = "LayerPopDicPerson"; break;  //계속하기
+        case 'DPP': layerName = "LayerPopDicPerson"; break;  //계속하기
       
         default:
           break;
@@ -138,6 +162,9 @@ export default {
       console.info(flg, layerName)
 
       this.layerPop  = layerName;
+    },
+    fnCallSubMenu(smId) {
+      this.subMenuFlag = smId;
     },
     fnChangeMainLayer () {
       var id  = ''

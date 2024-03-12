@@ -7,13 +7,15 @@ export default {
     traitList: [],
   },
   mutations: {
-    setTraitList(state, traitList) {
+    createTraitList(state) {
+      const traitList = global.traitUtils.getTraitList();
       state.traitList = traitList;
     },
   },
   actions: {
-    async createTraitList({ commit }) {
+    async setTraitList({ commit }) {
       try {
+        commit('setTraitList', []);
         const traitList = global.traitUtils.getTraitList();
         commit('setTraitList', traitList);
       } catch (error) {
