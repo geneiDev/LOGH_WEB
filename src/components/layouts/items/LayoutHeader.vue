@@ -3,8 +3,7 @@
 -->
 <template>
   <div class="layout_header">
-    <div class="dimmed" v-if="!preloader">
-      <div class="loader"></div>
+    <div class="preloader_div" v-if="!preloader">
       <h4 class="preloader_text">{{ preloader_text }}</h4>
     </div>
     <div class="profile_container">
