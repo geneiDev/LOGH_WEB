@@ -14,20 +14,19 @@ const META_TRAIT = {
 const traitUtils = {
   getTraitList(langType) {
     META_TRAIT.LIST = [];
-    if(!langType) {
+    if (!langType) {
       langType = '';
     }
     const requireContext = require.context('./detail', false, /\.js$/);
     const traitModules = requireContext.keys().map(requireContext);
-    traitModules.map(list => {
+    traitModules.forEach(list => {
       const traits = list.traitList;
-      META_TRAIT.LIST = META_TRAIT.LIST.concat(traits)
-    })
+      META_TRAIT.LIST = META_TRAIT.LIST.concat(traits);
+    });
     return META_TRAIT.LIST;
   },
   getTraitInfo(id) {
-    console.info(id, META_TRAIT)
-    
+    console.info(id, META_TRAIT);
   },
-}
-export default traitUtils
+};
+export default traitUtils;

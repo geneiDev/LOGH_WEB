@@ -59,61 +59,65 @@
       async fnInitData() {
         await this.fnGetUserData();
         await this.fnInitTraitData();
+        await this.fnInitSheepsData();
         await this.fnInitScenarioData();
-        // await this.fnInitSheepsData();
-        // await this.fnInitStarzoneData();
-        // await this.fnInitCharacterData();
+        await this.fnInitStarzoneData();
+        await this.fnInitCharacterData();
         await this.fnInitializeEnds();
       },
       async fnAddSystemMsg (text) {
-        console.info(text);
+        // console.info(text);
         this.preloader_text += text+'\n';
       },
+
       async fnGetUserData() {
         this.fnAddSystemMsg('사용자 정보를 받는중');
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
         if(this.userData.isLogin) {
-          this.fnAddSystemMsg('>로그인 성공');
+          this.fnAddSystemMsg('>로그인 성공\n');
           console.info('fnGetUserData', this.userData);
         } else {
           //로그인 세션 이동
-          this.fnAddSystemMsg('>로그인 이력 없음');
+          this.fnAddSystemMsg('>로그인 이력 없음\n');
           console.info('fnGetUserData', this.userData);
         }
       },
+      //특성 데이터
       async fnInitTraitData() {
-        this.fnAddSystemMsg('다음 기본 정보 로딩 중 : 특성 데이터');
+        this.fnAddSystemMsg('공통 특성 데이터 로딩 중');
         this.$store.commit('storeInfo/createTraitList');
-        const traitList = this.$store.getters['storeInfo/getTraitList'];
-        this.fnAddSystemMsg(`>총 ${traitList.length}건의 특성 데이터`);
+        const traitList = await this.$store.getters['storeInfo/getTraitList'];
+        this.fnAddSystemMsg(`:총 ${traitList.length}건의 특성 데이터\n`);
       },
-      async fnInitScenarioData() {
-        this.fnAddSystemMsg('다음 기본 정보 로딩 중 : 시나리오');
-        this.$store.commit('storeScene/createScenarioList')
-        const scenarioList = this.$store.getters['storeScene/getScenarioList'];
-        this.fnAddSystemMsg(`>총 ${scenarioList.length}건의 시나리오 데이터`);
-      },
+      //함선 데이터
       async fnInitSheepsData() {
-        this.fnAddSystemMsg('다음 기본 정보 로딩 중 : 함선');
-        // this.$store.commit('storeScene/createScenarioList')
-        // const scenarioList = this.$store.getters['storeScene/getScenarioList'];
-        this.fnAddSystemMsg(`>총 0건의 함선 데이터`);
+        this.fnAddSystemMsg('공통 함선 데이터 로딩 중');
+        this.$store.commit('storeInfo/createSheepList');
+        const sheepList = this.$store.getters['storeInfo/getSheepList'];
+        this.fnAddSystemMsg(`:총 ${sheepList.length}건의 함선 데이터\n`);
+      },
+
+      async fnInitScenarioData() {
+        this.fnAddSystemMsg('시나리오 데이터 로딩 중');
+        this.$store.commit('storeScene/createScenarioList');
+        const scenarioList = this.$store.getters['storeScene/getScenarioList'];
+        this.fnAddSystemMsg(`>총 ${scenarioList.length}건의 시나리오 데이터\n`);
       },
       async fnInitStarzoneData() {
-        this.fnAddSystemMsg('성계 지도를 가져오는 중');
+        this.fnAddSystemMsg('기본 시나리오의 성계 지도를 가져오는 중');
         this.$store.commit('storeScene/createStarzoneList');
-        // const scenarioList = this.$store.getters['storeScene/getScenarioList'];
-        this.fnAddSystemMsg(`>총 0건의 성계 데이터`);
+        const starzoneList = this.$store.getters['storeScene/getStarzoneList'];
+        this.fnAddSystemMsg(`>총 ${starzoneList.length}건의 성계 데이터\n`);
       },
       async fnInitCharacterData() {
-        this.fnAddSystemMsg('다음 기본 정보 로딩 중 : 인물');
+        this.fnAddSystemMsg('기본 시나리오의 등장 인물들을 가져오는 중');
         await this.$store.commit('storeScene/createCharacterList', 'T1');
         await new Promise(resolve => setTimeout(resolve, 0));
         const charData = this.$store.getters['storeScene/getCharacterList'];
-        await this.fnAddSystemMsg(`>총 ${charData.length}건의 인물 데이터`);
+        await this.fnAddSystemMsg(`>총 ${charData.length}건의 인물 데이터\n`);
       },
       async fnInitializeEnds() {
-        this.fnAddSystemMsg('데이터 초기화 완료');
+        this.fnAddSystemMsg('데이터 초기화 완료\n');
         let cnt = 3;
 
         // 3, 2, 1을 systemMsg에 추가하는 로직

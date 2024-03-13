@@ -5,11 +5,17 @@ export default {
   namespaced: true,
   state: {
     traitList: [],
+    sheepList: {},
+    
   },
   mutations: {
     createTraitList(state) {
       const traitList = global.traitUtils.getTraitList();
       state.traitList = traitList;
+    },
+    createSheepList(state) {
+      const sheepList = global.sheepUtils.getSheepList();
+      state.sheepList = sheepList;
     },
   },
   actions: {
@@ -25,10 +31,10 @@ export default {
   },
   getters: {
     getTraitList: (state) => {
-      if (state.traitList && state.traitList.length > 0) {
-        return state.traitList;
-      }
-      return [];
+      return state.traitList;
+    },
+    getSheepList: (state) => {
+      return state.sheepList;
     },
   },
 };
