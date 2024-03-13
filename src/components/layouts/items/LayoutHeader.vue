@@ -4,7 +4,7 @@
 <template>
   <div class="layout_header">
     <div class="preloader_div" v-if="!preloader">
-      <h4 class="preloader_text">{{ preloader_text }}</h4>
+      <h4 class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</h4>
     </div>
     <div class="profile_container">
       <img class="profile_img" src="@/assets/images/common/users/silhouette-male-person.png" alt="" @click="fnGetUserData">
@@ -40,16 +40,13 @@
         userData : {},
 
         preloaderChk : false,
-        preloaderCnt : 0,
 
         preloader : false,
-        preloader_text : '',
+        preloader_text : [],
       };
     },
     watch: {
-      preloaderCnt(b, a) {
-        console.info(`${a} -> ${b}`)
-      },
+
     },
     mounted() {
       this.fnInitData();
@@ -61,26 +58,33 @@
         await this.fnInitSheepsData();
         await this.fnInitScenarioData();
         await this.fnInitStarzoneData();
-        await this.fnInitCharacterData();
+        // await this.fnInitCharacterData();
         await this.fnInitializeEnds();
       },
-      async fnAddSystemMsg (text) {
-        // console.info(text);
-        this.preloader_text += text+'\n';
+      async fnAddSystemMsg (text, rn) {
+        if(!rn) rn = this.preloader_text.length;
+        this.preloader_text.push({ rn, text }) 
+        return rn;
       },
 
+      
       async fnGetUserData() {
-        this.fnAddSystemMsg('사용자 정보를 받는중');
+        await this.fnAddSystemMsg('사용자 정보를 받는중');
+        console.info('>fnGetUserData S')
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
         if(this.userData.isLogin) {
-          this.fnAddSystemMsg('>로그인 성공\n');
-          console.info('fnGetUserData', this.userData);
+          await this.fnAddSystemMsg('>로그인 성공');
         } else {
-          //로그인 세션 이동
-          this.fnAddSystemMsg('>로그인 이력 없음\n');
-          console.info('fnGetUserData', this.userData);
+          await this.fnAddSystemMsg('>로그인 이력 없음');
         }
+        console.info('>fnGetUserData E')
+        await this.fnAddSystemMsg('\n');
       },
+
+
+
+
+      
       //특성 데이터
       async fnInitTraitData() {
         this.fnAddSystemMsg('공통 특성 데이터 로딩 중');

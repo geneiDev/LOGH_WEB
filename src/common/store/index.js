@@ -9,8 +9,6 @@ import storeInfo from './storeInfo';
 import storeScene from './storeScene';
 
 //util
-
-
 Vue.use(Vuex);
 
 export default new Vuex.Store({

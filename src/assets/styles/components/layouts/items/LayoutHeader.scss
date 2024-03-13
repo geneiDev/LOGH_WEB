@@ -22,11 +22,9 @@
 		justify-content: center;
 		align-items: center;
 		z-index: 1000; /* 다른 엘리먼트 위에 표시하기 위한 z-index 값 */
-	
 		.preloader_text {
 			background-color: black;
 			min-width: 100%;
-			min-height: 50%;
 			white-space: pre-line;
 		}
 	}

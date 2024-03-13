@@ -165,16 +165,18 @@ export default {
     // 엑셀에서 데이터를 가져온다.
     async fnGetScenarioCharData() {
       const baseScenarioInfo = this.$store.getters['storeScene/getScenarioInfo'];
-      if(baseScenarioInfo.id === this.scenarioObj.id) {
-        console.info('//기존거')
-        this.characterArr = this.$store.getters['storeScene/getCharacterList'];
+      this.characterArr = await this.$store.getters['storeScene/getCharacterList'];
+
+      if(baseScenarioInfo.id === this.scenarioObj.id && this.characterArr.length > 0) {
+        console.info('//기존거');
       } else {
-        console.info('//새로')
+        console.info('//새로');
         this.$store.commit('storeScene/setScenarioInfo', this.scenarioObj);
         this.$store.commit('storeScene/createCharacterList', this.scenarioObj.id)
-        this.characterArr = this.$store.getters['storeScene/getCharacterList'];
+        this.characterArr = await this.$store.getters['storeScene/getCharacterList'];
+        console.info(this.characterArr);
       }
-      this.fnFilterCharacterInfo();
+      await this.fnFilterCharacterInfo();
     },
     //페이징
     async fnFilterCharacterInfo() {

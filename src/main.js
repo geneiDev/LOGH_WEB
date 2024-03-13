@@ -4,7 +4,7 @@ import Toasted from 'vue-toasted';
 import VueLazyload from 'vue-lazyload';
 
 //util
-import store from './common/store/';
+import store from './common/store';
 // import getUUID from '@/common/utils/commonutil/store/getUUID';
 // import COMM_CONST from '@/common/utils/commonutil/store/constants';
 // import localStorageUtil from '@/common/utils/commonutil/store/localStorageUtil';

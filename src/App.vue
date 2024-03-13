@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 //common utils
 import '@/common/utils/global';
 
@@ -22,7 +21,6 @@ import '@/common/utils/global';
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
 import LayoutFooter from './components/layouts/items/LayoutFooter.vue'
 //Body
-//src\components\layouts\mains\title\LayerTitle.vue
 import LayerTitle from './components/layouts/mains/title/LayerTitle.vue'
 import LayerLogin from './components/layouts/users/LayerLogin.vue'
 
@@ -42,7 +40,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('user', ['getCurrentUser']),
     LayerComponent() {
       return 'Layer' + this.globals.Layer;
     },
