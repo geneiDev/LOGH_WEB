@@ -29,6 +29,8 @@
 
 <script>
   import LayerHeaderMenu from '@/components/layer/commons/LayerHeaderMenu.vue'
+  const axios = require('axios');
+
   export default {
     components: {
       LayerHeaderMenu,
@@ -58,7 +60,7 @@
         await this.fnInitSheepsData();
         await this.fnInitScenarioData();
         await this.fnInitStarzoneData();
-        // await this.fnInitCharacterData();
+        await this.fnInitCharacterData();
         await this.fnInitializeEnds();
       },
       async fnAddSystemMsg (text, rn) {
@@ -70,6 +72,9 @@
       
       async fnGetUserData() {
         await this.fnAddSystemMsg('사용자 정보를 받는중');
+        console.info(axios)
+
+
         console.info('>fnGetUserData S')
         this.userData = this.$store.getters['storeUser/getCurrentUser'];
         if(this.userData.isLogin) {

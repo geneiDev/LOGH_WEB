@@ -16,6 +16,7 @@
 <script>
 //common utils
 import '@/common/utils/global';
+// const axios = require('axios');
 
 //common
 import LayoutHeader from './components/layouts/items/LayoutHeader.vue'
