@@ -4,7 +4,7 @@
 <template>
   <div class="layout_header">
     <div class="preloader_div" v-if="!preloader">
-      <div class="preloader_uuid">{{this.$store.getters['storeUser/getUUID']}}</div>
+      <div class="preloader_uuid">사용자 고유 ID :<br>{{this.$store.getters['storeUser/getUUID']}}</div>
       <div class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</div>
     </div>
     <div class="profile_container">
@@ -40,10 +40,10 @@
       return {
         isLogin : false,
         isHeaderVisible: false,
+        
         userData : {},
 
         preloaderChk : false,
-
         preloader : false,
         preloader_text : [],
       };
@@ -87,7 +87,7 @@
         
         await this.fnAddSystemMsg('\n사용자 정보를 받는중');
         await this.fnAddSystemMsg('유져 서버 점검 중.');
-        await this.fnAddSystemMsg('2024.03.14 22:00 점검 종료 예정');
+        await this.fnAddSystemMsg('2024.03.15 18:00 점검 종료 예정');
 
         // console.info(loginParam)
         // axios.get(`/api/user`, { params: loginParam }).then(response => {

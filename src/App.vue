@@ -52,10 +52,11 @@ export default {
       this.$store.commit('storeUser/setOS', currentEnv.os);
 
       let uuid    = localStorage.getItem('uuid');
-      if (!uuid) {
+      if (!uuid || uuid.length !== 36) {
         const { v4: uuidv4 } = require('uuid');
-        localStorage.setItem('uuid', uuidv4); // 생성된 UUID를 localStorage에 저장합니다.
-        uuid = uuidv4;
+        // 버전 4(UUID를 랜덤하게 생성)를 사용하여 UUID 생성
+        uuid = uuidv4();
+        localStorage.setItem('uuid', uuid); // 생성된 UUID를 localStorage에 저장합니다.
       }
       this.$store.commit('storeUser/setUUID', uuid);
     }
