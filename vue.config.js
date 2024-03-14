@@ -2,6 +2,9 @@ const path = require('path');
 
 module.exports = {
   transpileDependencies: true,
+  devServer: {
+    port: 8080
+  },
   css: {
     loaderOptions: {
       sass: {

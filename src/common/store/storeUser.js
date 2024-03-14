@@ -1,7 +1,10 @@
-// storeUser.js
+// src/common/store/storeUser.js
 export default {
   namespaced: true,
   state: {
+    browser : '',
+    os : '',
+    uuid : '',
     currentUser: {
       isLogin: false,
       lastLogin: 'K',
@@ -16,6 +19,15 @@ export default {
     setCurrentUser(state, user) {
       Object.assign(state.currentUser, user);
     },
+    setBrowser(state, browser) {
+      state.browser = browser;
+    },
+    setOS(state, os) {
+      state.os = os;
+    },
+    setUUID(state, os) {
+      state.uuid = os;
+    }
   },
   actions: {
     // 로그인 액션
@@ -35,5 +47,8 @@ export default {
   },
   getters: {
     getCurrentUser: (state) => state.currentUser,
+    getBrowser: (state) => state.browser,
+    getOS: (state) => state.os,
+    getUUID: (state) => state.uuid,
   },
 };

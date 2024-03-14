@@ -4,7 +4,7 @@
 <template>
   <div class="layout_header">
     <div class="preloader_div" v-if="!preloader">
-      <h4 class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</h4>
+      <div class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</div>
     </div>
     <div class="profile_container">
       <img class="profile_img" src="@/assets/images/common/users/silhouette-male-person.png" alt="" @click="fnGetUserData">
@@ -55,35 +55,59 @@
     },
     methods : {
       async fnInitData() {
-        await this.fnGetUserData();
-        await this.fnInitTraitData();
-        await this.fnInitSheepsData();
-        await this.fnInitScenarioData();
-        await this.fnInitStarzoneData();
-        await this.fnInitCharacterData();
-        await this.fnInitializeEnds();
+        let validInit = true;
+        validInit = await this.fnGetUserData();
+        // await this.fnInitTraitData();
+        // await this.fnInitSheepsData();
+        // await this.fnInitScenarioData();
+        // await this.fnInitStarzoneData();
+        // await this.fnInitCharacterData();
+        if(validInit) {
+          await this.fnInitializeEnds();
+        }
       },
       async fnAddSystemMsg (text, rn) {
         if(!rn) rn = this.preloader_text.length;
         this.preloader_text.push({ rn, text }) 
         return rn;
       },
-
-      
+      /** @DESC : 로컬스토리지에서 사용자 정보를 체크한다.  */
       async fnGetUserData() {
-        await this.fnAddSystemMsg('사용자 정보를 받는중');
-        console.info(axios)
-
-
-        console.info('>fnGetUserData S')
-        this.userData = this.$store.getters['storeUser/getCurrentUser'];
-        if(this.userData.isLogin) {
-          await this.fnAddSystemMsg('>로그인 성공');
-        } else {
-          await this.fnAddSystemMsg('>로그인 이력 없음');
+        const browser = this.$store.getters['storeUser/getBrowser'];
+        const os = this.$store.getters['storeUser/getOS'];
+        const uuid = this.$store.getters['storeUser/getUUID'];
+        await this.fnAddSystemMsg(`OS정보 : ${os}`);
+        await this.fnAddSystemMsg(`브라우져 정보 : ${browser}`);
+        await this.fnAddSystemMsg(`고유 키 : ${uuid ? '존재' : '없음'}`);
+        await this.fnAddSystemMsg(`데이터 서버 접근 권한 : ${typeof axios === 'function' ? 'ON' : 'OFF'}`);
+        if(!axios) {
+          await this.fnAddSystemMsg('\n권한 없음.');
+          return false;
         }
-        console.info('>fnGetUserData E')
-        await this.fnAddSystemMsg('\n');
+        
+        await this.fnAddSystemMsg('\n사용자 정보를 받는중');
+        await this.fnAddSystemMsg('유져 서버 점검 중.');
+        await this.fnAddSystemMsg('2024.03.14 22:00 점검 종료 예정');
+
+        // console.info(loginParam)
+        // axios.get(`/api/user`, { params: loginParam }).then(response => {
+        //   console.info(response)
+        //   if (response.data) {
+            
+        //     // this.$store.commit('setUser', response.data); // setUser mutation을 호출하여 사용자 정보를 저장합니다.
+        //   }
+        // })
+        // .catch(error => {
+        //   console.error('Error:', error);
+        // });
+        // this.userData = this.$store.getters['storeUser/getCurrentUser'];
+        // if(this.userData.isLogin) {
+        //   await this.fnAddSystemMsg('>로그인 성공');
+        // } else {
+        //   await this.fnAddSystemMsg('>로그인 이력 없음');
+        // }
+        // console.info('>fnGetUserData E')
+        // await this.fnAddSystemMsg('\n');
       },
 
 
@@ -135,7 +159,7 @@
             cnt--;
           } else {
             clearInterval(countDownInterval); // 카운트다운 종료
-            this.preloader = true; // 3초 후에 preloader 값을 변경
+            // this.preloader = true; // 3초 후에 preloader 값을 변경
           }
         }, 1000);
       }
@@ -143,5 +167,5 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "@/assets/styles/components/layouts/items/LayoutHeader.scss";
+  @import "./LayoutHeader.scss";
 </style>

@@ -29,7 +29,9 @@ export default {
     //캐릭터
     createCharacterList(state, scenarioId, callback) {
       console.info(`prev:${state.scenarioInfo.id} > to:${scenarioId}`, state.characterList.length);
-    
+      if(!scenarioId) {
+        console.info(`시나리오 없음`);
+      }
       if (state.scenarioInfo.id !== scenarioId || state.characterList.length === 0) {
         const matchingScenario = scenarioMeta.find(item => item.id === scenarioId);
         if (matchingScenario) {
