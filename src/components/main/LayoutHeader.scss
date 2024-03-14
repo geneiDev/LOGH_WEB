@@ -17,6 +17,10 @@
 		justify-content: center;
 		align-items: center;
 		z-index: 1000;
+		.preloader_uuid {
+			position: fixed;
+			top: 0;
+		}
 		.preloader_text {
 			text-align: center;
 			background-color: black;

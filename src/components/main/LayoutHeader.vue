@@ -4,6 +4,7 @@
 <template>
   <div class="layout_header">
     <div class="preloader_div" v-if="!preloader">
+      <div class="preloader_uuid">{{this.$store.getters['storeUser/getUUID']}}</div>
       <div class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</div>
     </div>
     <div class="profile_container">
@@ -78,7 +79,6 @@
         const uuid = this.$store.getters['storeUser/getUUID'];
         await this.fnAddSystemMsg(`OS정보 : ${os}`);
         await this.fnAddSystemMsg(`브라우져 정보 : ${browser}`);
-        await this.fnAddSystemMsg(`유져 식별키 : ${uuid}`);
         await this.fnAddSystemMsg(`데이터 서버 접근 권한 : ${typeof axios === 'function' ? 'ON' : 'OFF'}`);
         if(!axios && uuid) {
           await this.fnAddSystemMsg('\n권한 없음. 재접속 요망');
