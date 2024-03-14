@@ -78,10 +78,10 @@
         const uuid = this.$store.getters['storeUser/getUUID'];
         await this.fnAddSystemMsg(`OS정보 : ${os}`);
         await this.fnAddSystemMsg(`브라우져 정보 : ${browser}`);
-        await this.fnAddSystemMsg(`고유 키 : ${uuid ? '존재' : '없음'}`);
+        await this.fnAddSystemMsg(`유져 식별키 : ${uuid}`);
         await this.fnAddSystemMsg(`데이터 서버 접근 권한 : ${typeof axios === 'function' ? 'ON' : 'OFF'}`);
-        if(!axios) {
-          await this.fnAddSystemMsg('\n권한 없음.');
+        if(!axios && uuid) {
+          await this.fnAddSystemMsg('\n권한 없음. 재접속 요망');
           return false;
         }
         
