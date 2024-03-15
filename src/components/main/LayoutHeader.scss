@@ -1,7 +1,7 @@
 // LayoutHeader.scss
 @charset "UTF-8";
 .layout_header {
-	position: fixed;
+	position: relative;
 	z-index: 500;
 	width: 100%;
 	background-color: rgba(0, 0, 0, 1);
@@ -34,9 +34,11 @@
 		margin-bottom: env(safe-area-inset-bottom);
 		display: flex;
 		align-items: center;
-		
+		height: 100%;
+		overflow: hidden;
 		.profile_img {
-			height: 4.0rem;
+			height: 5.2rem;
+			width: 4.5rem;
 			border: 2px solid black;
 			margin: 0.4rem;
 		}

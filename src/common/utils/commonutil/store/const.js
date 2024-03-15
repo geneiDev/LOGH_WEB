@@ -1,7 +1,7 @@
 // framework 상수 정의
 const CONST = {
-//   API_HOST: process.env.VUE_APP_API_HOST,
-//   API_URL: `${process.env.VUE_APP_API_HOST}/webapp/wcs/stores/servlet`,
+  API_HOST  : process.env.VUE_APP_API_HOST,
+  API_URL   : process.env.VUE_APP_API_URL,
 //   MOBILE_HOST: process.env.VUE_APP_MOBILE_HOST,
 //   PC_HOST: process.env.VUE_APP_PC_HOST,
 //   NSMALL_API_HOST: process.env.VUE_APP_NSMALL_API_HOST,

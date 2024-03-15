@@ -7,7 +7,7 @@
       <div id="app_body">
         <router-view></router-view>
       </div>
-      <div v-show="fnGetFooterType()" id="app_footer">
+      <div v-show="!fnGetFooterType()" id="app_footer">
         <layout-footer></layout-footer>
       </div>    
     </div>
@@ -28,6 +28,7 @@ const router = new VueRouter({
 });
 
 export default {
+  namp : 'App',
   router,
   components: {
     LayoutHeader,
@@ -35,6 +36,7 @@ export default {
   },
   data() {
     return {
+      apiUrl: process.env.VUE_APP_API_URL,
       isOnload : false,
     };
   },
@@ -54,15 +56,17 @@ export default {
       let uuid    = localStorage.getItem('uuid');
       if (!uuid || uuid.length !== 36) {
         const { v4: uuidv4 } = require('uuid');
-        // 버전 4(UUID를 랜덤하게 생성)를 사용하여 UUID 생성
         uuid = uuidv4();
-        localStorage.setItem('uuid', uuid); // 생성된 UUID를 localStorage에 저장합니다.
+        localStorage.setItem('uuid', uuid);
       }
       this.$store.commit('storeUser/setUUID', uuid);
+
+
     }
   },
   mounted() {
     if (this.$store) {
+      console.info(this.apiUrl)
       const browser = this.$store.getters['storeUser/getBrowser'];
       const os = this.$store.getters['storeUser/getOS'];
       const uuid = this.$store.getters['storeUser/getUUID'];
@@ -124,6 +128,6 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   @import "@/assets/styles/App.scss";
 </style>

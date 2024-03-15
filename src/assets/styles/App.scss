@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import 'reset';
 * {
   padding: 0;
   margin: 0;
@@ -13,7 +14,10 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 
 #app {
@@ -27,6 +31,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: black;
+  width: 100vw;
+  height: 100vh;
 }
 
 #app.sky {
@@ -39,32 +45,51 @@ body {
   color: #c2daf7;
 }
 
+#pre_loader{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100vw;
+  height: 100vh;
+
+}
+
 #app_header {
-  height: 10vh;
-  position: fixed;
+  position: relative;
+  display: flex;
+  max-height: 10vh;
   left: 0;
   width: 100%;
   z-index: 200;
   overflow: hidden;
+  flex: 1;
 }
 
 #app_body {
-  margin-top: 10vh;
-  min-height: 76vh;
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100vw;
   overflow: auto;
   flex: 1;
   z-index: 100;
 }
 
 #app_footer {
+  position: relative;
   max-height: 10vh;
-  position: fixed;
+  min-height: 10vh;
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 50;
 }
 
+.body_layer {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+}
 .textflow {
   white-space: nowrap;
   overflow: hidden;
