@@ -4,7 +4,6 @@
 <template>
   <div class="layout_header">
     <div class="preloader_div" v-if="!preloader">
-      <!-- <div class="preloader_uuid">GUEST ID :<br>{{this.$store.getters['storeUser/getUUID']}}</div> -->
       <div class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</div>
     </div>
     <div class="profile_container">
@@ -27,12 +26,16 @@
         </div>
       </div>
     </div>
+    <div class="system_text">
+      aa
+    </div>
   </div>
 </template>
 
 <script>
   const axios = require('axios');
   import global from '@/common/utils/global';
+  import { tipMeta } from "@/assets/txt/tip.js";
   import LayerHeaderMenu from '@/components/layer/commons/LayerHeaderMenu.vue'
   import GeneiImgArea from '@/components/layer/utils/geneiImgArea'
 
@@ -65,6 +68,7 @@
 
     },
     mounted() {
+      this.fnStartTipRotation();
       this.fnInitData();
     },
     methods : {
@@ -82,6 +86,14 @@
         if(validInit) {
           await this.fnInitializeEnds();
         }
+      },
+      fnStartTipRotation() {
+        this.tipTxt = tipMeta[this.tipIdx];
+        this.tipRotationInterval = setInterval(() => {
+          const randomIndex = Math.floor(Math.random() * tipMeta.length);
+          this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
+          this.tipTxt = tipMeta[this.tipIdx];
+        }, 5000);
       },
       async fnAddSystemMsg (text, rn) {
         if(!rn) rn = this.preloader_text.length;
