@@ -10,9 +10,11 @@
       <div class="profile_img">
         <genei-img-area :imgSrc="userData.pic"/>
       </div>
-      <ul>
+      <ul class="profile_data_container">
         <li class="profile_data"><h3>{{ userData.name }}</h3></li>
-        <li class="profile_data"><h3>{{ userData.points }} PT</h3></li>
+        <li class="system_text" @click="fnShowSystemTextDetail()">
+          <h5 class="text-center">{{ tipLogs.length > 0 ? tipLogs[tipLogs.length - 1] : '' }}</h5>
+        </li>
       </ul>
       <div class="btn_menu">
         <input class="menu-check" type="checkbox" id="menu-check" />
@@ -25,9 +27,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="system_text">
-      aa
     </div>
   </div>
 </template>
@@ -62,6 +61,10 @@
         preloaderErr : [],
         preloader : false,
         preloader_text : [],
+
+        //tip영역
+        tipLogs : [],
+        tipIdx: 0,
       };
     },
     watch: {
@@ -81,19 +84,22 @@
         // await this.fnInitStarzoneData();
         // await this.fnInitCharacterData();
 
-        console.info('사소한 결함 : ', this.preloaderErr);
-        console.info('치명적인 결함 : ', validInit);
+        console.info('사소한 결함 코드들: ', this.preloaderErr);
+        console.info('치명적인 결함 없음: ', validInit);
         if(validInit) {
           await this.fnInitializeEnds();
         }
       },
+      fnShowSystemTextDetail() {
+
+      },
       fnStartTipRotation() {
-        this.tipTxt = tipMeta[this.tipIdx];
+        this.tipLogs.push(tipMeta[this.tipIdx]);
         this.tipRotationInterval = setInterval(() => {
           const randomIndex = Math.floor(Math.random() * tipMeta.length);
           this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
-          this.tipTxt = tipMeta[this.tipIdx];
-        }, 5000);
+          this.tipLogs.push(tipMeta[this.tipIdx]);
+        }, 30000);
       },
       async fnAddSystemMsg (text, rn) {
         if(!rn) rn = this.preloader_text.length;
@@ -149,7 +155,7 @@
         this.userData.isLogin   = info.isLogin || false;
         this.userData.langType  = info.langType || 'KR';
         this.userData.lastLogin = info.lastLogin || 'K';
-        this.userData.name      = info.name || 'GUEST';
+        this.userData.name      = info.name || `GUEST - ${info.uuid.substr(0,8)}`;
         this.userData.pic       = info.pic || '/images/person/CH_000000.png';
         this.userData.points    = info.points || '0';
         this.userData.userId    = info.userId || '';

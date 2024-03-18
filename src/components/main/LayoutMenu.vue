@@ -8,9 +8,6 @@
         <h1>뒤로</h1>
       </button>
     </div>
-    <div class="tip_container">
-      <span id="tips" style="white-space: pre-line;">{{ tipTxt }}</span>
-    </div>
     <div class="title_container" v-if="titleFlag === ''" @click="setTitleFlag('on')">
       <h1 class="blinking">화면을 터치해주세요.</h1>
     </div>
@@ -92,7 +89,6 @@
 </template>
 
 <script>
-import { tipMeta } from "@/assets/txt/tip.js";
 import LayerPopNewGame from '@/components/layouts/mains/title/details/LayerPopNewGame.vue'
 import LayerPopDicPerson from '@/components/layouts/mains/title/details/LayerPopDicPerson.vue'
 import LayerPopDicStarzone from '@/components/layouts/mains/title/details/LayerPopDicStarzone.vue'
@@ -115,9 +111,6 @@ export default {
       titleFlag : '',
       layerPop : '',
       layerPopName: '',
-      //tip영역
-      tipIdx: 0,
-      tipTxt : '',
       //login영역
       isLogin : false,
       //subMenu
@@ -126,7 +119,6 @@ export default {
   },
   mounted() {
     this.userData = this.$store.getters['storeUser/getCurrentUser'];
-    this.fnStartTipRotation();
   },
   activated() {
   },
@@ -135,15 +127,6 @@ export default {
     clearInterval(this.tipRotationInterval);
   },
   methods : {
-    //Tip처리
-    fnStartTipRotation() {
-      this.tipTxt = tipMeta[this.tipIdx];
-      this.tipRotationInterval = setInterval(() => {
-        const randomIndex = Math.floor(Math.random() * tipMeta.length);
-        this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
-        this.tipTxt = tipMeta[this.tipIdx];
-      }, 5000);
-    },
     //LayerTitle영역에서 현재 선택된 title을 세팅한다.
     setTitleFlag(flg) {
       this.titleFlag = flg;
