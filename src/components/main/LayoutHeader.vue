@@ -13,7 +13,7 @@
       <ul class="profile_data_container">
         <li class="profile_data"><h3>{{ userData.name }}</h3></li>
         <li class="system_text" @click="fnShowSystemTextDetail()">
-          <h5 class="text-center">{{ tipLogs.length > 0 ? tipLogs[tipLogs.length - 1] : '' }}</h5>
+          <h5 class="text-center">{{ tipLogs.length > 0 ? tipLogs[tipLogs.length - 1].text : '' }}</h5>
         </li>
       </ul>
       <div class="btn_menu">
@@ -84,7 +84,7 @@
         // await this.fnInitStarzoneData();
         // await this.fnInitCharacterData();
 
-        console.info('사소한 결함 코드들: ', this.preloaderErr);
+        console.info(`사소한 결함 코드들(${this.preloaderErr.length}):`, this.preloaderErr);
         console.info('치명적인 결함 없음: ', validInit);
         if(validInit) {
           await this.fnInitializeEnds();
@@ -94,11 +94,20 @@
 
       },
       fnStartTipRotation() {
-        this.tipLogs.push(tipMeta[this.tipIdx]);
+        this.tipLogs.push({
+          type : 'tip',
+          idx : this.tipIdx,
+          text : tipMeta[this.tipIdx],
+        });
         this.tipRotationInterval = setInterval(() => {
           const randomIndex = Math.floor(Math.random() * tipMeta.length);
           this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
-          this.tipLogs.push(tipMeta[this.tipIdx]);
+          this.tipLogs.push({
+            type : 'tip',
+            idx : this.tipIdx,
+            text : tipMeta[this.tipIdx],
+          });
+          // console.info(this.tipLogs)
         }, 30000);
       },
       async fnAddSystemMsg (text, rn) {
@@ -129,20 +138,30 @@
         const loginParam = { uuid, userId, userPwd }
         async function fetchDataFromApi() {
           try {
-            const response = await axios.post(`${API_URL}/user/login`, loginParam);
-            if (response.data.success) {
-              console.info('로그인 성공:', response.data);
-              await that.fnAddSystemMsg('로그인 성공');
-              // 여기에서 사용자 토큰이나 세션 정보를 저장하거나 다음 작업을 수행할 수 있습니다.
-              return true;
-            } else {
-              console.error('로그인 실패:', response.data.error);
-              await that.fnAddSystemMsg('로그인 실패: ' + response.data.error);
-              return true;
+            const response = await axios.post(`${API_URL}/user/isRegisted`, loginParam);
+            console.info('responseresponse', response);
+            if(response.result === 'Y') {
+              console.info('알수없는 케이스')
             }
+            // ID: 1
+            // REG_DT: "2024-03-18 08:03:10"
+            // TMP_USER: "Y"
+            // USER_ID: "dd3d2789-e27f-47b9-9c92-f7780310571a"
+            // USER_PWD: ""
+            // UUID: "dd3d2789-e27f-47b9-9c92-f7780310571a"
+            // if (response.data) {
+            //   console.info('로그인 성공:', response.data);
+            //   await that.fnAddSystemMsg('로그인 성공');
+            //   // 여기에서 사용자 토큰이나 세션 정보를 저장하거나 다음 작업을 수행할 수 있습니다.
+            //   return true;
+            // } else {
+            //   console.error('로그인 실패:', response.data.error);
+            //   await that.fnAddSystemMsg('로그인 실패: ' + response.data.error);
+              return true;
+            // }
           } catch (error) {
             await that.fnAddSystemMsg('로그인 서버에 접속할 수 없습니다.');
-            that.preloaderErr.push({'E001' : error});
+            that.preloaderErr.push({'E001' : `${error} 로그인 서버에 접속할 수 없습니다.`});
             that.fnSetUserData(loginParam)
             return true;
           }

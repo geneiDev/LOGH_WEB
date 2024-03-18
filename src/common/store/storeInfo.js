@@ -6,7 +6,6 @@ export default {
   state: {
     traitList: [],
     sheepList: {},
-    
   },
   mutations: {
     createTraitList(state) {
