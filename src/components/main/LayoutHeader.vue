@@ -5,6 +5,9 @@
   <div class="layout_header">
     <div class="preloader_div" v-if="!preloader">
       <div class="preloader_text" v-for="row in preloader_text" :key="row.rn">{{ row.text }}</div>
+      <div v-for="errRow in preloaderErr" :key="errRow.ERR_CODE">
+        <button @click="preloader = true">{{errRow.TEXT}}</button>
+      </div>
     </div>
     <div class="profile_container">
       <div class="profile_img">
@@ -160,8 +163,21 @@
               return true;
             // }
           } catch (error) {
-            await that.fnAddSystemMsg('로그인 서버에 접속할 수 없습니다.');
-            that.preloaderErr.push({'E001' : `${error} 로그인 서버에 접속할 수 없습니다.`});
+            const errorCode = 'SE001';
+            const errorText = '로그인 서버에 접속할 수 없습니다.';
+            await that.fnAddSystemMsg(errorText);
+
+
+            that.preloaderErr.push({
+              RN : (that.preloaderErr.length),
+              ERR_CODE : errorCode,
+              TEXT : `SERVER ERROR ${errorText}`
+            });
+            that.tipLogs.push({
+              type : 'error',
+              idx : that.tipLogs.length,
+              text : errorText
+            });
             that.fnSetUserData(loginParam)
             return true;
           }
@@ -219,11 +235,10 @@
         await this.fnAddSystemMsg(`>총 ${charData.length}건의 인물 데이터\n`);
       },
       async fnInitializeEnds() {
-        this.fnAddSystemMsg('\n데이터 초기화 완료');
         if(this.preloaderErr.length > 0) {
           this.fnAddSystemMsg('이슈가 존재합니다.');
-          // return;
         }
+        this.fnAddSystemMsg('\n데이터 초기화 완료');
         let cnt = 3;
         // 3, 2, 1을 systemMsg에 추가하는 로직
         const countDownInterval = setInterval(() => {
@@ -232,7 +247,13 @@
             cnt--;
           } else {
             clearInterval(countDownInterval); // 카운트다운 종료
-            this.preloader = true; // 3초 후에 preloader 값을 변경
+            if(this.preloaderErr.length > 0) {
+              this.fnAddSystemMsg('\n초기화 중 이슈가 발생했습니다.');
+              this.fnAddSystemMsg('이슈를 확인 후 진행하세요.');
+            } else {
+              this.preloader = true; // 3초 후에 preloader 값을 변경
+            }
+
           }
         }, 1000);
       }
