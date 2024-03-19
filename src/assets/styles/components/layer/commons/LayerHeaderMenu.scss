@@ -5,6 +5,15 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  max-height: 100%;
+  .user_info_container {
+    flex: 1;
+    min-height: 8rem;
+    max-height: 8rem;
+    background-color: rgb(8, 6, 6);
+    overflow-y: hidden;
+    border: 0.2em solid blueviolet;
+  }
   div {
     flex: 1;
     width: 100vw;

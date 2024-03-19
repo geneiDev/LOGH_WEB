@@ -13,6 +13,7 @@ export default {
       userName : '',
       userPic : '',
       points: 0,
+      tmpUser : 'Y',
     },
   },
   mutations: {
@@ -31,16 +32,17 @@ export default {
   },
   actions: {
     login({ commit }, userData) {
-      // console.info('로그인 액션', userData);
+      console.info('로그인 액션', userData);
       const userName = userData.TMP_USER === 'Y' ? `사용자_${userData.UUID.substring(0,8)}` : userData.USER_NAME
       const user = {
-        isLogin   : userData.IS_LOGIN,
-        langType  : userData.LANG_TYPE,
-        lastLogin : userData.LAST_LOGIN,
-        userId    : userData.USER_ID,
-        userName  : userName,
-        userPic   : userData.USER_PIC,
-        points    : userData.POINT,
+        isLogin     : userData.IS_LOGIN,
+        langType    : userData.LANG_TYPE,
+        lastLogin   : userData.LAST_LOGIN,
+        userId      : userData.USER_ID,
+        userName    : userName,
+        userPic     : userData.USER_PIC,
+        points      : userData.POINT,
+        tmpUser     : userData.TMP_USER,
       }
       commit('setCurrentUser', user);
     },

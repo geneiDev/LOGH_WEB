@@ -19,6 +19,11 @@
           <h5 class="text-center" v-if="tipLogs.length > 0"> {{ tipLogs[tipLogs.length - 1].text || '' }} </h5>
         </li>
       </ul>
+      <div class="system_detail" ref="system_detail">
+        <div v-for="tip in tipLogs" :key="tip.idx">
+          <h5 class="text-center">{{tip}}</h5>
+        </div>
+      </div>
       <div class="btn_menu">
         <input class="menu-check" type="checkbox" id="menu-check" ref="menu_check"/>
         <label class="menu-icon" for="menu-check">
@@ -34,7 +39,10 @@
 
 <script>
   const axios = require('axios');
+  import { mapState } from 'vuex';
   import global from '@/common/utils/global';
+  // import isEqual from 'lodash/isEqual';
+
   import { tipMeta } from "@/assets/txt/tip.js";
   import LayerHeaderMenu from '@/components/layer/commons/LayerHeaderMenu.vue'
   import GeneiImgArea from '@/components/layer/utils/geneiImgArea'
@@ -66,14 +74,25 @@
         headerMenuId : '',
 
         //tip영역
+        tipDelay : 30000,
         tipIdx: 0,
         tipLogs : [],
       };
     },
+    computed: {
+      ...mapState('storeInfo', ['systemMsg']), // Vuex store의 systemMsg 상태를 가져옴
+    },
     watch: {
-
+      systemMsg: {
+        handler(newMsg) {
+          console.info('watching sysmsg')
+          this.tipLogs = newMsg;
+        },
+        deep: true
+      },
     },
     mounted() {
+      this.fnAddSystemText('접속을 환영합니다.', 'msg');
       this.fnStartTipRotation();
       this.fnInitData();
     },
@@ -83,7 +102,18 @@
         validInit = await this.fnGetUserData();
         if(validInit) {
           this.userData = this.$store.getters['storeUser/getCurrentUser'];
-          console.info('로그인됨.', this.userData)
+          if(this.userData.isLogin) {
+            console.info('로그인됨.', this.userData)
+            if(this.userData.tmpUser === 'N') {
+              //asdf
+            } else {
+              this.fnAddSystemText('임시 사용자입니다.\n로그인 정보를 등록해주세요.', 'err');
+            }
+
+          } else {
+            console.info('로그인X.', this.userData);
+            this.fnAddSystemText('회원 정보에 이슈가 있습니다. 화면을 새로고침 해주세요.', 'err');
+          }
         }
         // await this.fnInitTraitData();
         // await this.fnInitSheepsData();
@@ -97,31 +127,7 @@
           await this.fnInitializeEnds();
         }
       },
-      fnShowSystemTextDetail() {
 
-      },
-      fnStartTipRotation() {
-        this.tipLogs.push({
-          type : 'tip',
-          idx : this.tipIdx,
-          text : tipMeta[this.tipIdx],
-        });
-        this.tipRotationInterval = setInterval(() => {
-          const randomIndex = Math.floor(Math.random() * tipMeta.length);
-          this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
-          this.tipLogs.push({
-            type : 'tip',
-            idx : this.tipIdx,
-            text : tipMeta[this.tipIdx],
-          });
-          // console.info(this.tipLogs)
-        }, 30000);
-      },
-      async fnAddSystemMsg (text, rn) {
-        if(!rn) rn = this.preloader_text.length;
-        this.preloader_text.push({ rn, text }) 
-        return rn;
-      },
       async fnAddSystemErr (err) {
         console.info(err)
         const errorInfo = global.errorHandler(err)
@@ -138,24 +144,60 @@
           detailInfo : errorInfo.detailInfo,
         });
       },
+      fnAddSystemText(text, flag, event) {
+        if(!flag) flag = 'msg'
+        if(!text) return;
+        const msg = {
+          text, flag, event
+        }
+        this.$store.dispatch('storeInfo/addSystemMsg', msg, { root: true });
+      },
+
+
+      fnShowSystemTextDetail() {
+
+        const systemDetail = this.$refs.system_detail;
+        const hasOnClass = systemDetail.classList.contains('on');
+
+        if (!hasOnClass) {
+          systemDetail.classList.add('on');
+        } else {
+          systemDetail.classList.remove('on');
+        }
+      },
+      fnStartTipRotation() {
+        
+        this.tipRotationInterval = setInterval(() => {
+          const randomIndex = Math.floor(Math.random() * tipMeta.length);
+          this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
+          this.fnAddSystemText(tipMeta[this.tipIdx], 'tip');
+        }, this.tipDelay);
+      },
+      async fnAddPreloaderMsg (text, rn) {
+        if(!rn) rn = this.preloader_text.length;
+        this.preloader_text.push({ rn, text }) 
+        return rn;
+      },
+
+      
 
       /** @DESC : 로컬스토리지에서 사용자 정보를 체크한다.  */
       async fnGetUserData() {
         const that    = this;
         const os      = this.$store.getters['storeUser/getOS'];
-        await this.fnAddSystemMsg(`OS정보 : ${os}`);
+        await this.fnAddPreloaderMsg(`OS정보 : ${os}`);
 
         const browser = this.$store.getters['storeUser/getBrowser'];
-        await this.fnAddSystemMsg(`브라우져 정보 : ${browser}`);
+        await this.fnAddPreloaderMsg(`브라우져 정보 : ${browser}`);
 
         const uuid    = this.$store.getters['storeUser/getUUID'];
         if(!uuid || uuid.length !== 36) {
-          await this.fnAddSystemMsg('\n※고유 키 체크 중 오류가 발생했습니다.');
-          await this.fnAddSystemMsg('에러 정보 송신 중.');
-          await this.fnAddSystemMsg('재접속하시거나 다른 브라우져를 이용해주세요.');
+          await this.fnAddPreloaderMsg('\n※고유 키 체크 중 오류가 발생했습니다.');
+          await this.fnAddPreloaderMsg('에러 정보 송신 중.');
+          await this.fnAddPreloaderMsg('재접속하시거나 다른 브라우져를 이용해주세요.');
           return false;
         }
-        await this.fnAddSystemMsg('\n사용자 정보를 받는중');
+        await this.fnAddPreloaderMsg('\n사용자 정보를 받는중');
         const userId  = localStorage.getItem('userId') || '';
         const userPwd = localStorage.getItem('userPwd') || '';
         const API_URL = global.CONST.API_URL;
@@ -169,9 +211,9 @@
               that.$store.dispatch('storeUser/login', userData, { root: true });
               return true;
             } else {
-              await that.fnAddSystemMsg('\n※고유 키 체크 중 오류가 발생했습니다.');
-              await that.fnAddSystemMsg('에러 정보 송신 중.');
-              await that.fnAddSystemMsg('재접속하시거나 다른 브라우져를 이용해주세요.');
+              await that.fnAddPreloaderMsg('\n※고유 키 체크 중 오류가 발생했습니다.');
+              await that.fnAddPreloaderMsg('에러 정보 송신 중.');
+              await that.fnAddPreloaderMsg('재접속하시거나 다른 브라우져를 이용해주세요.');
               return false;
             }
           } catch (error) {
@@ -198,54 +240,54 @@
       
       //특성 데이터
       async fnInitTraitData() {
-        this.fnAddSystemMsg('공통 특성 데이터 로딩 중');
+        this.fnAddPreloaderMsg('공통 특성 데이터 로딩 중');
         this.$store.commit('storeInfo/createTraitList');
         const traitList = await this.$store.getters['storeInfo/getTraitList'];
-        this.fnAddSystemMsg(`:총 ${traitList.length}건의 특성 데이터\n`);
+        this.fnAddPreloaderMsg(`:총 ${traitList.length}건의 특성 데이터\n`);
       },
       //함선 데이터
       async fnInitSheepsData() {
-        this.fnAddSystemMsg('공통 함선 데이터 로딩 중');
+        this.fnAddPreloaderMsg('공통 함선 데이터 로딩 중');
         this.$store.commit('storeInfo/createSheepList');
         const sheepList = this.$store.getters['storeInfo/getSheepList'];
-        this.fnAddSystemMsg(`:총 ${sheepList.length}건의 함선 데이터\n`);
+        this.fnAddPreloaderMsg(`:총 ${sheepList.length}건의 함선 데이터\n`);
       },
 
       async fnInitScenarioData() {
-        this.fnAddSystemMsg('시나리오 데이터 로딩 중');
+        this.fnAddPreloaderMsg('시나리오 데이터 로딩 중');
         this.$store.commit('storeScene/createScenarioList');
         const scenarioList = this.$store.getters['storeScene/getScenarioList'];
-        this.fnAddSystemMsg(`>총 ${scenarioList.length}건의 시나리오 데이터\n`);
+        this.fnAddPreloaderMsg(`>총 ${scenarioList.length}건의 시나리오 데이터\n`);
       },
       async fnInitStarzoneData() {
-        this.fnAddSystemMsg('기본 시나리오의 성계 지도를 가져오는 중');
+        this.fnAddPreloaderMsg('기본 시나리오의 성계 지도를 가져오는 중');
         this.$store.commit('storeScene/createStarzoneList');
         const starzoneList = this.$store.getters['storeScene/getStarzoneList'];
-        this.fnAddSystemMsg(`>총 ${starzoneList.length}건의 성계 데이터\n`);
+        this.fnAddPreloaderMsg(`>총 ${starzoneList.length}건의 성계 데이터\n`);
       },
       async fnInitCharacterData() {
-        this.fnAddSystemMsg('기본 시나리오의 등장 인물들을 가져오는 중');
+        this.fnAddPreloaderMsg('기본 시나리오의 등장 인물들을 가져오는 중');
         await this.$store.commit('storeScene/createCharacterList', 'T1');
         await new Promise(resolve => setTimeout(resolve, 0));
         const charData = this.$store.getters['storeScene/getCharacterList'];
-        await this.fnAddSystemMsg(`>총 ${charData.length}건의 인물 데이터\n`);
+        await this.fnAddPreloaderMsg(`>총 ${charData.length}건의 인물 데이터\n`);
       },
       async fnInitializeEnds() {
         if(this.preloaderErr.length > 0) {
-          this.fnAddSystemMsg('이슈가 존재합니다.');
+          this.fnAddPreloaderMsg('이슈가 존재합니다.');
         }
-        this.fnAddSystemMsg('\n데이터 초기화 완료');
+        this.fnAddPreloaderMsg('\n데이터 초기화 완료');
         let cnt = 3;
         // 3, 2, 1을 systemMsg에 추가하는 로직
         const countDownInterval = setInterval(() => {
           if (cnt > 0) {
-            this.fnAddSystemMsg(`${cnt}초 후 초기화 모듈 종료합니다.`);
+            this.fnAddPreloaderMsg(`${cnt}초 후 초기화 모듈 종료합니다.`);
             cnt--;
           } else {
             clearInterval(countDownInterval); // 카운트다운 종료
             if(this.preloaderErr.length > 0) {
-              this.fnAddSystemMsg('\n초기화 중 이슈가 발생했습니다.');
-              this.fnAddSystemMsg('이슈를 확인 후 진행하세요.');
+              this.fnAddPreloaderMsg('\n초기화 중 이슈가 발생했습니다.');
+              this.fnAddPreloaderMsg('이슈를 확인 후 진행하세요.');
             } else {
               this.preloader = true; // 3초 후에 preloader 값을 변경
             }

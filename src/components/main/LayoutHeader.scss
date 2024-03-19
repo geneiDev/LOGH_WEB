@@ -133,12 +133,12 @@
 				top: -10px;
 			}
 			.menu-check {
-					display: none;
+				display: none;
 			}
 			.menu-check:checked~.menu {
-					max-height: 100vh;
-					height: calc(100vh - 4.8rem);
-					opacity: 1;
+				max-height: 100vh;
+				height: calc(100vh - 4.8rem);
+				opacity: 1;
 			}
 			.menu-check:not(:checked)~.menu {
 				max-height: 0;
@@ -147,19 +147,50 @@
 				opacity: 0;
 			}
 			.menu-check:checked~.menu-icon .menu-sticks {
-					background: transparent;
+				background: transparent;
 			}
 			.menu-check:checked~.menu-icon .menu-sticks:before {
-					transform: rotate(-45deg);
+				transform: rotate(-45deg);
 			}
 			.menu-check:checked~.menu-icon .menu-sticks:after {
-					transform: rotate(45deg);
+				transform: rotate(45deg);
 			}
 			.menu-check:checked~.menu-icon:not(.steps) .menu-sticks:before,
 			.menu-check:checked~.menu-icon:not(.steps) .menu-sticks:after {
-					top: 0;
+				top: 0;
 			}
     }
+		.system_detail {
+			position: fixed;
+			top: 4.8rem;
+			right: 0;
+			margin-top: 1rem;
+			max-height: 0px;
+			width: 100vw;
+			transition: max-height 1.5s ease, opacity 0.5s ease;
+			z-index: 1;
+			overflow: hidden;
+			opacity: 0;
+			border: 2px solid white;
+		}
+		
+		.system_detail.on {
+			position: fixed;
+			top: 4.8rem;
+			right: 0;
+			margin-top: 1rem;
+			min-height: calc(100vh - 15rem);
+			max-height: 80vh;
+			width: 100vw;
+			transition: max-height 1.5s ease, opacity 0.5s ease;
+			z-index: 1;
+			overflow: hidden;
+			background-color: black;
+			opacity: 1;
+			border: 2px solid white;
+			overflow-y: auto;
+		}
+	
 
     
 	}
