@@ -6,12 +6,12 @@ export default {
     os : '',
     uuid : '',
     currentUser: {
-      isLogin: false,
-      lastLogin: 'K',
-      id: '',
-      name: 'GUEST',
-      langType : 'KR',
-      pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
+      isLogin : false,
+      langType : '',
+      lastLogin: '',
+      userId : '',
+      userName : '',
+      userPic : '',
       points: 0,
     },
   },
@@ -30,8 +30,18 @@ export default {
     }
   },
   actions: {
-    // 로그인 액션
-    login({ commit }, user) {
+    login({ commit }, userData) {
+      // console.info('로그인 액션', userData);
+      const userName = userData.TMP_USER === 'Y' ? `사용자_${userData.UUID.substring(0,8)}` : userData.USER_NAME
+      const user = {
+        isLogin   : userData.IS_LOGIN,
+        langType  : userData.LANG_TYPE,
+        lastLogin : userData.LAST_LOGIN,
+        userId    : userData.USER_ID,
+        userName  : userName,
+        userPic   : userData.USER_PIC,
+        points    : userData.POINT,
+      }
       commit('setCurrentUser', user);
     },
     // 로그아웃 액션

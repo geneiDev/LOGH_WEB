@@ -11,23 +11,21 @@
     </div>
     <div class="profile_container">
       <div class="profile_img">
-        <genei-img-area :imgSrc="userData.pic"/>
+        <genei-img-area :imgSrc="userData.userPic"/>
       </div>
       <ul class="profile_data_container">
-        <li class="profile_data"><h3>{{ userData.name }}</h3></li>
+        <li class="profile_data"><h3>{{ userData.userName }}</h3></li>
         <li class="system_text" @click="fnShowSystemTextDetail()">
-          <h5 class="text-center">{{ tipLogs.length > 0 ? tipLogs[tipLogs.length - 1].text : '' }}</h5>
+          <h5 class="text-center" v-if="tipLogs.length > 0"> {{ tipLogs[tipLogs.length - 1].text || '' }} </h5>
         </li>
       </ul>
       <div class="btn_menu">
-        <input class="menu-check" type="checkbox" id="menu-check" />
+        <input class="menu-check" type="checkbox" id="menu-check" ref="menu_check"/>
         <label class="menu-icon" for="menu-check">
           <span class="menu-sticks"></span>
         </label>
         <div class="menu">
-          <div>
-            <layer-header-menu></layer-header-menu>
-          </div>
+          <layer-header-menu :menuId="headerMenuId"></layer-header-menu>
         </div>
       </div>
     </div>
@@ -50,24 +48,26 @@
       return {
         isLogin : false,
         isHeaderVisible: false,
+        
         userData : {
-          isLogin: false,
-          lastLogin: '',
-          uuid : '',
-          userId: '',
-          userPwd: '',
-          name: '',
+          isLogin : false,
           langType : '',
-          pic: '',
+          lastLogin: '',
+          userId : '',
+          userName : '',
+          userPic : '',
           points: 0,
         },
         preloaderErr : [],
         preloader : false,
         preloader_text : [],
 
+        //header의 popup형 subMenu
+        headerMenuId : '',
+
         //tip영역
-        tipLogs : [],
         tipIdx: 0,
+        tipLogs : [],
       };
     },
     watch: {
@@ -81,6 +81,10 @@
       async fnInitData() {
         let validInit = true;
         validInit = await this.fnGetUserData();
+        if(validInit) {
+          this.userData = this.$store.getters['storeUser/getCurrentUser'];
+          console.info('로그인됨.', this.userData)
+        }
         // await this.fnInitTraitData();
         // await this.fnInitSheepsData();
         // await this.fnInitScenarioData();
@@ -118,6 +122,23 @@
         this.preloader_text.push({ rn, text }) 
         return rn;
       },
+      async fnAddSystemErr (err) {
+        console.info(err)
+        const errorInfo = global.errorHandler(err)
+        this.preloaderErr.push({
+          RN : (this.preloaderErr.length),
+          ERR_CODE : errorInfo.code,
+          TEXT : `SERVER ERROR ${errorInfo.text}`,
+          DETAIL_INFO : errorInfo.detailInfo,
+        });
+        this.tipLogs.push({
+          type : 'error',
+          idx : this.tipLogs.length,
+          text : errorInfo.text,
+          detailInfo : errorInfo.detailInfo,
+        });
+      },
+
       /** @DESC : 로컬스토리지에서 사용자 정보를 체크한다.  */
       async fnGetUserData() {
         const that    = this;
@@ -142,63 +163,38 @@
         async function fetchDataFromApi() {
           try {
             const response = await axios.post(`${API_URL}/user/isRegisted`, loginParam);
-            console.info('responseresponse', response);
-            if(response.result === 'Y') {
-              console.info('알수없는 케이스')
-            }
-            // ID: 1
-            // REG_DT: "2024-03-18 08:03:10"
-            // TMP_USER: "Y"
-            // USER_ID: "dd3d2789-e27f-47b9-9c92-f7780310571a"
-            // USER_PWD: ""
-            // UUID: "dd3d2789-e27f-47b9-9c92-f7780310571a"
-            // if (response.data) {
-            //   console.info('로그인 성공:', response.data);
-            //   await that.fnAddSystemMsg('로그인 성공');
-            //   // 여기에서 사용자 토큰이나 세션 정보를 저장하거나 다음 작업을 수행할 수 있습니다.
-            //   return true;
-            // } else {
-            //   console.error('로그인 실패:', response.data.error);
-            //   await that.fnAddSystemMsg('로그인 실패: ' + response.data.error);
+            if(response.data.result === 'Y' && response.data.user) {
+              const userData = response.data.user
+              userData.IS_LOGIN = true;
+              that.$store.dispatch('storeUser/login', userData, { root: true });
               return true;
-            // }
+            } else {
+              await that.fnAddSystemMsg('\n※고유 키 체크 중 오류가 발생했습니다.');
+              await that.fnAddSystemMsg('에러 정보 송신 중.');
+              await that.fnAddSystemMsg('재접속하시거나 다른 브라우져를 이용해주세요.');
+              return false;
+            }
           } catch (error) {
-            const errorCode = 'SE001';
-            const errorText = '로그인 서버에 접속할 수 없습니다.';
-            await that.fnAddSystemMsg(errorText);
-
-
-            that.preloaderErr.push({
-              RN : (that.preloaderErr.length),
-              ERR_CODE : errorCode,
-              TEXT : `SERVER ERROR ${errorText}`
-            });
-            that.tipLogs.push({
-              type : 'error',
-              idx : that.tipLogs.length,
-              text : errorText
-            });
-            that.fnSetUserData(loginParam)
+            console.info('error', error)
+            await that.fnAddSystemErr('SE001');
+            const userData = {
+              IS_LOGIN    : false,
+              LANG_TYPE   : 'KR',
+              LAST_LOGIN  : 'K',
+              USER_ID     : '',
+              USER_NAME   : `로컬-${loginParam.uuid.substr(0,8)}`,
+              USER_PIC    : '/images/person/CH_000000.png',
+              POINT       : '획득불가',
+              UUID        : loginParam.uuid,
+            }
+            that.$store.dispatch('storeUser/login', userData, { root: true });
             return true;
           }
         }
         const rst = await fetchDataFromApi();
-        console.info('fetchDataFromApi', rst);
         return rst;
       },
-      fnSetUserData(info) {
-        this.userData.isLogin   = info.isLogin || false;
-        this.userData.langType  = info.langType || 'KR';
-        this.userData.lastLogin = info.lastLogin || 'K';
-        this.userData.name      = info.name || `GUEST - ${info.uuid.substr(0,8)}`;
-        this.userData.pic       = info.pic || '/images/person/CH_000000.png';
-        this.userData.points    = info.points || '0';
-        this.userData.userId    = info.userId || '';
-        this.userData.userPwd   = info.userPwd || '';
-        this.userData.uuid      = info.uuid || '';
-      },
-
-
+      
       
       //특성 데이터
       async fnInitTraitData() {

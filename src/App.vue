@@ -66,7 +66,7 @@ export default {
   },
   mounted() {
     if (this.$store) {
-      console.info(this.apiUrl)
+      // console.info(this.apiUrl)
       const browser = this.$store.getters['storeUser/getBrowser'];
       const os = this.$store.getters['storeUser/getOS'];
       const uuid = this.$store.getters['storeUser/getUUID'];
