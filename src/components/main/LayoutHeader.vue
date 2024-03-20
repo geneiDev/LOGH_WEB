@@ -21,7 +21,12 @@
       </ul>
       <div class="system_detail" ref="system_detail">
         <div v-for="tip in tipLogs" :key="tip.idx">
-          <h5 class="text-center">{{tip}}</h5>
+          <div :class="`system_text ${tip.flag}`">
+            <i /><span class="text">{{tip.text}}</span>
+          </div>
+          <!-- <div v-else>
+            <h5 class="text-center">{{tip}}</h5>
+          </div> -->
         </div>
       </div>
       <div class="btn_menu">
@@ -137,12 +142,12 @@
           TEXT : `SERVER ERROR ${errorInfo.text}`,
           DETAIL_INFO : errorInfo.detailInfo,
         });
-        this.tipLogs.push({
-          type : 'error',
-          idx : this.tipLogs.length,
-          text : errorInfo.text,
-          detailInfo : errorInfo.detailInfo,
-        });
+        // this.tipLogs.push({
+        //   type : 'error',
+        //   idx : this.tipLogs.length,
+        //   text : errorInfo.text,
+        //   detailInfo : errorInfo.detailInfo,
+        // });
       },
       fnAddSystemText(text, flag, event) {
         if(!flag) flag = 'msg'
@@ -208,10 +213,11 @@
             if(response.data.result === 'Y' && response.data.user) {
               const userData = response.data.user
               userData.IS_LOGIN = true;
+              await that.fnAddPreloaderMsg(`※ 로그인되었습니다. ${userData.TMP_USER === 'Y' ? '\n(임시 사용자입니다.)' : ''}`);
               that.$store.dispatch('storeUser/login', userData, { root: true });
               return true;
             } else {
-              await that.fnAddPreloaderMsg('\n※고유 키 체크 중 오류가 발생했습니다.');
+              await that.fnAddPreloaderMsg('※ 고유 키 체크 중 오류가 발생했습니다.');
               await that.fnAddPreloaderMsg('에러 정보 송신 중.');
               await that.fnAddPreloaderMsg('재접속하시거나 다른 브라우져를 이용해주세요.');
               return false;
@@ -222,7 +228,7 @@
             const userData = {
               IS_LOGIN    : false,
               LANG_TYPE   : 'KR',
-              LAST_LOGIN  : 'K',
+              LAST_LOGIN  : 'X',
               USER_ID     : '',
               USER_NAME   : `로컬-${loginParam.uuid.substr(0,8)}`,
               USER_PIC    : '/images/person/CH_000000.png',
