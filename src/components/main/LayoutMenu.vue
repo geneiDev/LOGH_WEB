@@ -8,7 +8,7 @@
         <h1>뒤로</h1>
       </button>
     </div>
-    <div class="title_container" v-if="titleFlag === ''" @click="setTitleFlag('on')">
+    <div class="title_container" v-if="titleFlag === ''" @click="fnCheckRegisted()">
       <h1 class="blinking">화면을 터치해주세요.</h1>
     </div>
     <div class="title_container" v-if="titleFlag === 'on'">
@@ -78,17 +78,13 @@
           <h1>특성</h1>
           <h4>공통 특성 데이터입니다.</h4>
         </button>
-
-
       </div>
     </div>
-
-
-
   </div>
 </template>
 
 <script>
+import ConfirmPopup from '@/components/layouts/items/confirmPopup.vue';
 import LayerPopNewGame from '@/components/layouts/mains/title/details/LayerPopNewGame.vue'
 import LayerPopDicPerson from '@/components/layouts/mains/title/details/LayerPopDicPerson.vue'
 import LayerPopDicStarzone from '@/components/layouts/mains/title/details/LayerPopDicStarzone.vue'
@@ -96,6 +92,7 @@ import LayerPopDicStarzone from '@/components/layouts/mains/title/details/LayerP
 export default {
   name: 'layerTitle',
   components: {
+    ConfirmPopup,
     LayerPopNewGame,
     // LayerPopMultiGame,
     // LayerPopOption,
@@ -118,7 +115,7 @@ export default {
     };
   },
   mounted() {
-    this.userData = this.$store.getters['storeUser/getCurrentUser'];
+    
   },
   activated() {
   },
@@ -127,6 +124,31 @@ export default {
     clearInterval(this.tipRotationInterval);
   },
   methods : {
+    //최초 화면에서 임시 계정 여부를 체크하고 관련 프로세스를 처리한다.
+    fnCheckRegisted() {
+      const userData = this.$store.getters['storeUser/getCurrentUser'];
+      if(userData.isLogin && userData.tmpUser === 'Y') {
+        this.$modal.show(ConfirmPopup, {
+          title: '확인',
+          text: '임시 사용자로 로그인되었습니다.\n플레이한 정보를 잃어버릴 수 있습니다.\n회원가입을 하시겠습니까?',
+          buttons: [
+            {
+              title: '확인',
+              handleConfirm: () => {
+                alert('준비중.')
+                this.titleFlag = 'on';
+              }
+            },
+            {
+              title: '취소',
+              handleCancel: () => {
+                this.titleFlag = 'on';
+              }
+            }
+          ]
+        });
+      }
+    },
     //LayerTitle영역에서 현재 선택된 title을 세팅한다.
     setTitleFlag(flg) {
       this.titleFlag = flg;

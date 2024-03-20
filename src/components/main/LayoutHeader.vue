@@ -113,10 +113,8 @@
             } else {
               this.fnAddSystemText('임시 사용자입니다.\n로그인 정보를 등록해주세요.', 'err');
             }
-
           } else {
-            console.info('로그인X.', this.userData);
-            this.fnAddSystemText('회원 정보에 이슈가 있습니다. 화면을 새로고침 해주세요.', 'err');
+            this.fnAddSystemText('서버에 접속할 수 없습니다.', 'err');
           }
         }
         // await this.fnInitTraitData();

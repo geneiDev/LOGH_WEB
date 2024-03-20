@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Toasted from 'vue-toasted';
 import VueLazyload from 'vue-lazyload';
+import VModal from 'vue-js-modal';
 
 //util
 import store from './common/store/index.js';
@@ -12,6 +13,7 @@ Vue.config.productionTip = false
 
 // Vue에 플러그인 등록
 Vue.use(Toasted);
+Vue.use(VModal, { dynamic: true })
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   error: 'path_to_your_error_image',
