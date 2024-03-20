@@ -198,22 +198,49 @@
 				display: flex;
 				flex-direction: row;
 				align-items: center;
-				.text {
-					position: relative;
-					width: 80vw;
-					font-size: 1.4rem;
-					text-align: left;
-					overflow-x: hidden;
-    			white-space: nowrap;
-    			text-overflow: ellipsis;
-				}
 			}
-			.system_text.msg i {
+			.system_text .text {
+				margin: 1rem;
+				position: relative;
+				width: 80vw;
+				font-size: 1.4rem;
+				text-align: left;
+				white-space: pre-line;
+				display: inline-block;
+				margin-right: 0;
+			}
+			.system_text.err .text {
+				margin: 1rem;
+				position: relative;
+				width: 80vw;
+				font-size: 1.4rem;
+				text-align: left;
+				white-space: pre-line;
+				display: inline-block;
+				margin-right: 0;
+				color: red;
+			}
+			@keyframes marquee {
+				from { left: 100%; }
+				to { left: -100%; }
+			}
+			.system_text i {
+				position: relative;
 				width: 3rem;
 				height: 3rem;
 				background-color: gray;
 				background-image: url("@/assets/images/common/icon/icoMessage.png");
 				background-size: cover;
+				border: 2px solid gray;
+			}
+			.system_text.err i {
+				position: relative;
+				width: 3rem;
+				height: 3rem;
+				background-color: gray;
+				background-image: url("@/assets/images/common/icon/icoWarning.png");
+				background-size: cover;
+				border: 2px solid gray;
 			}
 		}
 	

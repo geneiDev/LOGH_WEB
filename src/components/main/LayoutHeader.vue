@@ -21,7 +21,7 @@
       </ul>
       <div class="system_detail" ref="system_detail">
         <div v-for="tip in tipLogs" :key="tip.idx">
-          <div :class="`system_text ${tip.flag}`">
+          <div :class="`system_text ${tip.flag}`" @click="fnClickSystemDetail(tip)">
             <i /><span class="text">{{tip.text}}</span>
           </div>
           <!-- <div v-else>
@@ -90,7 +90,6 @@
     watch: {
       systemMsg: {
         handler(newMsg) {
-          console.info('watching sysmsg')
           this.tipLogs = newMsg;
         },
         deep: true
@@ -132,7 +131,22 @@
           await this.fnInitializeEnds();
         }
       },
-
+      /** SystemMessage 영역 처리 */
+      // 영역 확장 및 축소
+      fnShowSystemTextDetail() {
+        const systemDetail = this.$refs.system_detail;
+        const hasOnClass = systemDetail.classList.contains('on');
+        if (!hasOnClass) {
+          systemDetail.classList.add('on');
+        } else {
+          systemDetail.classList.remove('on');
+        }
+      },
+      // 확장 영역 클릭
+      fnClickSystemDetail(info) {
+        //클릭시 detail정보가 존재하면 popup으로 detail정보를 오픈한다.
+        console.info(info);
+      },
       async fnAddSystemErr (err) {
         console.info(err)
         const errorInfo = global.errorHandler(err)
@@ -159,17 +173,7 @@
       },
 
 
-      fnShowSystemTextDetail() {
 
-        const systemDetail = this.$refs.system_detail;
-        const hasOnClass = systemDetail.classList.contains('on');
-
-        if (!hasOnClass) {
-          systemDetail.classList.add('on');
-        } else {
-          systemDetail.classList.remove('on');
-        }
-      },
       fnStartTipRotation() {
         
         this.tipRotationInterval = setInterval(() => {
