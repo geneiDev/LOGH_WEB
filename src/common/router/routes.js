@@ -1,16 +1,11 @@
-// src/common/router/routes.js
-
-// 라우트 컴포넌트를 import합니다.
 import mainMenu from '@/components/main/LayoutMenu.vue';
-// import About from '@/components/About.vue';
-// import Contact from '@/components/Contact.vue';
+import newGame from '@/components/layouts/main/menu/LayerPopNewGame.vue';
+import userInfo from '@/components/layouts/main/users/LayerUserInfo.vue';
 
-// 라우트 설정을 정의합니다.
 const routes = [
-  { path: '/', component: mainMenu },
-  // { path: '/about', component: About },
-  // { path: '/contact', component: Contact }
+  { path: '/', component: mainMenu, name: 'mainMenu' },
+  { path: '/newGame', component: newGame, name: 'newGame' },
+  { path: '/userInfo', component: userInfo, name: 'userInfo' },
 ];
 
-// 라우트 설정을 내보냅니다.
 export default routes;

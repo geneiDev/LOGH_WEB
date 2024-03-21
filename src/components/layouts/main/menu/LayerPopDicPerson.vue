@@ -217,15 +217,16 @@ export default {
 <style lang="scss" scoped>
   @charset "UTF-8";
 .pop_dictionary {
+  position: relative;
   width: 100%;
   height: 100%;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
   .pop_dictionary_layer {
     position: relative;
     z-index: 500;
-    height: 100%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     .scenario_section {

@@ -1,7 +1,13 @@
 <template>
   <div class="layer_menu">
     <div class="user_info_container">
-      
+      <div v-if="userData.tmpUser === 'Y'">
+        임시사용자 사용자 정보 창으로 이동.
+      </div>
+      <div v-else>
+        임시사용자아님.
+      </div>
+
 
     </div>
 

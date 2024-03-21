@@ -1,13 +1,5 @@
 <template>
   <div class="body_layer">
-    <div :class="'subPop_container'+(layerPop ? ' on' : ' off')">
-      <div class="subPop_div">
-        <component :is="layerPop"></component>
-      </div>
-      <button type="button" class="btn_back" @click="fnCallLayerPop('')">
-        <h1>뒤로</h1>
-      </button>
-    </div>
     <div class="title_container" v-if="titleFlag === ''" @click="fnCheckRegisted()">
       <h1 class="blinking">화면을 터치해주세요.</h1>
     </div>
@@ -31,6 +23,7 @@
     </div>
     <div class="title_container" v-if="titleFlag === 'S'">
       <button type="button" class="btn_title" @click="fnCallLayerPop('SN')">
+        <router-link to="/newGame">Go to New Game</router-link>
         <h1>새 게임</h1>
         <h4>새로운 시나리오와 인물을 선택하여 플레이합니다.</h4>
       </button>
@@ -85,19 +78,11 @@
 
 <script>
 import ConfirmPopup from '@/components/layouts/items/confirmPopup.vue';
-import LayerPopNewGame from '@/components/layouts/mains/title/details/LayerPopNewGame.vue'
-import LayerPopDicPerson from '@/components/layouts/mains/title/details/LayerPopDicPerson.vue'
-import LayerPopDicStarzone from '@/components/layouts/mains/title/details/LayerPopDicStarzone.vue'
 
 export default {
   name: 'layerTitle',
   components: {
-    ConfirmPopup,
-    LayerPopNewGame,
-    // LayerPopMultiGame,
-    // LayerPopOption,
-    LayerPopDicPerson,
-    LayerPopDicStarzone,
+    // ConfirmPopup,
   },
   props: {
     
@@ -114,15 +99,6 @@ export default {
       subMenuFlag : '',
     };
   },
-  mounted() {
-    
-  },
-  activated() {
-  },
-  beforeDestroy() {
-    // 컴포넌트 파기 시에 Interval 정리
-    clearInterval(this.tipRotationInterval);
-  },
   methods : {
     //최초 화면에서 임시 계정 여부를 체크하고 관련 프로세스를 처리한다.
     fnCheckRegisted() {
@@ -135,8 +111,8 @@ export default {
             {
               title: '확인',
               handleConfirm: () => {
-                alert('준비중.')
                 this.titleFlag = 'on';
+                this.fnCallLayerPop('userInfo');
               }
             },
             {
@@ -154,34 +130,11 @@ export default {
       this.titleFlag = flg;
     },
     //LayerTitle영역에서 호출할 SubPopup을 세팅한다.
-    fnCallLayerPop(flg) {
-      console.info('fnCallLayerPop', flg)
-      let layerName = ''
-      switch (flg) {
-        case 'SN': layerName = "LayerPopNewGame"; break;  //새 게임 호출
-        case 'SC': layerName = ""; break;  //계속하기
-        case 'SL': layerName = ""; break;  //계속하기
-        case 'DS': layerName = "LayerPopDicStarzone"; break;  //계속하기
-        case 'DPP': layerName = "LayerPopDicPerson"; break;  //계속하기
-      
-        default:
-          break;
-      }
-      console.info(flg, layerName)
-
-      this.layerPop  = layerName;
+    fnCallLayerPop(layerName) {
+      this.$router.push({ name: layerName });
     },
     fnCallSubMenu(smId) {
       this.subMenuFlag = smId;
-    },
-    fnChangeMainLayer () {
-      var id  = ''
-      if(this.userData.isLogin) {
-        id    = 'Main'
-      } else {
-        id    = 'Login'
-      }
-      this.$store.commit('storeMain/setLayer', id);
     },
   }
 }

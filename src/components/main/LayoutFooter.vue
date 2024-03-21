@@ -1,15 +1,22 @@
 <template>
   <div class="navigation">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <div class="dimmed"></div>
-    <ul :class="naviPopIdx ? 'on' : ''">
-      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(1)" id="1">1</a></li>
-      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(2)" id="2">2</a></li>
-      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('')"><span class="material-symbols-outlined">home</span></a></li>
-      
-      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(4)" id="4">4</a></li>
-      <li class="side"><a class="btn_navi_base" @click="fnPopBottomNavi(5)" id="5">5</a></li>
+    <ul v-if="routerType === 'main'">
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
     </ul>
+    <ul v-if="routerType === 'dic'">
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
+      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
+    </ul>
+    <ul v-else>
+      '{{routerType}}'
+    </ul>
+
+
+
+
     <div class="bottomNaviBox" v-if="naviPopIdx">
       <div class="footerContainer">
         <layer-footer-menu :naviPopIdx="naviPopIdx"></layer-footer-menu>
@@ -28,13 +35,27 @@ export default {
   components: {
     LayerFooterMenu,
   },
-  watch: {
-    
+  computed: {
+    routerType() {
+      const routerName = this.$route.name;
+      const mainType = ['mainMenu', 'userInfo'];
+      if(mainType.includes(routerName)) {
+        return 'main'
+      } else {
+        console.info('null routerName :', routerName)
+        return ''
+      }
+      
+    },
   },
+
   data () {
     return {
       naviPopIdx : 0
     }
+  },
+  mounted() {
+    
   },
   methods: {
     fnPopBottomNavi (idx) {
@@ -44,7 +65,9 @@ export default {
       this.naviPopIdx = idx;
     },
     fnChangeMainLayer (id) {
-      console.info(' ',id)
+      if(id === 'home') {
+        this.$router.push({ name: 'mainMenu' });
+      }
     }
     
   }
@@ -52,5 +75,130 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "@/assets/styles/components/layouts/items/LayoutFooter.scss"
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 40
+}
+.material-symbols-outlined .on {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 40
+}
+.navigation {
+  z-index: 400;
+  background-color: rgba(0, 0, 0, 1);
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  border-radius: 1rem 1rem 0 0;
+  padding-top: 0.5rem;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  ul {
+    z-index: 400 !important;
+    height: 4.8rem;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    li {
+      position: relative;
+      flex: 1;
+      border: 0.1em solid gray;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.2);
+      .btn_navi_base {
+        width:100%;
+      }
+      .btn_navi_base.on {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      
+    }
+    li + li {
+      margin-left: 0.3em;
+    }
+  }
+
+  ul + ul {
+    margin-top: 0.3em;
+  }
+  ul.on {
+    background-color: rgb(135, 135, 135);
+  }
+
+  //sub box
+  .bottomNaviBox {
+    z-index: 300;
+    position: fixed;
+    bottom: 0;
+    background-color: rgba(100, 100, 100);
+    min-height: 7rem;
+    width:100vw;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem 1rem 0 0;
+    padding-top: 0.5rem;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    transition: max-height 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+
+    .navi_sub_box {
+      width : 100vw;
+      height: 4rem;
+      .footerContainer {
+        height: 2rem;
+      }
+      .footerContainer + .footerContainer{
+        margin-left: 0.4em;
+      }
+    }
+    .btn_navi_close {
+      content: "";
+      // position: absolute;
+      bottom:-5rem;
+      left: calc(50% - 5rem);
+      width: 10rem;
+      height: 10rem;
+      border-radius: 22.5rem;
+      -webkit-box-shadow: 0 0 2rem rgba(0,0,0,.2);
+      box-shadow: 0 0 2rem rgba(0,0,0,.2);
+    }
+    .btn_navi_close:after {
+      content: "";
+      position: absolute;
+      bottom: 6rem;
+      left: calc(50% - .9rem);
+      width: 1.8rem;
+      height: 1.4rem;
+      background-image: url("@/assets/images/common/icon/btnClose.png");
+      background-repeat: no-repeat;
+      background-position: 50%;
+      background-size: 1.8rem;
+    }
+  }
+
+  .dimmed.on {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.6);
+    z-index: 200;
+  }
+}
+
 </style>

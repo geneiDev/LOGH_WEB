@@ -7,7 +7,7 @@
       <div id="app_body">
         <router-view></router-view>
       </div>
-      <div v-show="!fnGetFooterType()" id="app_footer">
+      <div id="app_footer">
         <layout-footer></layout-footer>
       </div>    
     </div>
@@ -26,7 +26,10 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 });
-
+router.beforeEach((to, from, next) => {
+  console.info(from , to)
+  next();
+});
 export default {
   namp : 'App',
   router,
@@ -41,11 +44,11 @@ export default {
     };
   },
   watch: {
-    '$route.name'(newRouteName) {
-      if (newRouteName) {
-        this.$store.commit('storeRoute/setCurrentRouteName', newRouteName);
-      }
-    }
+    // '$route.name'(newRouteName) {
+    //   if (newRouteName) {
+    //     this.$store.commit('storeRoute/setCurrentRouteName', newRouteName);
+    //   }
+    // }
   },
   created() {
     if (this.$store) {
@@ -66,7 +69,8 @@ export default {
   },
   mounted() {
     if (this.$store) {
-      // console.info(this.apiUrl)
+      
+
       const browser = this.$store.getters['storeUser/getBrowser'];
       const os = this.$store.getters['storeUser/getOS'];
       const uuid = this.$store.getters['storeUser/getUUID'];
@@ -77,6 +81,9 @@ export default {
         console.info('※ SYSTEM INIT...OK')
         this.isOnload = true;
       }
+      //서버 체크
+      //const response = axios.post(`${API_URL}/user/isRegisted`, loginParam);
+      //console.info(this.apiUrl)
     }
   },
   methods: {
