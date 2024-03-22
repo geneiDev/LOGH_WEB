@@ -4,10 +4,11 @@ import App from './App.vue'
 import Toasted from 'vue-toasted';
 import VueLazyload from 'vue-lazyload';
 import VModal from 'vue-js-modal';
+import VueRouter from 'vue-router';
 
 //util
 import store from './common/store/index.js';
-import router from './common/router/index.js';
+import router from './common/router/routes.js';
 
 
 Vue.config.productionTip = false
@@ -29,6 +30,9 @@ Vue.toasted.register('my-toast', {
   position: 'bottom-right',
   duration: 3000, // 3초 동안 보이도록 설정
 });
+
+// router
+Vue.use(VueRouter);
 
 new Vue({
   render: h => h(App),

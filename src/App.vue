@@ -15,24 +15,11 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 import LayoutHeader from '@/components/main/LayoutHeader.vue'
 import LayoutFooter from '@/components/main/LayoutFooter.vue'
-import routes from '@/common/router/routes.js';
-Vue.use(VueRouter);
 
-const router = new VueRouter({
-  routes,
-  mode: 'history'
-});
-router.beforeEach((to, from, next) => {
-  console.info(from , to)
-  next();
-});
 export default {
   namp : 'App',
-  router,
   components: {
     LayoutHeader,
     LayoutFooter
@@ -71,8 +58,6 @@ export default {
   },
   mounted() {
     if (this.$store) {
-      
-
       const browser = this.$store.getters['storeUser/getBrowser'];
       const os = this.$store.getters['storeUser/getOS'];
       const uuid = this.$store.getters['storeUser/getUUID'];
