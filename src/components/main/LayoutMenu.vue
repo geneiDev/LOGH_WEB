@@ -16,22 +16,22 @@
         <h1>환경 설정</h1>
         <h4>여러 환경요소를 설정합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('D')">
+      <button type="button" class="btn_title" @click="setTitleFlag('data')">
         <h1>데이터</h1>
         <h4>게임의 데이터 정보입니다.</h4>
       </button>
     </div>
     <div class="title_container" v-if="titleFlag === 'S'">
-      <button type="button" class="btn_title" @click="fnCallLayerPop('SN')">
+      <button type="button" class="btn_title" @click="fnCallRouter('SN')">
         <router-link to="/newGame">Go to New Game</router-link>
         <h1>새 게임</h1>
         <h4>새로운 시나리오와 인물을 선택하여 플레이합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="fnCallLayerPop('SC')" disabled>
+      <button type="button" class="btn_title" @click="fnCallRouter('SC')" disabled>
         <h1>계속하기</h1>
         <h4>마지막 플레이 이력 : 없음</h4>
       </button>
-      <button type="button" class="btn_title" @click="fnCallLayerPop('SL')" disabled>
+      <button type="button" class="btn_title" @click="fnCallRouter('SL')" disabled>
         <h1>불러오기</h1>
         <h4>저장된 데이터 : 0개</h4>
       </button>
@@ -44,16 +44,16 @@
     <div class="title_container" v-if="titleFlag === 'O'">
     </div>
     <!-- Data -->
-    <div class="title_container" v-if="titleFlag === 'D'">
-      <button type="button" class="btn_title" @click="fnCallSubMenu('DP')">
+    <div class="title_container" v-if="titleFlag === 'data'">
+      <button type="button" class="btn_title" @click="fnCallSubMenu('dataPersonList')">
         <h1>인물</h1>
         <h4>인물 관련 정보를 검색합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="fnCallLayerPop('DS')">
+      <button type="button" class="btn_title" @click="fnCallRouter('dataStarzone')">
         <h1>성계표</h1>
         <h4>성계 정보를 검색합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="fnCallLayerPop('GT')" disabled>
+      <button type="button" class="btn_title" @click="fnCallRouter('GT')" disabled>
         <h1>함선</h1>
         <h4>함선 정보를 검색합니다.</h4>
       </button>
@@ -62,12 +62,12 @@
       </button>
     </div>
     <div class="sub_layout_container" v-if="subMenuFlag" @click="fnCallSubMenu('')">
-      <div class="sub_layout_btn_area" v-if="subMenuFlag === 'DP'">
-        <button type="button" class="sub_layout_btn" @click="fnCallLayerPop('DPP')">
+      <div class="sub_layout_btn_area" v-if="subMenuFlag === 'dataPersonList'">
+        <button type="button" class="sub_layout_btn" @click="fnCallRouter('dataPerson')">
           <h1>캐릭터</h1>
           <h4>시나리오별 캐릭터 데이터입니다.</h4>
         </button>
-        <button type="button" class="sub_layout_btn" @click="fnCallLayerPop('DPT')" disabled>
+        <button type="button" class="sub_layout_btn" @click="fnCallRouter('DPT')" disabled>
           <h1>특성</h1>
           <h4>공통 특성 데이터입니다.</h4>
         </button>
@@ -112,7 +112,7 @@ export default {
               title: '확인',
               handleConfirm: () => {
                 this.titleFlag = 'on';
-                this.fnCallLayerPop('userInfo');
+                this.fnCallRouter('userInfo');
               }
             },
             {
@@ -130,7 +130,7 @@ export default {
       this.titleFlag = flg;
     },
     //LayerTitle영역에서 호출할 SubPopup을 세팅한다.
-    fnCallLayerPop(layerName) {
+    fnCallRouter(layerName) {
       this.$router.push({ name: layerName });
     },
     fnCallSubMenu(smId) {

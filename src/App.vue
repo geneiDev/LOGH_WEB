@@ -51,6 +51,8 @@ export default {
     // }
   },
   created() {
+    // # VUE_APP_API_URL=http://127.0.0.1:8081
+    // # VUE_APP_API_URL=http://43.202.214.224:8081
     if (this.$store) {
       const currentEnv = this.fnDetectEnv();
       this.$store.commit('storeUser/setBrowser', currentEnv.browser);

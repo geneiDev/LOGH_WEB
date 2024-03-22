@@ -1,7 +1,7 @@
 <template>
   <div class="navigation">
     <ul v-if="routerType === 'main'">
-      <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
+      <li class="side"><a class="iHome" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
     </ul>
     <ul v-if="routerType === 'dic'">
       <li class="side"><a class="btn_navi_base" @click="fnChangeMainLayer('home')"><span class="material-symbols-outlined">home</span></a></li>
@@ -90,16 +90,15 @@ export default {
   'opsz' 40
 }
 .navigation {
+  position: relative;
   z-index: 400;
   background-color: rgba(0, 0, 0, 1);
-  position: relative;
   bottom: 0;
   width: 100%;
   border-radius: 1rem 1rem 0 0;
   padding-top: 0.5rem;
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
-
   ul {
     z-index: 400 !important;
     height: 4.8rem;
@@ -108,7 +107,7 @@ export default {
     display: flex;
     align-items: center;
     list-style-type: none;
-    li {
+    .side {
       position: relative;
       flex: 1;
       border: 0.1em solid gray;
@@ -117,6 +116,11 @@ export default {
       align-items: center;
       justify-content: center;
       background-color: rgba(255, 255, 255, 0.2);
+      max-width: 20vw;
+      .iHome {
+        background-color: rgba(255, 255, 255, 0.2);
+        max-width: 20vw;
+      }
       .btn_navi_base {
         width:100%;
       }
@@ -137,68 +141,6 @@ export default {
     background-color: rgb(135, 135, 135);
   }
 
-  //sub box
-  .bottomNaviBox {
-    z-index: 300;
-    position: fixed;
-    bottom: 0;
-    background-color: rgba(100, 100, 100);
-    min-height: 7rem;
-    width:100vw;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem 1rem 0 0;
-    padding-top: 0.5rem;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-    transition: max-height 0.5s ease, height 0.5s ease, opacity 0.5s ease;
-
-    .navi_sub_box {
-      width : 100vw;
-      height: 4rem;
-      .footerContainer {
-        height: 2rem;
-      }
-      .footerContainer + .footerContainer{
-        margin-left: 0.4em;
-      }
-    }
-    .btn_navi_close {
-      content: "";
-      // position: absolute;
-      bottom:-5rem;
-      left: calc(50% - 5rem);
-      width: 10rem;
-      height: 10rem;
-      border-radius: 22.5rem;
-      -webkit-box-shadow: 0 0 2rem rgba(0,0,0,.2);
-      box-shadow: 0 0 2rem rgba(0,0,0,.2);
-    }
-    .btn_navi_close:after {
-      content: "";
-      position: absolute;
-      bottom: 6rem;
-      left: calc(50% - .9rem);
-      width: 1.8rem;
-      height: 1.4rem;
-      background-image: url("@/assets/images/common/icon/btnClose.png");
-      background-repeat: no-repeat;
-      background-position: 50%;
-      background-size: 1.8rem;
-    }
-  }
-
-  .dimmed.on {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,.6);
-    z-index: 200;
-  }
 }
 
 </style>
