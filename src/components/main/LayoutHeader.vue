@@ -117,11 +117,10 @@
             this.fnAddSystemText('서버에 접속할 수 없습니다.', 'err');
           }
         }
-        // await this.fnInitTraitData();
-        // await this.fnInitSheepsData();
-        // await this.fnInitScenarioData();
+        await this.fnInitTraitData();
+        await this.fnInitSheepsData();
+        await this.fnInitScenarioData();
         // await this.fnInitStarzoneData();
-        // await this.fnInitCharacterData();
 
         console.info(`사소한 결함 코드들(${this.preloaderErr.length}):`, this.preloaderErr);
         console.info('치명적인 결함 없음: ', validInit);

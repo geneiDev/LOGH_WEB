@@ -22,8 +22,7 @@
       </button>
     </div>
     <div class="title_container" v-if="titleFlag === 'S'">
-      <button type="button" class="btn_title" @click="fnCallRouter('SN')">
-        <router-link to="/newGame">Go to New Game</router-link>
+      <button type="button" class="btn_title" @click="fnCallRouter('newGame')">
         <h1>새 게임</h1>
         <h4>새로운 시나리오와 인물을 선택하여 플레이합니다.</h4>
       </button>

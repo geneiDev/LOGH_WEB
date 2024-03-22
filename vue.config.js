@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
   transpileDependencies: true,
   devServer: {
-    port: 8080
+    port: 8080,
+    historyApiFallback: true,
   },
   css: {
     loaderOptions: {
@@ -36,8 +37,9 @@ module.exports = {
     output: {
       filename: 'js/[name].[hash].js',
       chunkFilename: 'js/[name].[hash].js',
+      publicPath: '/',
     },
   },
   assetsDir: 'assets',
-  publicPath: './',
+  
 };
