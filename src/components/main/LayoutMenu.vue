@@ -101,6 +101,7 @@ export default {
   methods : {
     //최초 화면에서 임시 계정 여부를 체크하고 관련 프로세스를 처리한다.
     fnCheckRegisted() {
+      console.info('fnCheckRegisted')
       const userData = this.$store.getters['storeUser/getCurrentUser'];
       if(userData.isLogin && userData.tmpUser === 'Y') {
         this.$modal.show(ConfirmPopup, {
@@ -122,6 +123,9 @@ export default {
             }
           ]
         });
+      } else {
+        console.info('error처리')
+        this.titleFlag = 'on';
       }
     },
     //LayerTitle영역에서 현재 선택된 title을 세팅한다.

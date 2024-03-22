@@ -3,10 +3,10 @@
     <ul v-if="routerType === 'main'" class="navi_row">
       <li class="side20" @click="fnChangeMainLayer('home')"><a class="iHome"><span class=""></span></a></li>
     </ul>
-    <ul v-else-if="routerType === 'dic'">
+    <ul v-else-if="routerType === 'dic'" class="navi_row">
       <li class="side20" @click="fnChangeMainLayer('home')"><a class="iHome"><span class=""></span></a></li>
     </ul>
-    <ul v-else>
+    <ul v-else class="navi_row">
       <li class="side20" @click="fnChangeMainLayer('home')"><a class="iHome"><span class=""></span></a></li>
       {{ routerName }} -> '{{routerType}}'
     </ul>
@@ -38,7 +38,7 @@ export default {
     },
     routerType() {
       const routerName = this.$route.name;
-      const mainType = ['mainMenu', 'userInfo'];
+      const mainType = ['mainMenu', 'userInfo', 'dataStarzone'];
       if(mainType.includes(routerName)) {
         return 'main'
       } else {

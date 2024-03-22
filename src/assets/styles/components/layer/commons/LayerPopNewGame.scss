@@ -70,9 +70,6 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      .flag_info_item {
-        flex: 1;
-      }
       &.on {
         box-shadow: 0 0 0 2px #c2daf7;
         border-radius: 0.5em;
