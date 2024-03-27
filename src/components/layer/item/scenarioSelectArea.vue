@@ -11,7 +11,7 @@
       <button type="button" class="btn_next" @click="fnBtnScenario('N')"></button>
     </div>
     <div class="scenario_list_section">
-      <div :class="'scenario_row_section'+(scenarioInfo.rn === scenarioRow.rn ? ' on' : '')" v-for="scenarioRow in scenarioList" :key="scenarioRow.rn" @click="fnSetScenario(scenarioRow.rn)">
+      <div :class="'scenario_row_section'+(scenarioInfo.id === scenarioRow.id ? ' on' : '')" v-for="scenarioRow in scenarioList" :key="scenarioRow.rn" @click="fnSetScenario(scenarioRow)">
           <h4 class="flag_info_item">UC {{ scenarioRow.date }}</h4>
           <h3 class="flag_info_item">{{fnGetScenarioFlagName(scenarioRow.flag)}} {{ (scenarioRow.subtitle || '시나리오 이름 작성중') }}</h3>
       </div>
@@ -30,8 +30,6 @@ export default {
       return this.$store.getters['storeScene/getScenarioList'];
     },
     scenarioInfo() {
-      const scenarioObj = this.$store.getters['storeScene/getScenarioInfo']
-      console.info('scenarioObj', scenarioObj);
       return this.$store.getters['storeScene/getScenarioInfo'];
     },
   },
@@ -69,22 +67,19 @@ export default {
       const matchingFlag = this.menuFlag.find(flag => flag.flagCode === flagCode);
       return `[${matchingFlag?.flagName || ''}]`;
     },
-    fnSetScenario (rn) {
-      const scenarioObj = this.scenarioList.filter(row => row.rn === rn);
-      if(scenarioObj.length === 1) {
-        this.$store.commit('storeScene/setScenarioInfo', scenarioObj[0]);
-      }
+    fnSetScenario (info) {
+      this.$store.commit('storeScene/setScenarioInfo', info);
       this.fnToggleSceneList();
     },
     fnBtnScenario(flg) {
-      let index = this.scenarioObj.rn;
-      const arrLength = this.scenarioArr.length;
+      const arrLength = this.scenarioList.length;
+      let index = this.scenarioList.findIndex(row => row.idx === this.scenarioInfo.idx);
       if(flg === 'P') {
         index = (index - 1 + arrLength) % arrLength;
       } else if(flg === 'N') {
         index = (index + 1) % arrLength;
       }
-      this.scenarioObj = this.scenarioArr[index];
+      this.$store.commit('storeScene/setScenarioInfo', this.scenarioList[index]);
     },
   },
 };
@@ -94,6 +89,7 @@ export default {
 .scenario_select_area {
   position: relative;
   min-height: 4rem;
+  height: 100%;
   width: 100%;
   .scenario_section {
     position: relative;
@@ -102,6 +98,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
+    min-height: 4rem;
     border-bottom: 3px solid #ffffff;
     .btn_prev {
       background-image: url("@/assets/images/common/icon/play_arrow.png");
@@ -123,18 +120,21 @@ export default {
     }
   }
   .scenario_list_section {
+    position: fixed;
     overflow: hidden;
-    transition: height 1.2s ease;
+    transition: height 0.2s ease;
     height: 0;
     max-height: 40rem;
     width: 100%;
     background-color: black;
     z-index: 500;
-    border: 2px solid white;
+    border: none;
     box-shadow: 10px 10px 10px rgba(255, 255, 255, 0.5);
     overflow-y: auto;
     .scenario_row_section {
-      margin: 0.5rem;
+      color:#ffffff;
+      margin: 1.5rem;
+      
       border-bottom: 1px solid #ffffff;
     }
     .scenario_row_section.on {
@@ -144,7 +144,7 @@ export default {
   }
   .scenario_list_section.on {
     height: 100%;
-    max-height: 80vh;
+    max-height: 85vh;
   }
 }
 

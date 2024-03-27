@@ -3,75 +3,56 @@
   <div class="pop_dictionary_layer">
     <scenario-select></scenario-select>
     <div class="starzone_section">
-      <genei-map-area :scenario="scenarioObj" />
-      {{ starzoneData }}
+      <genei-map-area />
+      
     </div>
     <div class="star_section">
-      2
+      {{ starzoneList() }}
+      <div v-for="row in starzoneList" :key="row.code">
+        {{row.name.KR}}
+      </div>
+
     </div>
   </div>
 </div>
 </template>
 
 <script>
-import { scenarioMeta } from "@/assets/txt/scenario/scenarioMeta";
 import geneiMapArea from '@/components/layer/utils/geneiMapArea.vue'
 import scenarioSelect from "@/components/layer/item/scenarioSelectArea.vue";
 
 export default {
   components: {
-    geneiMapArea,
     scenarioSelect,
+    geneiMapArea,
   },
   data() {
     return {
-      
-      scenarioArr : [],
-      scenarioObj : {},
-
-      starzoneData : [],
     };
   },
   watch: {
-    'scenarioObj.rn'() {
-      this.fnGetStarzoneData();
+
+  },
+  computed: {
+    scenarioList() {
+      return this.$store.getters['storeScene/getScenarioList'];
+    },
+    scenarioInfo() {
+      return this.$store.getters['storeScene/getScenarioInfo'];
+    },
+    starzoneList() {
+      return this.$store.getters['storeScene/getStarzoneList'];
     },
   },
   mounted() {
-    this.userData = this.$store.getters['storeUser/getCurrentUser'];
-    console.info('userData', this.userData);
     this.fnInitScreenFunc();
-    this.fnInitScenarioMeta();
   },
   methods : {
     //화면
     fnInitScreenFunc() {
 
     },
-    //시나리오
-    fnInitScenarioMeta() {
-      this.scenarioArr = scenarioMeta;
-      this.scenarioArr.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA - dateB;
-      });
-      this.scenarioArr.forEach((row, index) => {
-        row.rn = index;
-      });
-      if(this.scenarioArr && this.scenarioArr.length > 0) {
-        this.scenarioObj = this.scenarioArr[0];
-      }
-    },
-    
-
-    //지도
-    async fnGetStarzoneData() {
-      this.$store.getters['storeScene/getStarzoneList'](this.scenarioObj.id).then(result => {
-        this.starzoneData = result;
-      })
-    },
-  }
+  },
 }
 </script>
 

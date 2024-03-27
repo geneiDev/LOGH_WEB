@@ -102,17 +102,18 @@ export default {
     },
     //starzone
     getStarzoneList: (state) => (id) => {
+      console.info('>>>>>>>>>>>>>>>>>>', id)
+
       if(state.scenarioInfo.id === id && state.starzoneList.length > 0) {
         return state.starzoneList;
       }
-      let scenarioId = state.scenarioInfo.id;
+      let scenarioId = state?.scenarioInfo.id;
       if(!scenarioId) {
         console.error('storeScene/getStarzoneList error : invalid scenarioId');
         return;
       }
       const starzoneList = global.starzoneUtils.fnInitStarzoneList(scenarioId);
       state.starzoneList = starzoneList;
-      
       return state.starzoneList;
     },
   },

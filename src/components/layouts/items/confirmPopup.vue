@@ -1,7 +1,7 @@
 <template>
   <div class="confirm_popup">
     <span class="input-group-addon">
-      {{ text }}
+      <span class="pop_text">{{ text }}</span>
     </span>
     <div class="confirm_pop_btn_row"> 
       <input class="confirm_pop_btn" @click="handleConfirm" type="button" value="확인">
@@ -49,7 +49,7 @@ export default {
   padding: 20px;
 }
 .input-group-addon {
-  font-size: 1.6rem;
+  /* font-size: 1.6rem; */
   display: flex;
   white-space: pre-line;
   flex-direction: column;
@@ -57,6 +57,12 @@ export default {
   align-items: center;
   flex: 3;
 }
+.pop_text {
+    flex: 1;
+    /* overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; */
+  }
 .confirm_pop_btn_row {
   flex: 1;
   max-height: 20%;

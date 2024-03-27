@@ -185,8 +185,6 @@
         return rn;
       },
 
-      
-
       /** @DESC : 로컬스토리지에서 사용자 정보를 체크한다.  */
       async fnGetUserData() {
         const that    = this;
@@ -206,11 +204,10 @@
         await this.fnAddPreloaderMsg('\n사용자 정보를 받는중');
         const userId  = localStorage.getItem('userId') || '';
         const userPwd = localStorage.getItem('userPwd') || '';
-        const API_URL = global.CONST.API_URL;
         const loginParam = { uuid, userId, userPwd }
         async function fetchDataFromApi() {
           try {
-            const response = await axios.post(`${API_URL}/user/isRegisted`, loginParam);
+            const response = await axios.post(`${global.CONST.API_URL}/user/isRegisted`, loginParam);
             if(response.data.result === 'Y' && response.data.user) {
               const userData = response.data.user
               userData.IS_LOGIN = true;

@@ -15,9 +15,11 @@
 </template>
 
 <script>
+import global from '@/common/utils/global';
+
 import LayoutHeader from '@/components/main/LayoutHeader.vue'
 import LayoutFooter from '@/components/main/LayoutFooter.vue'
-
+const axios = require('axios');
 export default {
   namp : 'App',
   components: {
@@ -26,7 +28,6 @@ export default {
   },
   data() {
     return {
-      apiUrl: process.env.VUE_APP_API_URL,
       isOnload : false,
     };
   },
@@ -38,8 +39,6 @@ export default {
     // }
   },
   created() {
-    // # VUE_APP_API_URL=http://127.0.0.1:8081
-    // # VUE_APP_API_URL=http://43.202.214.224:8081
     if (this.$store) {
       const currentEnv = this.fnDetectEnv();
       this.$store.commit('storeUser/setBrowser', currentEnv.browser);
@@ -52,11 +51,9 @@ export default {
         localStorage.setItem('uuid', uuid);
       }
       this.$store.commit('storeUser/setUUID', uuid);
-
-
     }
   },
-  mounted() {
+  async mounted() {
     if (this.$store) {
       const browser = this.$store.getters['storeUser/getBrowser'];
       const os = this.$store.getters['storeUser/getOS'];
@@ -68,10 +65,8 @@ export default {
         console.info('※ SYSTEM INIT...OK')
         this.isOnload = true;
       }
-      //서버 체크
-      //const response = axios.post(`${API_URL}/user/isRegisted`, loginParam);
-      //console.info(this.apiUrl)
     }
+    await this.fnDetectServer();
   },
   methods: {
     // 현재 브라우저를 검출하는 함수
@@ -107,6 +102,23 @@ export default {
         os = 'Unknown';
       }
       return { browser, os };
+    },
+    async fnDetectServer() {
+      console.info('※ SERVER INIT')
+      const API_URL = global?.CONST.API_URL;
+      async function fetchDataFromApi() {
+          try {
+            const response = await axios.post(`${API_URL}/`);
+            if(response.status !== 200) {
+              global.CONST.API_URL = 'http://43.202.214.224:8081';
+            } else {
+              console.info('개발계 접속됨. : ', API_URL)
+            }
+        } catch (error) {
+          global.CONST.API_URL = 'http://43.202.214.224:8081';
+        }
+      }
+      fetchDataFromApi();
     },
     fnGetFooterType () {
       const currentRouteName = this.$route.name || '';

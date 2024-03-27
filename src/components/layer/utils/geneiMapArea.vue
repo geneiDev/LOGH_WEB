@@ -9,7 +9,6 @@ export default {
   props: {
     scenario: {
       type: Object,
-      required: true
     },
   },
 }
