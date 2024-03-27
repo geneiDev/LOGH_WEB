@@ -63,10 +63,10 @@ export default {
       console.log('UUID:', uuid);
       if(browser && os && uuid) {
         console.info('※ SYSTEM INIT...OK')
-        this.isOnload = true;
+        // await this.fnDetectServer();
+        this.isOnload = await true;
       }
     }
-    await this.fnDetectServer();
   },
   methods: {
     // 현재 브라우저를 검출하는 함수
