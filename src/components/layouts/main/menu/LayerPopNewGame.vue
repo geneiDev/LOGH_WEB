@@ -1,6 +1,9 @@
 <template>
 <div>
   <div class="pop_layer">
+    <div v-if="scenarioArr">
+    <scenario-select></scenario-select>
+    </div>
     <div class="flag_section">
       <button type="button" class="btn_prev" @click="fnSetMainFlag('P')"></button>
       <h1>{{ currFlag.flagName }}</h1>
@@ -25,9 +28,13 @@
 
 <script>
 import { scenarioMeta } from "@/assets/txt/scenario/scenarioMeta";
+
+import scenarioSelect from "@/components/layer/item/scenarioSelectArea.vue";
+
 import scenarioDetailInfo from '@/components/layer/item/scenarioDetailInfoArea.vue'
 export default {
   components: {
+    scenarioSelect,
     scenarioDetailInfo,
   },
   data() {

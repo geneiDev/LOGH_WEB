@@ -31,7 +31,9 @@ export default {
 </script>
 <style>
 .vm--modal {
-  background-color: black !important;
+  background-color: rgba(0, 0, 0, 0);
+  max-height: 100vh;
+  max-width: 100vw;
 }
 .confirm_popup {
   background-color: black;

@@ -59,9 +59,6 @@
     },
     data() {
       return {
-        isLogin : false,
-        isHeaderVisible: false,
-        
         userData : {
           isLogin : false,
           langType : '',

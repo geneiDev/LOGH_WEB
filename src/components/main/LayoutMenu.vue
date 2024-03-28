@@ -105,6 +105,7 @@ export default {
       const userData = this.$store.getters['storeUser/getCurrentUser'];
       if(userData.isLogin && userData.tmpUser === 'Y') {
         this.$modal.show(ConfirmPopup, {
+          modal : this.$modal,
           title: '확인',
           text: '임시 사용자로 로그인되었습니다.\n플레이한 정보를 잃어버릴 수 있습니다.\n회원가입을 하시겠습니까?',
           buttons: [
@@ -122,6 +123,12 @@ export default {
               }
             }
           ]
+        },
+        {
+          name: 'dynamic-modal',
+          width : '100%',
+          height : '130px',
+          draggable: true,
         });
       } else {
         console.info('error처리')
