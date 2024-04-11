@@ -91,14 +91,16 @@ export default {
     position: relative;
     bottom: 0;
     width: 100vw;
+    height: 100%;
     display: flex;
     justify-content: center;
   }
   .side20 {
-    position: relative;
+    position: absolute;
     bottom : 0;
-    max-height: 100%;
-    min-height: 4rem;
+    max-height: 4rem;
+    max-width: 100%;
+    min-height: 100%;
     min-width: 4rem;
     max-width: 20vw;
     background-image: url("@/assets/images/common/icon/iHome.png");
