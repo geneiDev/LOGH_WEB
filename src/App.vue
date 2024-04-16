@@ -32,15 +32,10 @@ export default {
     };
   },
   watch: {
-    // '$route.name'(newRouteName) {
-    //   if (newRouteName) {
-    //     this.$store.commit('storeRoute/setCurrentRouteName', newRouteName);
-    //   }
-    // }
   },
   created() {
     if (this.$store) {
-      const currentEnv = this.fnDetectEnv();
+      const currentEnv = global.commonUtils.fnDetectEnv();
       this.$store.commit('storeUser/setBrowser', currentEnv.browser);
       this.$store.commit('storeUser/setOS', currentEnv.os);
 
@@ -70,39 +65,6 @@ export default {
   },
   methods: {
     // 현재 브라우저를 검출하는 함수
-    fnDetectEnv() {
-      const userAgent = navigator.userAgent;
-      let browser = '';
-      let os = '';
-
-      if (userAgent.indexOf('Chrome') !== -1 && userAgent.indexOf('Edg') === -1) {
-        browser = 'Chrome';
-      } else if (userAgent.indexOf('Firefox') !== -1) {
-        browser = 'Firefox';
-      } else if (userAgent.indexOf('Safari') !== -1 && userAgent.indexOf('Chrome') === -1) {
-        browser = 'Safari';
-      } else if (userAgent.indexOf('Edg') !== -1) {
-        browser = 'Edge';
-      } else if (userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
-        browser = 'IE'; // Internet Explorer
-      } else {
-        browser = 'Unknown';
-      }
-      if (userAgent.match(/iPhone|iPad|iPod/i)) {
-        os = 'iOS';
-      } else if (userAgent.match(/Android/i)) {
-        os = 'Android';
-      } else if (userAgent.match(/Windows/i)) {
-        os = 'Windows';
-      } else if (userAgent.match(/Mac/i)) {
-        os = 'Mac';
-      } else if (userAgent.match(/Linux/i)) {
-        os = 'Linux';
-      } else {
-        os = 'Unknown';
-      }
-      return { browser, os };
-    },
     async fnDetectServer() {
       console.info('※ SERVER INIT')
       const API_URL = global?.CONST.API_URL;
