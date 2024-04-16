@@ -4,7 +4,8 @@
       <span class="pop_text">{{ text }}</span>
     </span>
     <div class="confirm_pop_btn_row"> 
-      <input v-for="item in buttonInfo" :key="item.rn" class="confirm_pop_btn" @click="handleClick(item.func)" type="button" :value="item.title">
+      <input class="confirm_pop_btn" @click="handleConfirm" type="button" value="확인">
+      <input class="confirm_pop_btn" @click="handleCancel" type="button" value="취소">
     </div>
   </div>
 </template>
@@ -16,14 +17,6 @@ export default {
     },
     buttons: Array,
   },
-  data() {
-    return {
-      buttonInfo : [],
-    };
-  },
-  mounted() {
-    this.buttonInfo = this.buttons; 
-  },
   methods : {
     handleConfirm() {
       this.buttons[0].handleConfirm();
@@ -31,12 +24,6 @@ export default {
     },
     handleCancel() {
       this.buttons[1].handleCancel();
-      this.$emit('close');
-    },
-    handleClick(evt) {
-      if(typeof evt === 'function') {
-        evt();
-      }
       this.$emit('close');
     },
   }

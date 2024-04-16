@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   transpileDependencies: true,
   devServer: {
-    port: 8080,
+    port: 3000,
     historyApiFallback: true,
   },
   css: {

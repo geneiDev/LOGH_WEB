@@ -76,7 +76,9 @@
 </template>
 
 <script>
-import ConfirmPopup from '@/components/layouts/items/confirmPopup.vue';
+// const axios = require('axios');
+// import global from '@/common/utils/global';
+import MessagePopup from '@/components/layouts/items/messagePopup.vue';
 
 export default {
   name: 'layerTitle',
@@ -101,28 +103,14 @@ export default {
   methods : {
     //최초 화면에서 임시 계정 여부를 체크하고 관련 프로세스를 처리한다.
     fnCheckRegisted() {
-      console.info('fnCheckRegisted')
       const userData = this.$store.getters['storeUser/getCurrentUser'];
+      this.titleFlag = 'on';
       if(userData.isLogin && userData.tmpUser === 'Y') {
-        this.$modal.show(ConfirmPopup, {
-          modal : this.$modal,
+        this.$modal.show(MessagePopup, {
+          // modal : this.$modal,
           title: '확인',
-          text: '임시 사용자로 로그인되었습니다.\n플레이한 정보를 잃어버릴 수 있습니다.\n회원가입을 하시겠습니까?',
-          buttons: [
-            {
-              title: '확인',
-              handleConfirm: () => {
-                this.titleFlag = 'on';
-                this.fnCallRouter('userInfo');
-              }
-            },
-            {
-              title: '취소',
-              handleCancel: () => {
-                this.titleFlag = 'on';
-              }
-            }
-          ]
+          text: '사용자 정보가 존재하지 않습니다.\n사용자 등록 화면으로 이동합니다.',
+          time: 2,
         },
         {
           name: 'dynamic-modal',
@@ -130,9 +118,25 @@ export default {
           height : '130px',
           draggable: true,
         });
-      } else {
-        console.info('error처리')
         this.titleFlag = 'on';
+        this.fnCallRouter('user');
+      } else if(userData.isLogin && userData.tmpUser === 'N') {
+        //일일 로그인 포인트 지급 여부 확인
+
+
+        this.$modal.show(MessagePopup, {
+          // modal : this.$modal,
+          title: '확인',
+          text: '일일 로그인 포인트를 100 받았습니다.',
+          time: 0,
+        },
+        {
+          name: 'dynamic-modal',
+          width : '100%',
+          height : '130px',
+          draggable: true,
+        });
+
       }
     },
     //LayerTitle영역에서 현재 선택된 title을 세팅한다.

@@ -32,7 +32,6 @@ export default {
   },
   actions: {
     login({ commit }, userData) {
-      console.info('로그인 액션', userData);
       const userName = userData.TMP_USER === 'Y' ? `사용자_${userData.UUID.substring(0,8)}` : userData.USER_NAME
       const user = {
         isLogin     : userData.IS_LOGIN,

@@ -3,6 +3,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import mainMenu from '@/components/main/LayoutMenu.vue';
+
+import userMain from '@/components/layouts/main/users/LayerUserMain.vue';
 import userInfo from '@/components/layouts/main/users/LayerUserInfo.vue';
 
 //Single
@@ -16,7 +18,8 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: mainMenu, name: 'mainMenu' },
-  { path: '/userInfo', component: userInfo, name: 'userInfo' },
+  { path: '/user', component: userMain, name: 'user' },
+  { path: '/user/Info', component: userInfo, name: 'userInfo' },
   //single
   { path: '/single/newGame', component: newGame, name: 'newGame' },
   //data
@@ -30,7 +33,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.info(from, to);
   next();
 });
 

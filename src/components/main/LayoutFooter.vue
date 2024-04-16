@@ -38,8 +38,8 @@ export default {
     },
     routerType() {
       const routerName = this.$route.name;
-      const mainType = ['mainMenu', 'userInfo', 'dataStarzone'];
-      if(mainType.includes(routerName)) {
+      const mainType = ['mainMenu', 'user', 'dataStarzone'];
+      if (mainType.some(type => routerName.startsWith(type))) {
         return 'main'
       } else {
         console.info('null routerName :', routerName)
