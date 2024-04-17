@@ -33,19 +33,20 @@ export default {
   },
   watch: {
   },
-  created() {
+  async created() {
     if (this.$store) {
       const currentEnv = global.commonUtils.fnDetectEnv();
       this.$store.commit('storeUser/setBrowser', currentEnv.browser);
       this.$store.commit('storeUser/setOS', currentEnv.os);
 
-      let uuid    = localStorage.getItem('uuid');
+      let uuid = localStorage.getItem('uuid');
+
       if (!uuid || uuid.length !== 36) {
         const { v4: uuidv4 } = require('uuid');
         uuid = uuidv4();
         localStorage.setItem('uuid', uuid);
       }
-      this.$store.commit('storeUser/setUUID', uuid);
+      this.$store.commit('storeUser/setUUID', localStorage.getItem('uuid'));
     }
   },
   async mounted() {
@@ -58,26 +59,66 @@ export default {
       console.log('UUID:', uuid);
       if(browser && os && uuid) {
         console.info('※ SYSTEM INIT...OK')
-        // await this.fnDetectServer();
-        this.isOnload = await true;
+        this.fnGetCurrentUUID();
+      } else {
+        console.info('※ SYSTEM INIT...FAIL')
+        console.info((`browser:${browser} && os:${os} && uuid:${uuid}`))
       }
     }
   },
   methods: {
-    // 현재 브라우저를 검출하는 함수
-    async fnDetectServer() {
-      console.info('※ SERVER INIT')
+    async fnGetCurrentUUID() {
+      const that        = this;
+      const uuid        = localStorage.getItem('uuid')||'';
+      const currentUUID = localStorage.getItem('currentUUID')||'';
+      if(uuid === currentUUID) {
+        /*  브라우져에서 추출한 uuid와 기존 localstorage의 currentUUID가 동일한 경우
+            이미 로그인이 정상적으로 수행된 이력이 있는 사용자로 처리하여, 자동으로 로그인을 수행시킨다.
+            그 외엔 새로운 UUID를 생성하고 신규 유져로 취급한다.
+        */
+        console.info('사용자 정보 정상!');
+        return;
+      } else {
+        console.info('사용자 정보 체크 대상');
+      }
+
       const API_URL = global?.CONST.API_URL;
       async function fetchDataFromApi() {
-          try {
-            const response = await axios.post(`${API_URL}/`);
-            if(response.status !== 200) {
-              global.CONST.API_URL = 'http://43.202.214.224:8081';
+        try {
+            const response = await axios.post(`${API_URL}/user/getUUID`, {'uuid' : uuid} );
+            console.info('response:', response);
+            if(response.status === 200) {
+              const userId = response.data.USER_ID||'';
+              let userData = {
+                IS_LOGIN    : false,
+                LANG_TYPE   : 'KR',
+                LAST_LOGIN  : 'K',
+                USER_ID     : userId,
+                UUID        : uuid,
+                USER_NAME   : '',
+                USER_PIC    : '/images/person/CH_000000.png',
+                POINT       : 0,
+                TMP_USER    : 'Y',
+              }
+              if(!userId) {
+                console.info('완전 신규 유져임.');
+                userData.IS_LOGIN   = true;
+                userData.USER_NAME  = '신규유져';
+                localStorage.setItem('currentUUID', uuid);
+              } else {
+                // this.$store.dispatch('storeUser/login', userData, { root: true });
+              }
+              console.info('>>userData', userData);
+              that.$store.dispatch('storeUser/login', userData, { root: true }).then(() => {
+                that.isOnload = true;
+              });
             } else {
-              console.info('개발계 접속됨. : ', API_URL)
+              // global.CONST.API_URL = 'http://43.202.214.224:8081';
+              // console.info('개발계 접속됨. : ', API_URL)
             }
         } catch (error) {
-          global.CONST.API_URL = 'http://43.202.214.224:8081';
+          console.info('서버죽음1', error);
+          // global.CONST.API_URL = 'http://43.202.214.224:8081';
         }
       }
       fetchDataFromApi();
@@ -89,6 +130,9 @@ export default {
       } else {
         return true;
       }
+    },
+    fnValidInit() {
+
     },
     fnGetOuterLink() {
       //    https://gineipaedia.com/

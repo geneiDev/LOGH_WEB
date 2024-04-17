@@ -69,7 +69,7 @@
           points: 0,
         },
         preloaderErr : [],
-        preloader : false,
+        preloader : true,
         preloader_text : [],
 
         //header의 popup형 subMenu
@@ -93,14 +93,35 @@
       },
     },
     mounted() {
-      this.fnAddSystemText('접속을 환영합니다.', 'msg');
+      // this.preloader = false;
+      // this.fnAddSystemText('접속을 환영합니다.', 'msg');
       this.fnStartTipRotation();
       this.fnInitData();
+      console.info('START HEADER LOGICS')
     },
     methods : {
       async fnInitData() {
         let validInit = true;
-        validInit = await this.fnGetUserData();
+        // validInit = await this.fnGetUserData();
+        if(validInit) {
+          this.userData = this.$store.getters['storeUser/getCurrentUser'];
+          console.info('userData>>', this.userData);
+          if(this.userData.isLogin) {
+            console.info('로그인됨.', this.userData)
+            if(this.userData.tmpUser === 'N') {
+              //asdf
+            } else {
+              this.fnAddSystemText('임시 사용자입니다.\n로그인 정보를 등록해주세요.', 'err');
+            }
+          } else {
+            this.fnAddSystemText('현재 로그인 되지 않았습니다.', 'err');
+          }
+        }
+      },
+
+      async fnInitData2() {
+        let validInit = true;
+        // validInit = await this.fnGetUserData();
         if(validInit) {
           this.userData = this.$store.getters['storeUser/getCurrentUser'];
           if(this.userData.isLogin) {
@@ -111,7 +132,7 @@
               this.fnAddSystemText('임시 사용자입니다.\n로그인 정보를 등록해주세요.', 'err');
             }
           } else {
-            this.fnAddSystemText('서버에 접속할 수 없습니다.', 'err');
+            this.fnAddSystemText('현재 로그인 되지 않았습니다.', 'err');
           }
         }
         await this.fnInitTraitData();
@@ -169,7 +190,6 @@
 
 
       fnStartTipRotation() {
-        
         this.tipRotationInterval = setInterval(() => {
           const randomIndex = Math.floor(Math.random() * tipMeta.length);
           this.tipIdx = randomIndex !== this.tipIdx ? randomIndex : (randomIndex + 1) % tipMeta.length;
@@ -181,7 +201,6 @@
         this.preloader_text.push({ rn, text }) 
         return rn;
       },
-
       /** @DESC : 로컬스토리지에서 사용자 정보를 체크한다.  */
       async fnGetUserData() {
         const that    = this;
