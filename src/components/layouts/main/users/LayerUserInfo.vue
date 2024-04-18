@@ -1,29 +1,30 @@
 <template>
-  <div class="body_layer">
-    <div class="user_info_section">
-      <ul class="user_info_row" @click="fnChangeUserName">
-        <li class="user_info_header">닉네임</li>
-        <li class="user_input_area" v-if="userData.tmpUser === 'Y'">
-          <input type="text" class="user_info_input" v-model="tmpUserName" :placeholder="userData.userName" @focusout="fnChangeUserName(this)">
-          <span class="user_info_msg"></span>
-        </li>
-        <li class="user_info_col" v-else>
-          {{userData.userName}}<i/>
-        </li>
-      </ul>
+<div class="body_layer">
+  <div class="user_info_section">
+    <ul class="user_info_row" @click="fnChangeTmpUserData('userName')">
+      <li class="user_info_header">닉네임</li>
+      <li class="user_input_area">
+        <input type="text" class="user_info_input" :placeholder="tmpUserData.userName">
+      </li>
+    </ul>
       <ul class="user_info_row">
         <li class="user_info_header">LOGIN ID</li>
-        <li class="user_info_col">{{ userData.userId }}</li>
+        <li class="user_input_area" v-if="tmpUserData.tmpUser === 'Y'">
+          <input type="text" class="user_info_input" v-model="tmpUserData.userId" :placeholder="tmpUserData.userId">
+        </li>
+        <li class="user_info_col" v-else>
+          {{tmpUserData.userId}}<i/>
+        </li>
       </ul>
       <ul class="user_info_row">
         <li class="user_info_header">비밀번호</li>
         <li class="user_info_col">********</li>
       </ul>
-      <ul class="user_info_row" v-if="userData.tmpUser === 'Y'">
-        <li class="user_info_header">이미지</li>
+      <ul class="user_info_row" v-if="tmpUserData.tmpUser === 'Y'">
+        <li class="user_info_header">대표이미지</li>
         <li class="user_info_col">
-          <div class="profile_img" v-if="userData.userPic">
-            <genei-img-area :imgSrc="userData.userPic"/>
+          <div class="profile_img" v-if="tmpUserData.userPic">
+            <genei-img-area :imgSrc="tmpUserData.userPic"/>
           </div>
         </li>
       </ul>
@@ -32,18 +33,29 @@
         <li class="user_info_col">
           <button type="button" class="btn_base kakao" value="K"><span>카카오톡으로 로그인</span></button>
           <button type="button" class="btn_base naver" value="N"><span>네이버로 로그인</span></button>
-          <!-- <button type="button" class="btn_base facebook" value="F"><span>페이스북으로 로그인</span></button> -->
         </li>
       </ul>
-      <div class="login_btn_group" v-if="userData.tmpUser === 'Y'">
+      <div class="login_btn_group" v-if="tmpUserData.tmpUser === 'Y'">
         <button type="button" class="ctl_common" @click="fnUpdateUserData"><h1>승인</h1></button>
+        <button type="button" class="ctl_common" @click="fnClosePage()"><h1>취소</h1></button>
       </div>
       <div class="login_btn_group" v-else>
         <button type="button" class="ctl_common" @click="fnUpdateUserData"><h1>저장</h1></button>
         <button type="button" class="ctl_common"><h1>초기화</h1></button>
       </div>
     </div>
-	</div>
+    <div class="modify_area" :class="currentData ? 'on' : ''">
+      <div v-if="currentData === 'userName'">
+        <h1>닉네임 변경</h1>
+        <h3>닉네임은 한글/영어/숫자로만 작성 가능합니다.</h3>
+        <div>
+          <input type="text" class="modify_input" v-model="tmpUserData.userId" :placeholder="tmpUserData.userName">
+        </div>
+        <button type="button" class="ctl_common" @click="fnUpdateTmpUserData"><h1>확인</h1></button>
+        <button type="button" class="ctl_common" @click="fnChangeTmpUserData()"><h1>취소</h1></button>
+      </div>
+    </div>
+</div>
 </template>
 
 <script>
@@ -65,22 +77,67 @@ export default {
   },
   data() {
     return {
-      userData : {},
-      tmpUserName : "",
+      currentData : '',
+      tmpUserData : {},
     };
   },
   props: {
     
   },
   mounted() {
-    this.userData = { ...this.currentUser };
+    this.tmpUserData = { ...this.currentUser };
   },
   methods : {
-    fnChangeUserName() {
+    //닉네임을 바꾸기 위한 POP_UP창을 호출한다.
+    fnChangeTmpUserData(current) {
+      this.currentData = current
+    },
+    fnUpdateTmpUserData() {
+
+    },
+    fnClosePage() {
+      this.$router.push({ name: 'user' });
+    },
+
+
+    // fnChangeUserName() {
+    //   console.info('fnChangeUserName');
+    //   const that = this;
+    //   this.$modal.show(ConfirmPopup, {
+    //     modal : this.$modal,
+    //     title: '확인',
+    //     text: `slr`,
+    //     buttons: [
+    //       {
+    //         title: '예',
+    //         func: () => {
+    //           that.$router.push({ name: 'user' });
+    //         }
+    //       },
+    //       {
+    //         title: '아니오',
+    //         func: () => {
+    //           that.$router.push({ name: 'mainMenu' });
+    //         }
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     name: 'dynamic-modal',
+    //     width : '100%',
+    //     height : '130px',
+    //     draggable: true,
+    //   });
+    // },
+
+
+
+
+
+    fnChangeUserName2() {
       //.replace(/[^a-zA-Z0-9]/g, '');
       let tmpUserName = this.tmpUserName.replace(/[^a-zA-Z0-9가-힣]/g, '');
       this.tmpUserName = tmpUserName;
-
     },
     async fnUpdateUserData() {
       const userParam = this.userData;
@@ -119,10 +176,45 @@ export default {
         });
     },
   },
+  
 }
 </script>
 
 <style lang="scss" scoped>
+.ctl_common {
+  flex: 1;
+  border-radius: 0.1em;
+  margin: 1.4rem;
+  color: gray;
+  background-color: rgba(0, 0, 0, 1);
+  box-shadow: 0 0 0 2px #c2daf7;
+  border-radius: 0.5em;
+  color: #c2daf7;
+  max-height: 2.5rem;
+}
+.modify_area {
+  position: absolute;
+  top : 0;
+  width: 100%;
+  height: 0;
+  z-index: 120;
+  display: none;
+  &.on {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    .modify_input {
+      font-size: 1.6rem;
+      flex: 1;
+      flex-grow: 1;
+      max-width: 80%;
+    }
+  }
+}
 .user_info_section {
   position: absolute;
   display: flex;
@@ -132,6 +224,7 @@ export default {
   height: 100%;
   width: 100%;
   top: 0;
+  z-index: 100;
   .user_info_row {
     position: relative;
     width: 98%;
@@ -174,6 +267,7 @@ export default {
         flex: 1;
         flex-grow: 1;
         max-width: 80%;
+        text-align: center;
       }
       .user_info_msg {
         flex: 1;
@@ -207,18 +301,6 @@ export default {
     width: 98%;
     align-items: center;
     border: 2px solid #3498db;
-    .ctl_common {
-      flex: 1;
-      border-radius: 0.1em;
-      margin: 1.4rem;
-      color: gray;
-      background-color: rgba(0, 0, 0, 1);
-      box-shadow: 0 0 0 2px #c2daf7;
-      border-radius: 0.5em;
-      color: #c2daf7;
-      z-index: 800;
-      max-height: 2.5rem;
-    }
   }
 }
 .btn_base {
