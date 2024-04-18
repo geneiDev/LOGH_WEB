@@ -10,6 +10,8 @@ import userMain from '@/components/layouts/main/users/LayerUserMain.vue';
 import userInfo from '@/components/layouts/main/users/LayerUserInfo.vue';
 
 //Single
+//C:\Users\LG\Documents\LOGH_WEB\src\components\main\menu\LayoutSingle.vue
+import mainSingle from '@/components/layouts/main/menu/LayoutSingle.vue';
 import newGame from '@/components/layouts/main/menu/LayerPopNewGame.vue';
 
 //Data
@@ -22,10 +24,11 @@ const routes = [
   { path: '/', component: mainTitle, name: 'mainTitle' },
 
   { path: '/main', component: mainMenu, name: 'mainMenu' },
-
+  //user
   { path: '/user', component: userMain, name: 'user' },
   { path: '/user/Info', component: userInfo, name: 'userInfo' },
   //single
+  { path: '/mainSingle', component: mainSingle, name: 'mainSingle' },
   { path: '/single/newGame', component: newGame, name: 'newGame' },
   //data
   { path: '/data/person', component: dataPerson, name: 'dataPerson' },
