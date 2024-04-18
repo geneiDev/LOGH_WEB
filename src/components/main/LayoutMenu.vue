@@ -1,9 +1,6 @@
 <template>
   <div class="body_layer">
-    <div class="title_container" v-if="titleFlag === ''" @click="fnCheckRegisted()">
-      <h1 class="blinking">화면을 터치해주세요.</h1>
-    </div>
-    <div class="title_container" v-if="titleFlag === 'on'">
+    <div class="title_container" v-if="titleFlag === ''">
       <button type="button" class="btn_title" @click="setTitleFlag('S')">
         <h1>싱글플레이</h1>
         <h4>홀로 자유롭게 플레이할 수 있습니다.</h4>
@@ -12,13 +9,13 @@
         <h1>멀티플레이</h1>
         <h4>시즌별로 진행하는 멀티플레이입니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('O')" disabled>
-        <h1>환경 설정</h1>
-        <h4>여러 환경요소를 설정합니다.</h4>
-      </button>
       <button type="button" class="btn_title" @click="setTitleFlag('data')">
         <h1>데이터</h1>
         <h4>게임의 데이터 정보입니다.</h4>
+      </button>
+      <button type="button" class="btn_title" @click="setTitleFlag('O')" disabled>
+        <h1>환경 설정</h1>
+        <h4>여러 환경요소를 설정합니다.</h4>
       </button>
     </div>
     <div class="title_container" v-if="titleFlag === 'S'">
@@ -56,7 +53,7 @@
         <h1>함선</h1>
         <h4>함선 정보를 검색합니다.</h4>
       </button>
-      <button type="button" class="btn_title" @click="setTitleFlag('on')">
+      <button type="button" class="btn_title" @click="setTitleFlag('')">
         <h1>뒤로</h1>
       </button>
     </div>
@@ -88,6 +85,12 @@ export default {
   props: {
     
   },
+  mounted() {
+    if(this.$route.params.titleFlag) {
+      const flag = this.$route.params.titleFlag
+      this.fnCheckRegisted(flag);
+    }
+  },
   data() {
     return {
       //title영역
@@ -104,8 +107,8 @@ export default {
     //최초 화면에서 임시 계정 여부를 체크하고 관련 프로세스를 처리한다.
     fnCheckRegisted() {
       const userData = this.$store.getters['storeUser/getCurrentUser'];
-      this.titleFlag = 'on';
-      if(userData.isLogin && userData.tmpUser === 'Y') {
+      console.info(userData);
+      if(!userData.isLogin && userData.tmpUser === 'Y') {
         this.$modal.show(MessagePopup, {
           // modal : this.$modal,
           title: '확인',

@@ -10,10 +10,6 @@
       <li class="side20" @click="fnChangeMainLayer('home')"><a class="iHome"><span class=""></span></a></li>
       {{ routerName }} -> '{{routerType}}'
     </ul>
-
-
-
-
     <div class="bottomNaviBox" v-if="naviPopIdx">
       <div class="footerContainer">
         <layer-footer-menu :naviPopIdx="naviPopIdx"></layer-footer-menu>
@@ -67,7 +63,8 @@ export default {
     fnChangeMainLayer (id) {
       console.info(id)
       if(id === 'home') {
-        this.$router.push({ name: 'mainMenu' });
+        // mainTitle
+        this.$router.push({ name: 'mainTitle' });
       }
     }
     

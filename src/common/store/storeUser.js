@@ -26,8 +26,8 @@ export default {
     setOS(state, os) {
       state.os = os;
     },
-    setUUID(state, os) {
-      state.uuid = os;
+    setUUID(state, uuid) {
+      state.uuid = uuid;
     }
   },
   actions: {
@@ -47,13 +47,20 @@ export default {
     },
     // 로그아웃 액션
     logout({ commit }) {
+      const uuid      = localStorage.getItem('currentUUID');
+      const userId    = localStorage.getItem('userId')||uuid;
+      const userName  = `사용자_${uuid.substring(0,8)}`;
       commit('setCurrentUser', {
-        isLogin: false,
-        id: '',
-        name: 'GUEST',
-        pic: '@/assets/images/person/etc/user/silhouette-male-person.png',
-        points: 0,
+        isLogin     : false,
+        langType    : 'KR',
+        userId      : userId,
+        userName    : userName,
+        userPic     : '/images/person/CH_000000.png',
+        points      : 0,
+        tmpUser     : 'Y',
       });
+      localStorage.removeItem('userPwd');
+      
     },
   },
   getters: {

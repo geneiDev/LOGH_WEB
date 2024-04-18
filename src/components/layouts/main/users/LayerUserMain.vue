@@ -45,6 +45,7 @@
 
 const axios = require('axios');
 import global from '@/common/utils/global';
+import MessagePopup from '@/components/layouts/items/messagePopup.vue';
 
 export default {
   name: 'userMain',
@@ -72,11 +73,25 @@ export default {
     fnCallRouter(layerName) {
       this.$router.push({ name: layerName });
     },
+    fnMessagePop(text) {
+      this.$modal.show(MessagePopup, {
+        title: '확인',
+        text: text,
+        time: 200,
+      },
+      {
+        name: 'dynamic-modal',
+        width : '100%',
+        height : '130px',
+        draggable: true,
+      })
+    },
     async fnCallLogin() {
       let {userId, userPwd} = '';
       userId = this.userId;
       userPwd = this.userPwd;
       if(!userId) {
+        this.fnMessagePop('ID를 ')
         return;
       }
       if(!userPwd) {
@@ -89,7 +104,13 @@ export default {
       const response = await axios.post(`${global.CONST.API_URL}/user/login`, userParam);
       const userData = response.data.user||undefined;
       if(userData) {
+        const uuid        = localStorage.getItem('uuid')||'';
+        localStorage.setItem('currentUUID', uuid);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('userPwd', userPwd);
         this.$store.dispatch('storeUser/login', response.data.user, { root: true });
+        
+        this.$router.push({ name: 'mainMenu', params: { titleFlag: 'on' } });
       }
 
     }

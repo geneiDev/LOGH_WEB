@@ -1,24 +1,22 @@
 <template>
-  <div id="app" class="sky">
-    <div id="pre_loader" v-if="isOnload">
-      <div id="app_header">
-        <layout-header></layout-header>
-      </div>
-      <div id="app_body">
-        <router-view></router-view>
-      </div>
-      <div id="app_footer">
-        <layout-footer></layout-footer>
-      </div>    
+  <div id="app" class="sky" v-if="isOnload">
+    <div id="app_header" v-show="routerName !== 'mainTitle'">
+      <layout-header></layout-header>
+    </div>
+    <div id="app_body">
+      <router-view></router-view>
+    </div>
+    <div id="app_footer" v-show="routerName !== 'mainTitle'">
+      <layout-footer></layout-footer>
     </div>
   </div>
 </template>
 
 <script>
 import global from '@/common/utils/global';
-
 import LayoutHeader from '@/components/main/LayoutHeader.vue'
 import LayoutFooter from '@/components/main/LayoutFooter.vue'
+
 const axios = require('axios');
 export default {
   namp : 'App',
@@ -30,6 +28,11 @@ export default {
     return {
       isOnload : false,
     };
+  },
+  computed: {
+    routerName() {
+      return this.$route.name;
+    },
   },
   watch: {
   },
@@ -71,17 +74,19 @@ export default {
       const that        = this;
       const uuid        = localStorage.getItem('uuid')||'';
       const currentUUID = localStorage.getItem('currentUUID')||'';
-      if(uuid === currentUUID) {
+
+      const userId      = localStorage.getItem('userId')||'';
+      const userPwd     = localStorage.getItem('userPwd')||'';
+      if((uuid === currentUUID) && userId && userPwd) {
         /*  브라우져에서 추출한 uuid와 기존 localstorage의 currentUUID가 동일한 경우
             이미 로그인이 정상적으로 수행된 이력이 있는 사용자로 처리하여, 자동으로 로그인을 수행시킨다.
             그 외엔 새로운 UUID를 생성하고 신규 유져로 취급한다.
         */
         console.info('사용자 정보 정상!');
+        this.fnCallLogin();
         return;
-      } else {
-        console.info('사용자 정보 체크 대상');
       }
-
+      console.info('사용자 정보 체크 대상');
       const API_URL = global?.CONST.API_URL;
       async function fetchDataFromApi() {
         try {
@@ -102,13 +107,8 @@ export default {
               }
               if(!userId) {
                 console.info('완전 신규 유져임.');
-                userData.IS_LOGIN   = true;
-                userData.USER_NAME  = '신규유져';
                 localStorage.setItem('currentUUID', uuid);
-              } else {
-                // this.$store.dispatch('storeUser/login', userData, { root: true });
               }
-              console.info('>>userData', userData);
               that.$store.dispatch('storeUser/login', userData, { root: true }).then(() => {
                 that.isOnload = true;
               });
@@ -123,6 +123,32 @@ export default {
       }
       fetchDataFromApi();
     },
+    async fnCallLogin() {
+      const userId      = localStorage.getItem('userId')||'';
+      const userPwd     = localStorage.getItem('userPwd')||'';
+      if(!userId) {
+        return;
+      }
+      if(!userPwd) {
+        return;
+      }
+      const userParam = { 
+        userId, 
+        userPwd 
+      }
+      const response = await axios.post(`${global.CONST.API_URL}/user/login`, userParam);
+      const userData = response.data.user||undefined;
+      if(userData) {
+        const uuid        = localStorage.getItem('uuid')||'';
+        localStorage.setItem('currentUUID', uuid);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('userPwd', userPwd);
+        this.$store.dispatch('storeUser/login', response.data.user, { root: true });
+        console.info('로그인됨;');
+      }
+      this.isOnload = true;
+    },
+
     fnGetFooterType () {
       const currentRouteName = this.$route.name || '';
       if (!currentRouteName) {

@@ -3,29 +3,29 @@
   <div v-if="!userData.isLogin" class="login_info_container">
     <button class="login_button" @click="fnCallRouter('user')"><h1>로그인</h1></button>
   </div>
-    <div v-else class="user_info_container">
-      <div>
-        포인트 : {{userData.points}}
-      </div>
-      <div>
-        최근 플레이 : 플레이 이력 없음
-      </div>
-      <button class="login_button" @click="fnCallRouter('user')"><h1>정보수정</h1></button>
-      <button class="login_button" @click="fnUserLogout()"><h1>로그아웃</h1></button>
+  <div v-else class="user_info_container">
+    <div>
+      포인트 : {{userData.points}}
     </div>
-    
-    <div class="option_info_container">
-      <ul>
-        <li>{{ userData.langType }}</li>
-        <li>{{ userData }}</li>
-        <li>3</li>
-        <li>4</li>
-      </ul>
+    <div>
+      최근 플레이 : 플레이 이력 없음
     </div>
-  </div>  
+    <button class="login_button" @click="fnCallRouter('user')"><h1>정보수정</h1></button>
+    <button class="login_button" @click="fnUserLogout()"><h1>로그아웃</h1></button>
+  </div>
+  <div class="option_info_container">
+    <ul>
+      <li>{{ userData.langType }}</li>
+      <li>{{ userData }}</li>
+      <li>3</li>
+      <li>4</li>
+    </ul>
+  </div>
+</div>
 </template>
 
 <script>
+import MessagePopup from '@/components/layouts/items/messagePopup.vue';
 export default {
   props: {
     menuId  : {
@@ -61,8 +61,23 @@ export default {
       this.$router.push({ name: layerName });
     },
     fnUserLogout() {
+      if(this.$parent.$refs.menu_check) {
+        this.$parent.$refs.menu_check.click();
+      }
+      this.$modal.show(MessagePopup, {
+        title: '확인',
+        text: '로그아웃되었습니다.',
+        time: 150,
+      },
+      {
+        name: 'dynamic-modal',
+        width : '100%',
+        height : '130px',
+        draggable: true,
+      })
+
       this.$store.dispatch('storeUser/logout', { root: true });
-      this.$router.push({ name: '' });
+      this.$router.push({ name: 'mainTitle' });
     },
   },
 

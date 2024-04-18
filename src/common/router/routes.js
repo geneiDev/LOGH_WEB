@@ -2,6 +2,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import mainTitle from '@/components/main/LayoutTitle.vue';
+
 import mainMenu from '@/components/main/LayoutMenu.vue';
 
 import userMain from '@/components/layouts/main/users/LayerUserMain.vue';
@@ -17,7 +19,10 @@ import dataStarzone from '@/components/layouts/main/menu/LayerPopDicStarzone.vue
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: mainMenu, name: 'mainMenu' },
+  { path: '/', component: mainTitle, name: 'mainTitle' },
+
+  { path: '/main', component: mainMenu, name: 'mainMenu' },
+
   { path: '/user', component: userMain, name: 'user' },
   { path: '/user/Info', component: userInfo, name: 'userInfo' },
   //single
